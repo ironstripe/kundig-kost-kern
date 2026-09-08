@@ -306,38 +306,85 @@ export type Database = {
       import_jobs: {
         Row: {
           confirmed_at: string | null
+          confirmed_by: string | null
+          content_type: string | null
           created_at: string
+          created_by: string | null
           error_message: string | null
+          estimation_confirmed_at: string | null
+          estimation_payload: Json | null
           extracted_payload: Json | null
+          file_size: number | null
           file_url: string
           id: string
           import_type: Database["public"]["Enums"]["import_type"]
           menu_card_id: string
+          review_payload: Json | null
+          source_kind: string
+          source_name: string | null
           status: Database["public"]["Enums"]["import_job_status"]
+          storage_path: string | null
+          updated_at: string
         }
         Insert: {
           confirmed_at?: string | null
+          confirmed_by?: string | null
+          content_type?: string | null
           created_at?: string
+          created_by?: string | null
           error_message?: string | null
+          estimation_confirmed_at?: string | null
+          estimation_payload?: Json | null
           extracted_payload?: Json | null
+          file_size?: number | null
           file_url: string
           id?: string
           import_type: Database["public"]["Enums"]["import_type"]
           menu_card_id: string
+          review_payload?: Json | null
+          source_kind?: string
+          source_name?: string | null
           status?: Database["public"]["Enums"]["import_job_status"]
+          storage_path?: string | null
+          updated_at?: string
         }
         Update: {
           confirmed_at?: string | null
+          confirmed_by?: string | null
+          content_type?: string | null
           created_at?: string
+          created_by?: string | null
           error_message?: string | null
+          estimation_confirmed_at?: string | null
+          estimation_payload?: Json | null
           extracted_payload?: Json | null
+          file_size?: number | null
           file_url?: string
           id?: string
           import_type?: Database["public"]["Enums"]["import_type"]
           menu_card_id?: string
+          review_payload?: Json | null
+          source_kind?: string
+          source_name?: string | null
           status?: Database["public"]["Enums"]["import_job_status"]
+          storage_path?: string | null
+          updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "import_jobs_confirmed_by_fkey"
+            columns: ["confirmed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "import_jobs_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "import_jobs_menu_card_id_fkey"
             columns: ["menu_card_id"]
@@ -600,6 +647,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      import_estimation_payload: {
+        Args: { _job_id: string; _payload: Json }
+        Returns: Json
+      }
+      import_menu_payload: {
+        Args: { _job_id: string; _payload: Json }
+        Returns: Json
+      }
       is_active_user: { Args: { _user_id: string }; Returns: boolean }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
