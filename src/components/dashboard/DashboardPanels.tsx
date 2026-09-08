@@ -42,7 +42,7 @@ export function KpiCards({ overall }: { overall: OverallTotals | null }) {
 }
 
 export function SecondaryCounts({ counts }: { counts: MenuTotals["counts"] }) {
-  const items: { label: string; value: number; tone?: string }[] = [
+  const items: { label: string; value: number; tone?: string | undefined }[] = [
     { label: "Gerichte", value: counts.dishes },
     { label: "Varianten", value: counts.variants },
     { label: "Add-ons", value: counts.addOns },
