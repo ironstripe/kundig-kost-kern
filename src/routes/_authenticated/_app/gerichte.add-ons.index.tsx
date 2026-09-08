@@ -56,6 +56,7 @@ function AddOnsPage() {
     if (!addOns || !items || !links || !dishes || !variants) return [];
     const q = search.trim().toLowerCase();
     return addOns
+      .filter((a) => !card || a.menu_card_id === card.id)
       .filter((a) => (activeFilter === "all" ? true : activeFilter === "active" ? a.is_active : !a.is_active))
       .filter((a) => !q || a.name.toLowerCase().includes(q))
       .map((a) => {
@@ -90,6 +91,8 @@ function AddOnsPage() {
           </Button>
         }
       />
+
+      <MenuCardSelector className="mb-4" />
 
       {loading && <Skeleton className="h-64 w-full" />}
 

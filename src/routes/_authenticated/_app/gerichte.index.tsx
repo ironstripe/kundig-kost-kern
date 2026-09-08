@@ -75,7 +75,7 @@ function DishesPage() {
     const ingById = new Map(ingredients.map((i) => [i.id, i]));
     const catById = new Map((categories ?? []).map((c) => [c.id, c.name]));
     const out: Row[] = [];
-    for (const d of dishes) {
+    for (const d of dishes.filter((x) => !card || x.menu_card_id === card.id)) {
       const vs = variants.filter((v) => v.dish_id === d.id);
       vs.forEach((v, idx) => {
         const its = items.filter((it) => it.variant_id === v.id);
@@ -170,7 +170,7 @@ function DishesPage() {
   );
 
   const loading = isPending || !variants || !items || !ingredients;
-  const hasAny = (dishes?.length ?? 0) > 0;
+  const hasAny = rows.length > 0;
   const categoryNames = Array.from(new Set(rows.map((r) => r.category))).filter((c) => c !== "–").sort();
 
   return (
@@ -189,6 +189,8 @@ function DishesPage() {
           </>
         }
       />
+
+      <MenuCardSelector className="mb-4" />
 
       {loading && <Skeleton className="h-64 w-full" />}
 
