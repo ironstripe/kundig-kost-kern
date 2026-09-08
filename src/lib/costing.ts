@@ -335,7 +335,8 @@ export type QuantityComparisonRow = {
 
 function classifyRow(quantities: (number | null)[]): QuantityComparisonKind {
   if (quantities.length !== 2) return "mixed";
-  const [a, b] = quantities;
+  const a = quantities[0] ?? null;
+  const b = quantities[1] ?? null;
   if (a !== null && b === null) return "only_first";
   if (a === null && b !== null) return "only_second";
   if (a !== null && b !== null) return Math.abs(a - b) < 1e-9 ? "shared_equal" : "shared_different";
