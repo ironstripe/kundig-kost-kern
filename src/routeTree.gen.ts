@@ -10,33 +10,181 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as SetupRouteImport } from './routes/setup'
+import { Route as AuthenticatedAppRouteRouteImport } from './routes/_authenticated/_app/route'
+import { Route as AuthenticatedPasswortAendernRouteImport } from './routes/_authenticated/passwort-aendern'
+import { Route as AuthenticatedAppGerichteRouteImport } from './routes/_authenticated/_app/gerichte'
+import { Route as AuthenticatedAppSpeisekartenRouteImport } from './routes/_authenticated/_app/speisekarten'
+import { Route as AuthenticatedAppSzenarioRouteImport } from './routes/_authenticated/_app/szenario'
+import { Route as AuthenticatedAppUebersichtRouteImport } from './routes/_authenticated/_app/uebersicht'
+import { Route as AuthenticatedAppZutatenRouteImport } from './routes/_authenticated/_app/zutaten'
+import { Route as AuthenticatedAppEinstellungenIndexRouteImport } from './routes/_authenticated/_app/einstellungen/index'
+import { Route as AuthenticatedAppEinstellungenKonfigurationRouteImport } from './routes/_authenticated/_app/einstellungen/konfiguration'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SetupRoute = SetupRouteImport.update({
+  id: '/setup',
+  path: '/setup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAppRouteRoute = AuthenticatedAppRouteRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPasswortAendernRoute =
+  AuthenticatedPasswortAendernRouteImport.update({
+    id: '/passwort-aendern',
+    path: '/passwort-aendern',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAppGerichteRoute =
+  AuthenticatedAppGerichteRouteImport.update({
+    id: '/gerichte',
+    path: '/gerichte',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppSpeisekartenRoute =
+  AuthenticatedAppSpeisekartenRouteImport.update({
+    id: '/speisekarten',
+    path: '/speisekarten',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppSzenarioRoute =
+  AuthenticatedAppSzenarioRouteImport.update({
+    id: '/szenario',
+    path: '/szenario',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppUebersichtRoute =
+  AuthenticatedAppUebersichtRouteImport.update({
+    id: '/uebersicht',
+    path: '/uebersicht',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppZutatenRoute = AuthenticatedAppZutatenRouteImport.update({
+  id: '/zutaten',
+  path: '/zutaten',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
+const AuthenticatedAppEinstellungenIndexRoute =
+  AuthenticatedAppEinstellungenIndexRouteImport.update({
+    id: '/einstellungen/',
+    path: '/einstellungen/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppEinstellungenKonfigurationRoute =
+  AuthenticatedAppEinstellungenKonfigurationRouteImport.update({
+    id: '/einstellungen/konfiguration',
+    path: '/einstellungen/konfiguration',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/setup': typeof SetupRoute
+  '/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
+  '/gerichte': typeof AuthenticatedAppGerichteRoute
+  '/speisekarten': typeof AuthenticatedAppSpeisekartenRoute
+  '/szenario': typeof AuthenticatedAppSzenarioRoute
+  '/uebersicht': typeof AuthenticatedAppUebersichtRoute
+  '/zutaten': typeof AuthenticatedAppZutatenRoute
+  '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
+  '/einstellungen/': typeof AuthenticatedAppEinstellungenIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/setup': typeof SetupRoute
+  '/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
+  '/gerichte': typeof AuthenticatedAppGerichteRoute
+  '/speisekarten': typeof AuthenticatedAppSpeisekartenRoute
+  '/szenario': typeof AuthenticatedAppSzenarioRoute
+  '/uebersicht': typeof AuthenticatedAppUebersichtRoute
+  '/zutaten': typeof AuthenticatedAppZutatenRoute
+  '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
+  '/einstellungen': typeof AuthenticatedAppEinstellungenIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/setup': typeof SetupRoute
+  '/_authenticated/_app': typeof AuthenticatedAppRouteRouteWithChildren
+  '/_authenticated/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
+  '/_authenticated/_app/gerichte': typeof AuthenticatedAppGerichteRoute
+  '/_authenticated/_app/speisekarten': typeof AuthenticatedAppSpeisekartenRoute
+  '/_authenticated/_app/szenario': typeof AuthenticatedAppSzenarioRoute
+  '/_authenticated/_app/uebersicht': typeof AuthenticatedAppUebersichtRoute
+  '/_authenticated/_app/zutaten': typeof AuthenticatedAppZutatenRoute
+  '/_authenticated/_app/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
+  '/_authenticated/_app/einstellungen/': typeof AuthenticatedAppEinstellungenIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/setup'
+    | '/passwort-aendern'
+    | '/gerichte'
+    | '/speisekarten'
+    | '/szenario'
+    | '/uebersicht'
+    | '/zutaten'
+    | '/einstellungen/konfiguration'
+    | '/einstellungen/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/setup'
+    | '/passwort-aendern'
+    | '/gerichte'
+    | '/speisekarten'
+    | '/szenario'
+    | '/uebersicht'
+    | '/zutaten'
+    | '/einstellungen/konfiguration'
+    | '/einstellungen'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/setup'
+    | '/_authenticated/_app'
+    | '/_authenticated/passwort-aendern'
+    | '/_authenticated/_app/gerichte'
+    | '/_authenticated/_app/speisekarten'
+    | '/_authenticated/_app/szenario'
+    | '/_authenticated/_app/uebersicht'
+    | '/_authenticated/_app/zutaten'
+    | '/_authenticated/_app/einstellungen/konfiguration'
+    | '/_authenticated/_app/einstellungen/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  SetupRoute: typeof SetupRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +196,138 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/setup': {
+      id: '/setup'
+      path: '/setup'
+      fullPath: '/setup'
+      preLoaderRoute: typeof SetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/_app': {
+      id: '/_authenticated/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedAppRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/passwort-aendern': {
+      id: '/_authenticated/passwort-aendern'
+      path: '/passwort-aendern'
+      fullPath: '/passwort-aendern'
+      preLoaderRoute: typeof AuthenticatedPasswortAendernRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/_app/gerichte': {
+      id: '/_authenticated/_app/gerichte'
+      path: '/gerichte'
+      fullPath: '/gerichte'
+      preLoaderRoute: typeof AuthenticatedAppGerichteRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/speisekarten': {
+      id: '/_authenticated/_app/speisekarten'
+      path: '/speisekarten'
+      fullPath: '/speisekarten'
+      preLoaderRoute: typeof AuthenticatedAppSpeisekartenRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/szenario': {
+      id: '/_authenticated/_app/szenario'
+      path: '/szenario'
+      fullPath: '/szenario'
+      preLoaderRoute: typeof AuthenticatedAppSzenarioRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/uebersicht': {
+      id: '/_authenticated/_app/uebersicht'
+      path: '/uebersicht'
+      fullPath: '/uebersicht'
+      preLoaderRoute: typeof AuthenticatedAppUebersichtRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/zutaten': {
+      id: '/_authenticated/_app/zutaten'
+      path: '/zutaten'
+      fullPath: '/zutaten'
+      preLoaderRoute: typeof AuthenticatedAppZutatenRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/einstellungen/': {
+      id: '/_authenticated/_app/einstellungen/'
+      path: '/einstellungen'
+      fullPath: '/einstellungen/'
+      preLoaderRoute: typeof AuthenticatedAppEinstellungenIndexRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/einstellungen/konfiguration': {
+      id: '/_authenticated/_app/einstellungen/konfiguration'
+      path: '/einstellungen/konfiguration'
+      fullPath: '/einstellungen/konfiguration'
+      preLoaderRoute: typeof AuthenticatedAppEinstellungenKonfigurationRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
   }
 }
 
+interface AuthenticatedAppRouteRouteChildren {
+  AuthenticatedAppGerichteRoute: typeof AuthenticatedAppGerichteRoute
+  AuthenticatedAppSpeisekartenRoute: typeof AuthenticatedAppSpeisekartenRoute
+  AuthenticatedAppSzenarioRoute: typeof AuthenticatedAppSzenarioRoute
+  AuthenticatedAppUebersichtRoute: typeof AuthenticatedAppUebersichtRoute
+  AuthenticatedAppZutatenRoute: typeof AuthenticatedAppZutatenRoute
+  AuthenticatedAppEinstellungenKonfigurationRoute: typeof AuthenticatedAppEinstellungenKonfigurationRoute
+  AuthenticatedAppEinstellungenIndexRoute: typeof AuthenticatedAppEinstellungenIndexRoute
+}
+
+const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
+  AuthenticatedAppGerichteRoute: AuthenticatedAppGerichteRoute,
+  AuthenticatedAppSpeisekartenRoute: AuthenticatedAppSpeisekartenRoute,
+  AuthenticatedAppSzenarioRoute: AuthenticatedAppSzenarioRoute,
+  AuthenticatedAppUebersichtRoute: AuthenticatedAppUebersichtRoute,
+  AuthenticatedAppZutatenRoute: AuthenticatedAppZutatenRoute,
+  AuthenticatedAppEinstellungenKonfigurationRoute:
+    AuthenticatedAppEinstellungenKonfigurationRoute,
+  AuthenticatedAppEinstellungenIndexRoute:
+    AuthenticatedAppEinstellungenIndexRoute,
+}
+
+const AuthenticatedAppRouteRouteWithChildren =
+  AuthenticatedAppRouteRoute._addFileChildren(
+    AuthenticatedAppRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAppRouteRoute: typeof AuthenticatedAppRouteRouteWithChildren
+  AuthenticatedPasswortAendernRoute: typeof AuthenticatedPasswortAendernRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAppRouteRoute: AuthenticatedAppRouteRouteWithChildren,
+  AuthenticatedPasswortAendernRoute: AuthenticatedPasswortAendernRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  SetupRoute: SetupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
