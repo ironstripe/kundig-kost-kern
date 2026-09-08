@@ -46,8 +46,8 @@ export function VariantComparisonDialog({ results, open, onOpenChange }: Props) 
                   {m.values.map((v, i) => (
                     <TableCell key={i} className="text-right">
                       <div className="flex flex-col items-end">
-                        <MetricValue value={v} kind={m.kind} problems={results[i].problems} />
-                        {i > 0 && <span className="text-xs"><DeltaValue value={m.deltas[i]} kind={m.kind} /></span>}
+                        <MetricValue value={v} kind={m.kind} problems={results[i]?.problems} />
+                        {i > 0 && <span className="text-xs"><DeltaValue value={m.deltas[i] ?? null} kind={m.kind} /></span>}
                       </div>
                     </TableCell>
                   ))}

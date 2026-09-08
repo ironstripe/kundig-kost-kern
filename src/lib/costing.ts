@@ -222,10 +222,12 @@ export function calculateVariant(
   }
 
   const foodCost = ingredientCost !== null && smallMaterialCost !== null ? ingredientCost + smallMaterialCost : null;
-  const canRatio = foodCost !== null && netPrice !== null && netPrice > 0;
-  const foodCostRatio = canRatio ? (foodCost / netPrice) * 100 : null;
-  const contributionMargin1 = foodCost !== null && netPrice !== null ? netPrice - foodCost : null;
-  const contributionMarginRatio = canRatio && contributionMargin1 !== null ? (contributionMargin1 / netPrice) * 100 : null;
+  const np: number | null = netPrice;
+  const canRatio = foodCost !== null && np !== null && np > 0;
+  const foodCostRatio = foodCost !== null && np !== null && np > 0 ? (foodCost / np) * 100 : null;
+  const contributionMargin1 = foodCost !== null && np !== null ? np - foodCost : null;
+  const contributionMarginRatio =
+    canRatio && contributionMargin1 !== null && np !== null && np > 0 ? (contributionMargin1 / np) * 100 : null;
 
   const hasEstimatedPrices = itemResults.some((r) => r.ingredient?.price_status === "estimated");
   const hasUnconfirmedQuantities = itemResults.some((r) => !r.item.quantity_confirmed);
