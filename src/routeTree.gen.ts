@@ -21,6 +21,7 @@ import { Route as AuthenticatedAppSzenarioRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAppUebersichtRouteImport } from './routes/_authenticated/_app/uebersicht'
 import { Route as AuthenticatedAppZutatenRouteImport } from './routes/_authenticated/_app/zutaten'
 import { Route as AuthenticatedAppEinstellungenIndexRouteImport } from './routes/_authenticated/_app/einstellungen/index'
+import { Route as AuthenticatedAppEinstellungenBenutzerRouteImport } from './routes/_authenticated/_app/einstellungen/benutzer'
 import { Route as AuthenticatedAppEinstellungenKonfigurationRouteImport } from './routes/_authenticated/_app/einstellungen/konfiguration'
 
 const IndexRoute = IndexRouteImport.update({
@@ -87,6 +88,12 @@ const AuthenticatedAppEinstellungenIndexRoute =
     path: '/einstellungen/',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
+const AuthenticatedAppEinstellungenBenutzerRoute =
+  AuthenticatedAppEinstellungenBenutzerRouteImport.update({
+    id: '/einstellungen/benutzer',
+    path: '/einstellungen/benutzer',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
 const AuthenticatedAppEinstellungenKonfigurationRoute =
   AuthenticatedAppEinstellungenKonfigurationRouteImport.update({
     id: '/einstellungen/konfiguration',
@@ -104,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/szenario': typeof AuthenticatedAppSzenarioRoute
   '/uebersicht': typeof AuthenticatedAppUebersichtRoute
   '/zutaten': typeof AuthenticatedAppZutatenRoute
+  '/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
   '/einstellungen/': typeof AuthenticatedAppEinstellungenIndexRoute
 }
@@ -117,6 +125,7 @@ export interface FileRoutesByTo {
   '/szenario': typeof AuthenticatedAppSzenarioRoute
   '/uebersicht': typeof AuthenticatedAppUebersichtRoute
   '/zutaten': typeof AuthenticatedAppZutatenRoute
+  '/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
   '/einstellungen': typeof AuthenticatedAppEinstellungenIndexRoute
 }
@@ -133,6 +142,7 @@ export interface FileRoutesById {
   '/_authenticated/_app/szenario': typeof AuthenticatedAppSzenarioRoute
   '/_authenticated/_app/uebersicht': typeof AuthenticatedAppUebersichtRoute
   '/_authenticated/_app/zutaten': typeof AuthenticatedAppZutatenRoute
+  '/_authenticated/_app/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/_authenticated/_app/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
   '/_authenticated/_app/einstellungen/': typeof AuthenticatedAppEinstellungenIndexRoute
 }
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/szenario'
     | '/uebersicht'
     | '/zutaten'
+    | '/einstellungen/benutzer'
     | '/einstellungen/konfiguration'
     | '/einstellungen/'
   fileRoutesByTo: FileRoutesByTo
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/szenario'
     | '/uebersicht'
     | '/zutaten'
+    | '/einstellungen/benutzer'
     | '/einstellungen/konfiguration'
     | '/einstellungen'
   id:
@@ -176,6 +188,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_app/szenario'
     | '/_authenticated/_app/uebersicht'
     | '/_authenticated/_app/zutaten'
+    | '/_authenticated/_app/einstellungen/benutzer'
     | '/_authenticated/_app/einstellungen/konfiguration'
     | '/_authenticated/_app/einstellungen/'
   fileRoutesById: FileRoutesById
@@ -273,6 +286,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppEinstellungenIndexRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
+    '/_authenticated/_app/einstellungen/benutzer': {
+      id: '/_authenticated/_app/einstellungen/benutzer'
+      path: '/einstellungen/benutzer'
+      fullPath: '/einstellungen/benutzer'
+      preLoaderRoute: typeof AuthenticatedAppEinstellungenBenutzerRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
     '/_authenticated/_app/einstellungen/konfiguration': {
       id: '/_authenticated/_app/einstellungen/konfiguration'
       path: '/einstellungen/konfiguration'
@@ -289,6 +309,7 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppSzenarioRoute: typeof AuthenticatedAppSzenarioRoute
   AuthenticatedAppUebersichtRoute: typeof AuthenticatedAppUebersichtRoute
   AuthenticatedAppZutatenRoute: typeof AuthenticatedAppZutatenRoute
+  AuthenticatedAppEinstellungenBenutzerRoute: typeof AuthenticatedAppEinstellungenBenutzerRoute
   AuthenticatedAppEinstellungenKonfigurationRoute: typeof AuthenticatedAppEinstellungenKonfigurationRoute
   AuthenticatedAppEinstellungenIndexRoute: typeof AuthenticatedAppEinstellungenIndexRoute
 }
@@ -299,6 +320,8 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppSzenarioRoute: AuthenticatedAppSzenarioRoute,
   AuthenticatedAppUebersichtRoute: AuthenticatedAppUebersichtRoute,
   AuthenticatedAppZutatenRoute: AuthenticatedAppZutatenRoute,
+  AuthenticatedAppEinstellungenBenutzerRoute:
+    AuthenticatedAppEinstellungenBenutzerRoute,
   AuthenticatedAppEinstellungenKonfigurationRoute:
     AuthenticatedAppEinstellungenKonfigurationRoute,
   AuthenticatedAppEinstellungenIndexRoute:
