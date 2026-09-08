@@ -9,7 +9,8 @@ import { DishDialog } from "@/components/dishes/DishDialog";
 import { MetricValue } from "@/components/dishes/Metric";
 import { allItemsQuery, allVariantsQuery, categoriesQuery, dishesQuery } from "@/lib/dishes";
 import { ingredientsQuery } from "@/lib/ingredients";
-import { activeMenuCardQuery } from "@/lib/menu-cards";
+import { useSelectedMenuCard } from "@/lib/selected-menu-card";
+import { MenuCardSelector } from "@/components/menu-cards/MenuCardSelector";
 import { calculateVariant, type CalculationStatus, type VariantResult } from "@/lib/costing";
 import { calculationStatusLabels } from "@/lib/labels";
 import { Button } from "@/components/ui/button";
@@ -55,7 +56,7 @@ const statusTone: Record<CalculationStatus, "warning" | "neutral" | "success"> =
 
 function DishesPage() {
   const navigate = useNavigate();
-  const { data: card } = useQuery(activeMenuCardQuery);
+  const { data: card } = useSelectedMenuCard();
   const { data: dishes, isPending } = useQuery(dishesQuery);
   const { data: categories } = useQuery(categoriesQuery);
   const { data: variants } = useQuery(allVariantsQuery);
