@@ -50,15 +50,15 @@ export function ScenarioSummary({
           const d = m.base !== null && m.scen !== null ? m.scen - m.base : null;
           const changed = d !== null && Math.abs(d) > 1e-9;
           return (
-            <div key={m.label} className="px-5 py-3">
+            <div key={m.label} className="px-4 py-3">
               <div className="text-xs font-medium text-muted-foreground">{m.label}</div>
-              <dl className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-sm">
+              <dl className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 text-[13px]">
                 <dt className="text-muted-foreground">Basis</dt>
-                <dd className="text-right tabular">{fmt(m.base, m.kind)}</dd>
+                <dd className="text-right tabular whitespace-nowrap">{fmt(m.base, m.kind)}</dd>
                 <dt className="text-muted-foreground">Szenario</dt>
-                <dd className={cn("text-right tabular", changed && "font-semibold")}>{fmt(m.scen, m.kind)}</dd>
+                <dd className={cn("text-right tabular whitespace-nowrap", changed && "font-semibold")}>{fmt(m.scen, m.kind)}</dd>
                 <dt className="text-muted-foreground">Differenz</dt>
-                <dd className="flex items-center justify-end gap-1 text-right tabular">
+                <dd className="flex items-center justify-end gap-1 text-right tabular whitespace-nowrap">
                   <DirectionIcon d={d} />
                   {d === null
                     ? "–"
