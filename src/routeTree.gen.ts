@@ -17,6 +17,7 @@ import { Route as AuthenticatedAppRouteRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedPasswortAendernRouteImport } from './routes/_authenticated/passwort-aendern'
 import { Route as AuthenticatedAppSzenarioRouteImport } from './routes/_authenticated/_app/szenario'
 import { Route as AuthenticatedAppUebersichtRouteImport } from './routes/_authenticated/_app/uebersicht'
+import { Route as AuthenticatedAppVerkaufsmengenRouteImport } from './routes/_authenticated/_app/verkaufsmengen'
 import { Route as AuthenticatedAppZutatenRouteImport } from './routes/_authenticated/_app/zutaten'
 import { Route as AuthenticatedAppEinstellungenIndexRouteImport } from './routes/_authenticated/_app/einstellungen/index'
 import { Route as AuthenticatedAppEinstellungenBenutzerRouteImport } from './routes/_authenticated/_app/einstellungen/benutzer'
@@ -67,6 +68,12 @@ const AuthenticatedAppUebersichtRoute =
   AuthenticatedAppUebersichtRouteImport.update({
     id: '/uebersicht',
     path: '/uebersicht',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppVerkaufsmengenRoute =
+  AuthenticatedAppVerkaufsmengenRouteImport.update({
+    id: '/verkaufsmengen',
+    path: '/verkaufsmengen',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
 const AuthenticatedAppZutatenRoute = AuthenticatedAppZutatenRouteImport.update({
@@ -136,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
   '/szenario': typeof AuthenticatedAppSzenarioRoute
   '/uebersicht': typeof AuthenticatedAppUebersichtRoute
+  '/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
   '/zutaten': typeof AuthenticatedAppZutatenRoute
   '/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
@@ -154,6 +162,7 @@ export interface FileRoutesByTo {
   '/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
   '/szenario': typeof AuthenticatedAppSzenarioRoute
   '/uebersicht': typeof AuthenticatedAppUebersichtRoute
+  '/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
   '/zutaten': typeof AuthenticatedAppZutatenRoute
   '/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
@@ -175,6 +184,7 @@ export interface FileRoutesById {
   '/_authenticated/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
   '/_authenticated/_app/szenario': typeof AuthenticatedAppSzenarioRoute
   '/_authenticated/_app/uebersicht': typeof AuthenticatedAppUebersichtRoute
+  '/_authenticated/_app/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
   '/_authenticated/_app/zutaten': typeof AuthenticatedAppZutatenRoute
   '/_authenticated/_app/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/_authenticated/_app/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/passwort-aendern'
     | '/szenario'
     | '/uebersicht'
+    | '/verkaufsmengen'
     | '/zutaten'
     | '/einstellungen/benutzer'
     | '/einstellungen/konfiguration'
@@ -213,6 +224,7 @@ export interface FileRouteTypes {
     | '/passwort-aendern'
     | '/szenario'
     | '/uebersicht'
+    | '/verkaufsmengen'
     | '/zutaten'
     | '/einstellungen/benutzer'
     | '/einstellungen/konfiguration'
@@ -233,6 +245,7 @@ export interface FileRouteTypes {
     | '/_authenticated/passwort-aendern'
     | '/_authenticated/_app/szenario'
     | '/_authenticated/_app/uebersicht'
+    | '/_authenticated/_app/verkaufsmengen'
     | '/_authenticated/_app/zutaten'
     | '/_authenticated/_app/einstellungen/benutzer'
     | '/_authenticated/_app/einstellungen/konfiguration'
@@ -308,6 +321,13 @@ declare module '@tanstack/react-router' {
       path: '/uebersicht'
       fullPath: '/uebersicht'
       preLoaderRoute: typeof AuthenticatedAppUebersichtRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/verkaufsmengen': {
+      id: '/_authenticated/_app/verkaufsmengen'
+      path: '/verkaufsmengen'
+      fullPath: '/verkaufsmengen'
+      preLoaderRoute: typeof AuthenticatedAppVerkaufsmengenRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
     '/_authenticated/_app/zutaten': {
@@ -386,6 +406,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppSzenarioRoute: typeof AuthenticatedAppSzenarioRoute
   AuthenticatedAppUebersichtRoute: typeof AuthenticatedAppUebersichtRoute
+  AuthenticatedAppVerkaufsmengenRoute: typeof AuthenticatedAppVerkaufsmengenRoute
   AuthenticatedAppZutatenRoute: typeof AuthenticatedAppZutatenRoute
   AuthenticatedAppEinstellungenBenutzerRoute: typeof AuthenticatedAppEinstellungenBenutzerRoute
   AuthenticatedAppEinstellungenKonfigurationRoute: typeof AuthenticatedAppEinstellungenKonfigurationRoute
@@ -401,6 +422,7 @@ interface AuthenticatedAppRouteRouteChildren {
 const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppSzenarioRoute: AuthenticatedAppSzenarioRoute,
   AuthenticatedAppUebersichtRoute: AuthenticatedAppUebersichtRoute,
+  AuthenticatedAppVerkaufsmengenRoute: AuthenticatedAppVerkaufsmengenRoute,
   AuthenticatedAppZutatenRoute: AuthenticatedAppZutatenRoute,
   AuthenticatedAppEinstellungenBenutzerRoute:
     AuthenticatedAppEinstellungenBenutzerRoute,
