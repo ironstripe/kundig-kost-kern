@@ -15,7 +15,6 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as AuthenticatedAppRouteRouteImport } from './routes/_authenticated/_app/route'
 import { Route as AuthenticatedPasswortAendernRouteImport } from './routes/_authenticated/passwort-aendern'
-import { Route as AuthenticatedAppSpeisekartenRouteImport } from './routes/_authenticated/_app/speisekarten'
 import { Route as AuthenticatedAppSzenarioRouteImport } from './routes/_authenticated/_app/szenario'
 import { Route as AuthenticatedAppUebersichtRouteImport } from './routes/_authenticated/_app/uebersicht'
 import { Route as AuthenticatedAppZutatenRouteImport } from './routes/_authenticated/_app/zutaten'
@@ -55,12 +54,6 @@ const AuthenticatedPasswortAendernRoute =
     id: '/passwort-aendern',
     path: '/passwort-aendern',
     getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedAppSpeisekartenRoute =
-  AuthenticatedAppSpeisekartenRouteImport.update({
-    id: '/speisekarten',
-    path: '/speisekarten',
-    getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
 const AuthenticatedAppSzenarioRoute =
   AuthenticatedAppSzenarioRouteImport.update({
@@ -127,7 +120,6 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/setup': typeof SetupRoute
   '/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
-  '/speisekarten': typeof AuthenticatedAppSpeisekartenRoute
   '/szenario': typeof AuthenticatedAppSzenarioRoute
   '/uebersicht': typeof AuthenticatedAppUebersichtRoute
   '/zutaten': typeof AuthenticatedAppZutatenRoute
@@ -144,7 +136,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/setup': typeof SetupRoute
   '/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
-  '/speisekarten': typeof AuthenticatedAppSpeisekartenRoute
   '/szenario': typeof AuthenticatedAppSzenarioRoute
   '/uebersicht': typeof AuthenticatedAppUebersichtRoute
   '/zutaten': typeof AuthenticatedAppZutatenRoute
@@ -164,7 +155,6 @@ export interface FileRoutesById {
   '/setup': typeof SetupRoute
   '/_authenticated/_app': typeof AuthenticatedAppRouteRouteWithChildren
   '/_authenticated/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
-  '/_authenticated/_app/speisekarten': typeof AuthenticatedAppSpeisekartenRoute
   '/_authenticated/_app/szenario': typeof AuthenticatedAppSzenarioRoute
   '/_authenticated/_app/uebersicht': typeof AuthenticatedAppUebersichtRoute
   '/_authenticated/_app/zutaten': typeof AuthenticatedAppZutatenRoute
@@ -183,7 +173,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/setup'
     | '/passwort-aendern'
-    | '/speisekarten'
     | '/szenario'
     | '/uebersicht'
     | '/zutaten'
@@ -200,7 +189,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/setup'
     | '/passwort-aendern'
-    | '/speisekarten'
     | '/szenario'
     | '/uebersicht'
     | '/zutaten'
@@ -219,7 +207,6 @@ export interface FileRouteTypes {
     | '/setup'
     | '/_authenticated/_app'
     | '/_authenticated/passwort-aendern'
-    | '/_authenticated/_app/speisekarten'
     | '/_authenticated/_app/szenario'
     | '/_authenticated/_app/uebersicht'
     | '/_authenticated/_app/zutaten'
@@ -282,13 +269,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/passwort-aendern'
       preLoaderRoute: typeof AuthenticatedPasswortAendernRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/_app/speisekarten': {
-      id: '/_authenticated/_app/speisekarten'
-      path: '/speisekarten'
-      fullPath: '/speisekarten'
-      preLoaderRoute: typeof AuthenticatedAppSpeisekartenRouteImport
-      parentRoute: typeof AuthenticatedAppRouteRoute
     }
     '/_authenticated/_app/szenario': {
       id: '/_authenticated/_app/szenario'
@@ -364,7 +344,6 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAppRouteRouteChildren {
-  AuthenticatedAppSpeisekartenRoute: typeof AuthenticatedAppSpeisekartenRoute
   AuthenticatedAppSzenarioRoute: typeof AuthenticatedAppSzenarioRoute
   AuthenticatedAppUebersichtRoute: typeof AuthenticatedAppUebersichtRoute
   AuthenticatedAppZutatenRoute: typeof AuthenticatedAppZutatenRoute
@@ -378,7 +357,6 @@ interface AuthenticatedAppRouteRouteChildren {
 }
 
 const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
-  AuthenticatedAppSpeisekartenRoute: AuthenticatedAppSpeisekartenRoute,
   AuthenticatedAppSzenarioRoute: AuthenticatedAppSzenarioRoute,
   AuthenticatedAppUebersichtRoute: AuthenticatedAppUebersichtRoute,
   AuthenticatedAppZutatenRoute: AuthenticatedAppZutatenRoute,
