@@ -9,6 +9,7 @@ import { calculateVariant, type CalculationStatus, type VariantResult } from "@/
 import { openDaysCount, addOnSalesWarning } from "@/lib/sales";
 import { derivedSales, type SalesInputMode } from "@/lib/sales-planning";
 import type { MenuCardData } from "@/lib/menu-cards";
+import { applyOverrides, type Overrides } from "@/lib/scenario";
 
 export type LineKind = "variant" | "add_on";
 
@@ -97,7 +98,12 @@ export type MenuTotals = {
 
 const UNCATEGORISED = "Ohne Kategorie";
 
-export function calculateMenuTotals(data: MenuCardData): MenuTotals {
+/**
+ * @param baseline saved source data
+ * @param overrides optional temporary scenario overrides (never persisted)
+ */
+export function calculateMenuTotals(baseline: MenuCardData, overrides?: Overrides): MenuTotals {
+  const data = applyOverrides(baseline, overrides);
   const { card, excludedDays, categories, dishes, variants, addOns, links, items, ingredients } = data;
   const sellingDays = openDaysCount(card, excludedDays.map((d) => d.excluded_date));
   const ingById = new Map(ingredients.map((i) => [i.id, i]));
