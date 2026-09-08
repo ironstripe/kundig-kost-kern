@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { BookOpen, Plus, MoreHorizontal, ArrowUpRight, Check } from "lucide-react";
+import { BookOpen, Plus, MoreHorizontal, ArrowUpRight, Check, FileUp } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { EmptyState } from "@/components/layout/EmptyState";
 import { StatusBadge } from "@/components/layout/StatusBadge";
@@ -115,9 +115,14 @@ function MenuCardsPage() {
         title="Speisekarten"
         description="Eine Speisekarte bündelt Laufzeit, Öffnungstage, MWST und Kleinmaterial-Zuschlag. Die hier gewählte Karte gilt in Übersicht, Gerichten, Verkaufsmengen und Szenario."
         actions={
-          <Button onClick={() => setDialog({ kind: "create" })}>
-            <Plus className="size-4" /> Speisekarte anlegen
-          </Button>
+          <>
+            <Button variant="outline" asChild>
+              <Link to="/speisekarten/importieren"><FileUp className="size-4" /> Importieren</Link>
+            </Button>
+            <Button onClick={() => setDialog({ kind: "create" })}>
+              <Plus className="size-4" /> Speisekarte anlegen
+            </Button>
+          </>
         }
       />
 
