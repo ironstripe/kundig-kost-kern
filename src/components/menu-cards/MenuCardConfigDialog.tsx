@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { Database } from "@/integrations/supabase/types";
-import { updateMenuCard, type MenuCard } from "@/lib/menu-cards";
+import { createMenuCard, updateMenuCard, type MenuCard } from "@/lib/menu-cards";
 import { WEEKDAYS } from "@/lib/format";
 import { smallMaterialModeLabels } from "@/lib/labels";
 import {
@@ -17,54 +17,77 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type Mode = Database["public"]["Enums"]["small_material_mode"];
 
 type Props = {
-  card: MenuCard;
+  /** Omit to create a new menu card. */
+  card?: MenuCard | null;
   userId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onCreated?: (card: MenuCard) => void;
 };
 
-export function MenuCardConfigDialog({ card, userId, open, onOpenChange }: Props) {
+const DEFAULTS = {
+  name: "",
+  valid_from: new Date().toISOString().slice(0, 10),
+  valid_to: new Date().toISOString().slice(0, 10),
+  vat_rate: 0.081,
+  small_material_mode: "percent" as Mode,
+  small_material_value: 0.03,
+  opening_weekdays: [3, 4, 5, 6, 7],
+  is_active: true,
+};
+
+export function MenuCardConfigDialog({ card, userId, open, onOpenChange, onCreated }: Props) {
   const queryClient = useQueryClient();
-  const [name, setName] = useState(card.name);
-  const [validFrom, setValidFrom] = useState(card.valid_from);
-  const [validTo, setValidTo] = useState(card.valid_to);
-  const [vatPercent, setVatPercent] = useState(String(Number(card.vat_rate) * 100));
-  const [mode, setMode] = useState<Mode>(card.small_material_mode);
+  const base = card ?? DEFAULTS;
+  const [name, setName] = useState(base.name);
+  const [validFrom, setValidFrom] = useState(base.valid_from);
+  const [validTo, setValidTo] = useState(base.valid_to);
+  const [vatPercent, setVatPercent] = useState(String(Math.round(Number(base.vat_rate) * 10000) / 100));
+  const [mode, setMode] = useState<Mode>(base.small_material_mode);
   const [smallValue, setSmallValue] = useState(
-    card.small_material_mode === "percent"
-      ? String(Number(card.small_material_value) * 100)
-      : String(Number(card.small_material_value)),
+    base.small_material_mode === "percent"
+      ? String(Math.round(Number(base.small_material_value) * 10000) / 100)
+      : String(Number(base.small_material_value)),
   );
-  const [weekdays, setWeekdays] = useState<number[]>(card.opening_weekdays);
+  const [weekdays, setWeekdays] = useState<number[]>(base.opening_weekdays);
+  const [isActive, setIsActive] = useState(base.is_active);
   const [error, setError] = useState<string | null>(null);
 
   const mutation = useMutation({
-    mutationFn: () => {
+    mutationFn: async () => {
       const vat = Number(vatPercent.replace(",", ".")) / 100;
       const sm = Number(smallValue.replace(",", "."));
-      return updateMenuCard(
-        card.id,
-        {
-          name: name.trim(),
-          valid_from: validFrom,
-          valid_to: validTo,
-          vat_rate: vat,
-          small_material_mode: mode,
-          small_material_value: mode === "percent" ? sm / 100 : sm,
-          opening_weekdays: [...weekdays].sort((a, b) => a - b),
-        },
-        userId,
-      );
+      const values = {
+        name: name.trim(),
+        valid_from: validFrom,
+        valid_to: validTo,
+        vat_rate: vat,
+        small_material_mode: mode,
+        small_material_value: mode === "percent" ? sm / 100 : sm,
+        opening_weekdays: [...weekdays].sort((a, b) => a - b),
+        is_active: isActive,
+      };
+      if (card) {
+        await updateMenuCard(card.id, values, userId);
+        return null;
+      }
+      return createMenuCard(values, userId);
     },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["menu_cards"] });
-      toast.success("Konfiguration gespeichert.");
+    onSuccess: async (created) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["menu_cards"] }),
+        queryClient.invalidateQueries({ queryKey: ["menu_card_data"] }),
+        queryClient.invalidateQueries({ queryKey: ["menu_card_counts"] }),
+      ]);
+      toast.success(card ? "Speisekarte gespeichert." : "Speisekarte angelegt.");
       onOpenChange(false);
+      if (created && onCreated) onCreated(created);
     },
     onError: (err) => setError(err instanceof Error ? err.message : "Speichern fehlgeschlagen."),
   });
@@ -91,9 +114,9 @@ export function MenuCardConfigDialog({ card, userId, open, onOpenChange }: Props
       <DialogContent className="sm:max-w-lg">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Konfiguration bearbeiten</DialogTitle>
+            <DialogTitle>{card ? "Speisekarte bearbeiten" : "Speisekarte anlegen"}</DialogTitle>
             <DialogDescription>
-              Zentrale Annahmen der Speisekarte. Kalkulationen werden später daraus abgeleitet.
+              Laufzeit, Öffnungstage, MWST (Restaurant 8.1 %, kein Take-away) und Kleinmaterial-Zuschlag. Alle Kalkulationen leiten sich daraus ab.
             </DialogDescription>
           </DialogHeader>
           <div className="mt-5 space-y-4">
@@ -152,6 +175,13 @@ export function MenuCardConfigDialog({ card, userId, open, onOpenChange }: Props
                   );
                 })}
               </div>
+            </div>
+            <div className="flex items-center justify-between rounded-md border border-border px-3 py-2">
+              <div>
+                <Label htmlFor="mc-active">Aktiv</Label>
+                <p className="text-xs text-muted-foreground">Inaktive Karten bleiben erhalten, werden aber nicht standardmässig ausgewählt.</p>
+              </div>
+              <Switch id="mc-active" checked={isActive} onCheckedChange={setIsActive} />
             </div>
             {error && (
               <p role="alert" className="text-sm text-destructive">

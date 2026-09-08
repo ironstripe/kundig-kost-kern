@@ -5,6 +5,7 @@ import {
   Carrot,
   SlidersHorizontal,
   Settings,
+  BarChart3,
   type LucideIcon,
 } from "lucide-react";
 
@@ -20,6 +21,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Übersicht", to: "/uebersicht", icon: LayoutDashboard },
   { label: "Speisekarten", to: "/speisekarten", icon: BookOpen },
   { label: "Gerichte", to: "/gerichte", icon: UtensilsCrossed },
+  { label: "Verkaufsmengen", to: "/verkaufsmengen", icon: BarChart3 },
   { label: "Zutaten & EK", to: "/zutaten", icon: Carrot },
   { label: "Szenario", to: "/szenario", icon: SlidersHorizontal },
   {
