@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { signOutCleanly } from "@/lib/auth";
+import { scenarioStore, SCENARIO_LOSS_MESSAGE } from "@/lib/scenario";
 import type { Profile } from "@/lib/profiles";
 
 export function UserMenu({ profile, email }: { profile: Profile; email: string }) {
@@ -26,6 +27,8 @@ export function UserMenu({ profile, email }: { profile: Profile; email: string }
     .toUpperCase();
 
   async function handleSignOut() {
+    if (scenarioStore.hasChanges() && !window.confirm(`${SCENARIO_LOSS_MESSAGE} Trotzdem abmelden?`)) return;
+    scenarioStore.clear();
     await signOutCleanly(queryClient);
     navigate({ to: "/auth", replace: true });
   }

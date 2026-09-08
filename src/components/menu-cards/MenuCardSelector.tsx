@@ -3,6 +3,7 @@ import { useSelectedMenuCard } from "@/lib/selected-menu-card";
 import { formatDate } from "@/lib/format";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { StatusBadge } from "@/components/layout/StatusBadge";
+import { scenarioStore, SCENARIO_LOSS_MESSAGE } from "@/lib/scenario";
 
 /** Consistent menu-card selection used by Übersicht, Gerichte, Verkaufsmengen and Szenario. */
 export function MenuCardSelector({ className }: { className?: string }) {
@@ -13,7 +14,12 @@ export function MenuCardSelector({ className }: { className?: string }) {
       <div className="flex flex-wrap items-center gap-2">
         <BookOpen className="size-4 text-muted-foreground" />
         <span className="text-xs font-medium text-muted-foreground">Speisekarte</span>
-        <Select value={card?.id ?? ""} onValueChange={(v) => select(v)}>
+        <Select value={card?.id ?? ""} onValueChange={(v) => {
+            if (v === card?.id) return;
+            if (scenarioStore.hasChanges() && !window.confirm(`${SCENARIO_LOSS_MESSAGE} Speisekarte trotzdem wechseln?`)) return;
+            scenarioStore.clear();
+            select(v);
+          }}>
           <SelectTrigger className="h-8 w-64 bg-background" aria-label="Speisekarte wählen">
             <SelectValue placeholder="Speisekarte wählen" />
           </SelectTrigger>
