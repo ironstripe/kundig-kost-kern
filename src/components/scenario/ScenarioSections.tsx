@@ -111,7 +111,10 @@ export function ScenarioSections({ data, base, scen, scenario }: Props) {
     const dishes: [string, string][] = data.dishes.filter((d) => d.is_active).map((d) => [d.id, d.name]);
     const lines: [string, string][] = activeLines.map((l) => [l.key, l.kind === "add_on" ? `${l.name} (Add-on)` : `${l.dishName} – ${l.name}`]);
     const usedIng = new Set(activeLines.flatMap((l) => l.result.items.map((r) => r.item.ingredient_id)));
-    const ingredients: [string, string][] = data.ingredients.filter((i) => usedIng.has(i.id)).map((i) => [i.id, i.name]).sort((a, b) => a[1].localeCompare(b[1], "de-CH"));
+    const ingredients: [string, string][] = data.ingredients
+      .filter((i) => usedIng.has(i.id))
+      .sort((a, b) => a.name.localeCompare(b.name, "de-CH"))
+      .map((i) => [i.id, i.name]);
     return { categories: Array.from(cats.entries()), dishes, lines, ingredients };
   }, [activeLines, data]);
 
@@ -123,7 +126,7 @@ export function ScenarioSections({ data, base, scen, scenario }: Props) {
     ingredientIds: l.result.items.map((r) => r.item.ingredient_id),
     changed,
   });
-  const entityOf = (l: MenuLine) => (l.kind === "variant" ? "variant" : "add_on") as const;
+  const entityOf = (l: MenuLine): "variant" | "add_on" => (l.kind === "variant" ? "variant" : "add_on");
   const has = (k: string) => k in scenario.overrides;
 
   // Section 1 – Verkaufspreise
