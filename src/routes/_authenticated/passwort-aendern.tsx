@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { ownProfileQuery } from "@/lib/profiles";
 import { changeOwnPassword } from "@/lib/user-admin.functions";
 import { validatePassword, PASSWORD_MIN_LENGTH } from "@/lib/password";
-import { signOutCleanly } from "@/lib/auth";
+import { signInWithPassword, signOutCleanly } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -49,8 +49,14 @@ function ChangePasswordPage() {
     setPending(true);
     try {
       await change({ data: { newPassword: password, confirm } });
-      await queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
+      // Changing the password invalidates the current session; sign in again with the new one.
+      const signInErr = await signInWithPassword(user.email ?? "", password);
+      queryClient.removeQueries({ queryKey: ["profile", user.id] });
       toast.success("Passwort erfolgreich geändert.");
+      if (signInErr) {
+        navigate({ to: "/auth", replace: true });
+        return;
+      }
       navigate({ to: "/uebersicht", replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Passwort konnte nicht geändert werden.");
