@@ -281,7 +281,7 @@ function DishDetailPage() {
       </div>
 
       {selected && result && (
-        <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
           {/* Left: items */}
           <div className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
