@@ -345,7 +345,7 @@ function DishDetailPage() {
                   Keine Add-ons zugeordnet.
                 </div>
               ) : (
-                <div className="surface overflow-x-auto border-l-4 border-l-accent">
+                <div className="surface overflow-x-auto border-l-4 border-l-primary/50">
                   <Table>
                     <TableHeader>
                       <TableRow>
