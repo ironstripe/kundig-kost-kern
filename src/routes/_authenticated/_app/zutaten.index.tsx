@@ -34,7 +34,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-export const Route = createFileRoute("/_authenticated/_app/zutaten")({
+export const Route = createFileRoute("/_authenticated/_app/zutaten/")({
   head: () => ({
     meta: [
       { title: "Zutaten & EK – KundiCalc" },
