@@ -11,8 +11,8 @@ export function MetricValue({
 }: {
   value: number | null;
   kind: "chf" | "percent";
-  problems?: string[];
-  className?: string;
+  problems?: string[] | undefined;
+  className?: string | undefined;
 }) {
   if (value === null || !Number.isFinite(value)) {
     const text = <span className={cn("text-xs text-muted-foreground italic", className)}>Unvollständig</span>;
