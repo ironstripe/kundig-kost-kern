@@ -120,7 +120,7 @@ function DishDetailPage() {
   useEffect(() => {
     if (!variants || variants.length === 0) return;
     if (!selectedId || !variants.some((v) => v.id === selectedId)) {
-      setSelectedId((variants.find((v) => v.is_default) ?? variants[0]).id);
+      setSelectedId((variants.find((v) => v.is_default) ?? variants[0]!).id);
     }
   }, [variants, selectedId]);
 
@@ -158,7 +158,7 @@ function DishDetailPage() {
       if (!other) return;
       const reordered = [...selectedItems];
       reordered[idx] = other;
-      reordered[idx + dir] = selectedItems[idx];
+      reordered[idx + dir] = selectedItems[idx]!;
       await reorderItems(reordered.map((it, i) => ({ id: it.id, sort_order: i + 1 })));
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["calculation_items"] }),
@@ -260,7 +260,7 @@ function DishDetailPage() {
       {/* Variant tabs */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {variants.length > 0 ? (
-          <Tabs value={selectedId ?? undefined} onValueChange={setSelectedId}>
+          <Tabs value={selectedId ?? ""} onValueChange={setSelectedId}>
             <TabsList className="h-auto flex-wrap">
               {variants.map((v) => (
                 <TabsTrigger key={v.id} value={v.id} className="gap-1.5">
@@ -449,7 +449,7 @@ function DishDetailPage() {
           mode={dialog.mode}
           dishId={dishId}
           userId={profile.id}
-          variant={dialog.variant}
+          variant={dialog.variant ?? null}
           sourceItems={dialog.mode === "duplicate" ? selectedItems : []}
           cardSmallMaterial={cardSmallMaterial}
           open
@@ -460,7 +460,7 @@ function DishDetailPage() {
       {dialog.kind === "item" && selected && (
         <CalculationItemDialog
           variantId={selected.id}
-          item={dialog.item}
+          item={dialog.item ?? null}
           ingredients={ingredients}
           nextSortOrder={(selectedItems.at(-1)?.sort_order ?? 0) + 1}
           open
