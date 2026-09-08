@@ -16,6 +16,19 @@ export async function fetchImportJobs(menuCardId: string): Promise<ImportJob[]> 
 export const importJobsQuery = (menuCardId: string) =>
   queryOptions({ queryKey: ["import_jobs", menuCardId], queryFn: () => fetchImportJobs(menuCardId) });
 
+export async function fetchIngredientImportJobs(): Promise<ImportJob[]> {
+  const { data, error } = await supabase
+    .from("import_jobs")
+    .select("*")
+    .eq("import_type", "ingredient_excel")
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (error) throw error;
+  return data ?? [];
+}
+
+export const ingredientImportJobsQuery = queryOptions({ queryKey: ["import_jobs", "ingredient_excel"], queryFn: fetchIngredientImportJobs });
+
 export async function fetchImportJob(jobId: string): Promise<ImportJob | null> {
   const { data, error } = await supabase.from("import_jobs").select("*").eq("id", jobId).maybeSingle();
   if (error) throw error;
@@ -36,4 +49,6 @@ export const IMPORT_RESULT_KEYS = [
   ["add_ons"],
   ["ingredients"],
   ["categories"],
+  ["calculation_items"],
+  ["add_on_links"],
 ] as const;

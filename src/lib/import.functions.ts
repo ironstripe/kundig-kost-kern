@@ -49,10 +49,13 @@ async function assertActive(ctx: Ctx) {
   if (error || !data || !data.is_active) throw new Error("Ihr Konto ist deaktiviert.");
 }
 
-async function loadJob(ctx: Ctx, jobId: string) {
+type MenuImportJob = Omit<import("@/lib/import-schema").ImportJob, "menu_card_id"> & { menu_card_id: string };
+
+async function loadJob(ctx: Ctx, jobId: string): Promise<MenuImportJob> {
   const { data, error } = await ctx.supabase.from("import_jobs").select("*").eq("id", jobId).maybeSingle();
   if (error || !data) throw new Error("Import-Auftrag nicht gefunden.");
-  return data as import("@/lib/import-schema").ImportJob;
+  if (data.import_type !== "menu_document" || !data.menu_card_id) throw new Error("Dieser Import-Auftrag gehört nicht zu einer Speisekarte.");
+  return data as MenuImportJob;
 }
 
 async function setJob(ctx: Ctx, jobId: string, patch: Record<string, unknown>) {
