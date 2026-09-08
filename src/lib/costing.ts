@@ -320,6 +320,8 @@ export function compareVariants(results: VariantResult[]): ComparisonMetric[] {
   });
 }
 
+export type QuantityComparisonKind = "shared_equal" | "shared_different" | "only_first" | "only_second" | "mixed";
+
 export type QuantityComparisonRow = {
   ingredientId: string;
   ingredientName: string;
@@ -327,7 +329,18 @@ export type QuantityComparisonRow = {
   /** Net quantity per variant (null when the variant does not use the ingredient). */
   quantities: (number | null)[];
   costs: (number | null)[];
+  /** Classification (meaningful for two-way comparisons). */
+  kind: QuantityComparisonKind;
 };
+
+function classifyRow(quantities: (number | null)[]): QuantityComparisonKind {
+  if (quantities.length !== 2) return "mixed";
+  const [a, b] = quantities;
+  if (a !== null && b === null) return "only_first";
+  if (a === null && b !== null) return "only_second";
+  if (a !== null && b !== null) return Math.abs(a - b) < 1e-9 ? "shared_equal" : "shared_different";
+  return "mixed";
+}
 
 export function compareQuantities(results: VariantResult[]): QuantityComparisonRow[] {
   const rows = new Map<string, QuantityComparisonRow>();
@@ -342,6 +355,7 @@ export function compareQuantities(results: VariantResult[]): QuantityComparisonR
           unit: r.ingredient.base_unit,
           quantities: results.map(() => null),
           costs: results.map(() => null),
+          kind: "mixed",
         };
         rows.set(r.ingredient.id, row);
       }
@@ -349,5 +363,46 @@ export function compareQuantities(results: VariantResult[]): QuantityComparisonR
       row.costs[idx] = (row.costs[idx] ?? 0) + (r.cost ?? 0);
     }
   });
-  return Array.from(rows.values()).sort((a, b) => a.ingredientName.localeCompare(b.ingredientName, "de-CH"));
+  return Array.from(rows.values())
+    .map((row) => ({ ...row, kind: classifyRow(row.quantities) }))
+    .sort((a, b) => a.ingredientName.localeCompare(b.ingredientName, "de-CH"));
+}
+
+// ---------------------------------------------------------------------------
+// Combined order (dish variant + add-ons) – informational only
+// ---------------------------------------------------------------------------
+
+export type CombinedResult = {
+  parts: VariantResult[];
+  grossPrice: number | null;
+  netPrice: number | null;
+  foodCost: number | null;
+  contributionMargin1: number | null;
+  contributionMarginRatio: number | null;
+  foodCostRatio: number | null;
+  complete: boolean;
+  problems: string[];
+};
+
+/** Sums the results of one variant and any number of add-ons. Nothing is persisted. */
+export function combineResults(parts: VariantResult[]): CombinedResult {
+  const problems = parts.flatMap((p) => p.problems.map((m) => `${p.variant.name}: ${m}`));
+  const sum = (key: "grossPrice" | "netPrice" | "foodCost") =>
+    parts.some((p) => p[key] === null) ? null : parts.reduce((s, p) => s + (p[key] ?? 0), 0);
+  const grossPrice = parts.length ? sum("grossPrice") : null;
+  const netPrice = parts.length ? sum("netPrice") : null;
+  const foodCost = parts.length ? sum("foodCost") : null;
+  const contributionMargin1 = netPrice !== null && foodCost !== null ? netPrice - foodCost : null;
+  const ratioOk = netPrice !== null && netPrice > 0;
+  return {
+    parts,
+    grossPrice,
+    netPrice,
+    foodCost,
+    contributionMargin1,
+    contributionMarginRatio: ratioOk && contributionMargin1 !== null ? (contributionMargin1 / netPrice) * 100 : null,
+    foodCostRatio: ratioOk && foodCost !== null ? (foodCost / netPrice) * 100 : null,
+    complete: problems.length === 0 && contributionMargin1 !== null,
+    problems,
+  };
 }

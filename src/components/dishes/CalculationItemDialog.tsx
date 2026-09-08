@@ -22,8 +22,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { StatusBadge } from "@/components/layout/StatusBadge";
 
+/** Exactly one calculation owner: a dish variant or an add-on. */
+export type CalculationOwner = { variant_id: string; add_on_id?: undefined } | { add_on_id: string; variant_id?: undefined };
+
 type Props = {
-  variantId: string;
+  owner: CalculationOwner;
   item?: CalculationItem | null;
   ingredients: Ingredient[];
   nextSortOrder: number;
@@ -31,7 +34,7 @@ type Props = {
   onOpenChange: (open: boolean) => void;
 };
 
-export function CalculationItemDialog({ variantId, item, ingredients, nextSortOrder, open, onOpenChange }: Props) {
+export function CalculationItemDialog({ owner, item, ingredients, nextSortOrder, open, onOpenChange }: Props) {
   const queryClient = useQueryClient();
   const isEdit = Boolean(item);
   const [ingredientId, setIngredientId] = useState(item?.ingredient_id ?? "");
@@ -103,7 +106,11 @@ export function CalculationItemDialog({ variantId, item, ingredients, nextSortOr
           quantity_source: changedQty ? "manual" : item.quantity_source,
         });
       } else {
-        await createItem({ ...values, variant_id: variantId, sort_order: nextSortOrder, quantity_source: "manual" });
+        const ownerCols =
+          owner.variant_id !== undefined
+            ? { variant_id: owner.variant_id, add_on_id: null }
+            : { variant_id: null, add_on_id: owner.add_on_id };
+        await createItem({ ...values, ...ownerCols, sort_order: nextSortOrder, quantity_source: "manual" });
       }
     },
     onSuccess: async () => {
