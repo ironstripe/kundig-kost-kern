@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppSidebar } from "./AppSidebar";
 import { UserMenu } from "./UserMenu";
 import { Logo } from "./Logo";
@@ -17,6 +18,7 @@ export function AppShell({ profile, email, children }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
+    <TooltipProvider delayDuration={200}>
     <div className="flex min-h-screen bg-background">
       {/* Desktop sidebar */}
       <aside className="sticky top-0 hidden h-screen w-60 shrink-0 border-r border-sidebar-border lg:block">
@@ -52,5 +54,6 @@ export function AppShell({ profile, email, children }: Props) {
         </main>
       </div>
     </div>
+    </TooltipProvider>
   );
 }
