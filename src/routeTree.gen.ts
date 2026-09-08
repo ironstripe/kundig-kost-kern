@@ -15,15 +15,17 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as AuthenticatedAppRouteRouteImport } from './routes/_authenticated/_app/route'
 import { Route as AuthenticatedPasswortAendernRouteImport } from './routes/_authenticated/passwort-aendern'
-import { Route as AuthenticatedAppSpeisekartenRouteImport } from './routes/_authenticated/_app/speisekarten'
 import { Route as AuthenticatedAppSzenarioRouteImport } from './routes/_authenticated/_app/szenario'
 import { Route as AuthenticatedAppUebersichtRouteImport } from './routes/_authenticated/_app/uebersicht'
+import { Route as AuthenticatedAppVerkaufsmengenRouteImport } from './routes/_authenticated/_app/verkaufsmengen'
 import { Route as AuthenticatedAppZutatenRouteImport } from './routes/_authenticated/_app/zutaten'
 import { Route as AuthenticatedAppEinstellungenIndexRouteImport } from './routes/_authenticated/_app/einstellungen/index'
 import { Route as AuthenticatedAppEinstellungenBenutzerRouteImport } from './routes/_authenticated/_app/einstellungen/benutzer'
 import { Route as AuthenticatedAppEinstellungenKonfigurationRouteImport } from './routes/_authenticated/_app/einstellungen/konfiguration'
 import { Route as AuthenticatedAppGerichteIndexRouteImport } from './routes/_authenticated/_app/gerichte.index'
 import { Route as AuthenticatedAppGerichteDishIdRouteImport } from './routes/_authenticated/_app/gerichte.$dishId'
+import { Route as AuthenticatedAppSpeisekartenIndexRouteImport } from './routes/_authenticated/_app/speisekarten.index'
+import { Route as AuthenticatedAppSpeisekartenMenuCardIdRouteImport } from './routes/_authenticated/_app/speisekarten.$menuCardId'
 import { Route as AuthenticatedAppGerichteAddOnsIndexRouteImport } from './routes/_authenticated/_app/gerichte.add-ons.index'
 import { Route as AuthenticatedAppGerichteAddOnsAddOnIdRouteImport } from './routes/_authenticated/_app/gerichte.add-ons.$addOnId'
 
@@ -56,12 +58,6 @@ const AuthenticatedPasswortAendernRoute =
     path: '/passwort-aendern',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedAppSpeisekartenRoute =
-  AuthenticatedAppSpeisekartenRouteImport.update({
-    id: '/speisekarten',
-    path: '/speisekarten',
-    getParentRoute: () => AuthenticatedAppRouteRoute,
-  } as any)
 const AuthenticatedAppSzenarioRoute =
   AuthenticatedAppSzenarioRouteImport.update({
     id: '/szenario',
@@ -72,6 +68,12 @@ const AuthenticatedAppUebersichtRoute =
   AuthenticatedAppUebersichtRouteImport.update({
     id: '/uebersicht',
     path: '/uebersicht',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppVerkaufsmengenRoute =
+  AuthenticatedAppVerkaufsmengenRouteImport.update({
+    id: '/verkaufsmengen',
+    path: '/verkaufsmengen',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
 const AuthenticatedAppZutatenRoute = AuthenticatedAppZutatenRouteImport.update({
@@ -109,6 +111,18 @@ const AuthenticatedAppGerichteDishIdRoute =
     path: '/gerichte/$dishId',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
+const AuthenticatedAppSpeisekartenIndexRoute =
+  AuthenticatedAppSpeisekartenIndexRouteImport.update({
+    id: '/speisekarten/',
+    path: '/speisekarten/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppSpeisekartenMenuCardIdRoute =
+  AuthenticatedAppSpeisekartenMenuCardIdRouteImport.update({
+    id: '/speisekarten/$menuCardId',
+    path: '/speisekarten/$menuCardId',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
 const AuthenticatedAppGerichteAddOnsIndexRoute =
   AuthenticatedAppGerichteAddOnsIndexRouteImport.update({
     id: '/gerichte/add-ons/',
@@ -127,15 +141,17 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/setup': typeof SetupRoute
   '/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
-  '/speisekarten': typeof AuthenticatedAppSpeisekartenRoute
   '/szenario': typeof AuthenticatedAppSzenarioRoute
   '/uebersicht': typeof AuthenticatedAppUebersichtRoute
+  '/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
   '/zutaten': typeof AuthenticatedAppZutatenRoute
   '/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
   '/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
+  '/speisekarten/$menuCardId': typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   '/einstellungen/': typeof AuthenticatedAppEinstellungenIndexRoute
   '/gerichte/': typeof AuthenticatedAppGerichteIndexRoute
+  '/speisekarten/': typeof AuthenticatedAppSpeisekartenIndexRoute
   '/gerichte/add-ons/$addOnId': typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
   '/gerichte/add-ons/': typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
@@ -144,15 +160,17 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/setup': typeof SetupRoute
   '/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
-  '/speisekarten': typeof AuthenticatedAppSpeisekartenRoute
   '/szenario': typeof AuthenticatedAppSzenarioRoute
   '/uebersicht': typeof AuthenticatedAppUebersichtRoute
+  '/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
   '/zutaten': typeof AuthenticatedAppZutatenRoute
   '/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
   '/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
+  '/speisekarten/$menuCardId': typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   '/einstellungen': typeof AuthenticatedAppEinstellungenIndexRoute
   '/gerichte': typeof AuthenticatedAppGerichteIndexRoute
+  '/speisekarten': typeof AuthenticatedAppSpeisekartenIndexRoute
   '/gerichte/add-ons/$addOnId': typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
   '/gerichte/add-ons': typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
@@ -164,15 +182,17 @@ export interface FileRoutesById {
   '/setup': typeof SetupRoute
   '/_authenticated/_app': typeof AuthenticatedAppRouteRouteWithChildren
   '/_authenticated/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
-  '/_authenticated/_app/speisekarten': typeof AuthenticatedAppSpeisekartenRoute
   '/_authenticated/_app/szenario': typeof AuthenticatedAppSzenarioRoute
   '/_authenticated/_app/uebersicht': typeof AuthenticatedAppUebersichtRoute
+  '/_authenticated/_app/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
   '/_authenticated/_app/zutaten': typeof AuthenticatedAppZutatenRoute
   '/_authenticated/_app/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/_authenticated/_app/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
   '/_authenticated/_app/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
+  '/_authenticated/_app/speisekarten/$menuCardId': typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   '/_authenticated/_app/einstellungen/': typeof AuthenticatedAppEinstellungenIndexRoute
   '/_authenticated/_app/gerichte/': typeof AuthenticatedAppGerichteIndexRoute
+  '/_authenticated/_app/speisekarten/': typeof AuthenticatedAppSpeisekartenIndexRoute
   '/_authenticated/_app/gerichte/add-ons/$addOnId': typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
   '/_authenticated/_app/gerichte/add-ons/': typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
@@ -183,15 +203,17 @@ export interface FileRouteTypes {
     | '/auth'
     | '/setup'
     | '/passwort-aendern'
-    | '/speisekarten'
     | '/szenario'
     | '/uebersicht'
+    | '/verkaufsmengen'
     | '/zutaten'
     | '/einstellungen/benutzer'
     | '/einstellungen/konfiguration'
     | '/gerichte/$dishId'
+    | '/speisekarten/$menuCardId'
     | '/einstellungen/'
     | '/gerichte/'
+    | '/speisekarten/'
     | '/gerichte/add-ons/$addOnId'
     | '/gerichte/add-ons/'
   fileRoutesByTo: FileRoutesByTo
@@ -200,15 +222,17 @@ export interface FileRouteTypes {
     | '/auth'
     | '/setup'
     | '/passwort-aendern'
-    | '/speisekarten'
     | '/szenario'
     | '/uebersicht'
+    | '/verkaufsmengen'
     | '/zutaten'
     | '/einstellungen/benutzer'
     | '/einstellungen/konfiguration'
     | '/gerichte/$dishId'
+    | '/speisekarten/$menuCardId'
     | '/einstellungen'
     | '/gerichte'
+    | '/speisekarten'
     | '/gerichte/add-ons/$addOnId'
     | '/gerichte/add-ons'
   id:
@@ -219,15 +243,17 @@ export interface FileRouteTypes {
     | '/setup'
     | '/_authenticated/_app'
     | '/_authenticated/passwort-aendern'
-    | '/_authenticated/_app/speisekarten'
     | '/_authenticated/_app/szenario'
     | '/_authenticated/_app/uebersicht'
+    | '/_authenticated/_app/verkaufsmengen'
     | '/_authenticated/_app/zutaten'
     | '/_authenticated/_app/einstellungen/benutzer'
     | '/_authenticated/_app/einstellungen/konfiguration'
     | '/_authenticated/_app/gerichte/$dishId'
+    | '/_authenticated/_app/speisekarten/$menuCardId'
     | '/_authenticated/_app/einstellungen/'
     | '/_authenticated/_app/gerichte/'
+    | '/_authenticated/_app/speisekarten/'
     | '/_authenticated/_app/gerichte/add-ons/$addOnId'
     | '/_authenticated/_app/gerichte/add-ons/'
   fileRoutesById: FileRoutesById
@@ -283,13 +309,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPasswortAendernRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/_app/speisekarten': {
-      id: '/_authenticated/_app/speisekarten'
-      path: '/speisekarten'
-      fullPath: '/speisekarten'
-      preLoaderRoute: typeof AuthenticatedAppSpeisekartenRouteImport
-      parentRoute: typeof AuthenticatedAppRouteRoute
-    }
     '/_authenticated/_app/szenario': {
       id: '/_authenticated/_app/szenario'
       path: '/szenario'
@@ -302,6 +321,13 @@ declare module '@tanstack/react-router' {
       path: '/uebersicht'
       fullPath: '/uebersicht'
       preLoaderRoute: typeof AuthenticatedAppUebersichtRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/verkaufsmengen': {
+      id: '/_authenticated/_app/verkaufsmengen'
+      path: '/verkaufsmengen'
+      fullPath: '/verkaufsmengen'
+      preLoaderRoute: typeof AuthenticatedAppVerkaufsmengenRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
     '/_authenticated/_app/zutaten': {
@@ -346,6 +372,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppGerichteDishIdRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
+    '/_authenticated/_app/speisekarten/': {
+      id: '/_authenticated/_app/speisekarten/'
+      path: '/speisekarten'
+      fullPath: '/speisekarten/'
+      preLoaderRoute: typeof AuthenticatedAppSpeisekartenIndexRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/speisekarten/$menuCardId': {
+      id: '/_authenticated/_app/speisekarten/$menuCardId'
+      path: '/speisekarten/$menuCardId'
+      fullPath: '/speisekarten/$menuCardId'
+      preLoaderRoute: typeof AuthenticatedAppSpeisekartenMenuCardIdRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
     '/_authenticated/_app/gerichte/add-ons/': {
       id: '/_authenticated/_app/gerichte/add-ons/'
       path: '/gerichte/add-ons'
@@ -364,32 +404,38 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAppRouteRouteChildren {
-  AuthenticatedAppSpeisekartenRoute: typeof AuthenticatedAppSpeisekartenRoute
   AuthenticatedAppSzenarioRoute: typeof AuthenticatedAppSzenarioRoute
   AuthenticatedAppUebersichtRoute: typeof AuthenticatedAppUebersichtRoute
+  AuthenticatedAppVerkaufsmengenRoute: typeof AuthenticatedAppVerkaufsmengenRoute
   AuthenticatedAppZutatenRoute: typeof AuthenticatedAppZutatenRoute
   AuthenticatedAppEinstellungenBenutzerRoute: typeof AuthenticatedAppEinstellungenBenutzerRoute
   AuthenticatedAppEinstellungenKonfigurationRoute: typeof AuthenticatedAppEinstellungenKonfigurationRoute
   AuthenticatedAppGerichteDishIdRoute: typeof AuthenticatedAppGerichteDishIdRoute
+  AuthenticatedAppSpeisekartenMenuCardIdRoute: typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   AuthenticatedAppEinstellungenIndexRoute: typeof AuthenticatedAppEinstellungenIndexRoute
   AuthenticatedAppGerichteIndexRoute: typeof AuthenticatedAppGerichteIndexRoute
+  AuthenticatedAppSpeisekartenIndexRoute: typeof AuthenticatedAppSpeisekartenIndexRoute
   AuthenticatedAppGerichteAddOnsAddOnIdRoute: typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
   AuthenticatedAppGerichteAddOnsIndexRoute: typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
 
 const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
-  AuthenticatedAppSpeisekartenRoute: AuthenticatedAppSpeisekartenRoute,
   AuthenticatedAppSzenarioRoute: AuthenticatedAppSzenarioRoute,
   AuthenticatedAppUebersichtRoute: AuthenticatedAppUebersichtRoute,
+  AuthenticatedAppVerkaufsmengenRoute: AuthenticatedAppVerkaufsmengenRoute,
   AuthenticatedAppZutatenRoute: AuthenticatedAppZutatenRoute,
   AuthenticatedAppEinstellungenBenutzerRoute:
     AuthenticatedAppEinstellungenBenutzerRoute,
   AuthenticatedAppEinstellungenKonfigurationRoute:
     AuthenticatedAppEinstellungenKonfigurationRoute,
   AuthenticatedAppGerichteDishIdRoute: AuthenticatedAppGerichteDishIdRoute,
+  AuthenticatedAppSpeisekartenMenuCardIdRoute:
+    AuthenticatedAppSpeisekartenMenuCardIdRoute,
   AuthenticatedAppEinstellungenIndexRoute:
     AuthenticatedAppEinstellungenIndexRoute,
   AuthenticatedAppGerichteIndexRoute: AuthenticatedAppGerichteIndexRoute,
+  AuthenticatedAppSpeisekartenIndexRoute:
+    AuthenticatedAppSpeisekartenIndexRoute,
   AuthenticatedAppGerichteAddOnsAddOnIdRoute:
     AuthenticatedAppGerichteAddOnsAddOnIdRoute,
   AuthenticatedAppGerichteAddOnsIndexRoute:

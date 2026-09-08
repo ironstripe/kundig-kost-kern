@@ -11,7 +11,7 @@ import { AddOnDialog } from "@/components/add-ons/AddOnDialog";
 import { addOnLinksQuery, addOnQuery, updateAddOn } from "@/lib/add-ons";
 import { allItemsQuery, allVariantsQuery, deleteItem, dishesQuery, reorderItems, updateItem, type CalculationItem } from "@/lib/dishes";
 import { ingredientsQuery } from "@/lib/ingredients";
-import { activeMenuCardQuery } from "@/lib/menu-cards";
+import { useMenuCardFor } from "@/lib/selected-menu-card";
 import { calculateVariant, type CalculationStatus } from "@/lib/costing";
 import { addOnSalesWarning, expectedTotalSales, openDaysCount } from "@/lib/sales";
 import { calculationStatusLabels } from "@/lib/labels";
@@ -56,7 +56,7 @@ function AddOnDetailPage() {
   const { data: variants } = useQuery(allVariantsQuery);
   const { data: allItems } = useQuery(allItemsQuery);
   const { data: ingredients } = useQuery(ingredientsQuery);
-  const { data: card } = useQuery(activeMenuCardQuery);
+  const { data: card } = useMenuCardFor(addOn?.menu_card_id);
   const [dialog, setDialog] = useState<Dialogs>({ kind: "none" });
 
   const ingById = useMemo(() => new Map((ingredients ?? []).map((i) => [i.id, i])), [ingredients]);

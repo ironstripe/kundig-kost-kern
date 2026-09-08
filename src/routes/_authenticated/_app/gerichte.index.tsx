@@ -9,7 +9,8 @@ import { DishDialog } from "@/components/dishes/DishDialog";
 import { MetricValue } from "@/components/dishes/Metric";
 import { allItemsQuery, allVariantsQuery, categoriesQuery, dishesQuery } from "@/lib/dishes";
 import { ingredientsQuery } from "@/lib/ingredients";
-import { activeMenuCardQuery } from "@/lib/menu-cards";
+import { useSelectedMenuCard } from "@/lib/selected-menu-card";
+import { MenuCardSelector } from "@/components/menu-cards/MenuCardSelector";
 import { calculateVariant, type CalculationStatus, type VariantResult } from "@/lib/costing";
 import { calculationStatusLabels } from "@/lib/labels";
 import { Button } from "@/components/ui/button";
@@ -55,7 +56,7 @@ const statusTone: Record<CalculationStatus, "warning" | "neutral" | "success"> =
 
 function DishesPage() {
   const navigate = useNavigate();
-  const { data: card } = useQuery(activeMenuCardQuery);
+  const { data: card } = useSelectedMenuCard();
   const { data: dishes, isPending } = useQuery(dishesQuery);
   const { data: categories } = useQuery(categoriesQuery);
   const { data: variants } = useQuery(allVariantsQuery);
@@ -74,7 +75,7 @@ function DishesPage() {
     const ingById = new Map(ingredients.map((i) => [i.id, i]));
     const catById = new Map((categories ?? []).map((c) => [c.id, c.name]));
     const out: Row[] = [];
-    for (const d of dishes) {
+    for (const d of dishes.filter((x) => !card || x.menu_card_id === card.id)) {
       const vs = variants.filter((v) => v.dish_id === d.id);
       vs.forEach((v, idx) => {
         const its = items.filter((it) => it.variant_id === v.id);
@@ -169,7 +170,7 @@ function DishesPage() {
   );
 
   const loading = isPending || !variants || !items || !ingredients;
-  const hasAny = (dishes?.length ?? 0) > 0;
+  const hasAny = rows.length > 0;
   const categoryNames = Array.from(new Set(rows.map((r) => r.category))).filter((c) => c !== "–").sort();
 
   return (
@@ -188,6 +189,8 @@ function DishesPage() {
           </>
         }
       />
+
+      <MenuCardSelector className="mb-4" />
 
       {loading && <Skeleton className="h-64 w-full" />}
 

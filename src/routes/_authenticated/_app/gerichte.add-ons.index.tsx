@@ -11,7 +11,8 @@ import { AddOnDialog } from "@/components/add-ons/AddOnDialog";
 import { addOnLinksQuery, addOnsQuery } from "@/lib/add-ons";
 import { allItemsQuery, allVariantsQuery, dishesQuery } from "@/lib/dishes";
 import { ingredientsQuery } from "@/lib/ingredients";
-import { activeMenuCardQuery } from "@/lib/menu-cards";
+import { useSelectedMenuCard } from "@/lib/selected-menu-card";
+import { MenuCardSelector } from "@/components/menu-cards/MenuCardSelector";
 import { calculateVariant } from "@/lib/costing";
 import { addOnSalesWarning, openDaysCount } from "@/lib/sales";
 import { calculationStatusLabels } from "@/lib/labels";
@@ -36,7 +37,7 @@ export const Route = createFileRoute("/_authenticated/_app/gerichte/add-ons/")({
 
 function AddOnsPage() {
   const navigate = useNavigate();
-  const { data: card } = useQuery(activeMenuCardQuery);
+  const { data: card } = useSelectedMenuCard();
   const { data: addOns, isPending } = useQuery(addOnsQuery);
   const { data: links } = useQuery(addOnLinksQuery);
   const { data: dishes } = useQuery(dishesQuery);
@@ -55,6 +56,7 @@ function AddOnsPage() {
     if (!addOns || !items || !links || !dishes || !variants) return [];
     const q = search.trim().toLowerCase();
     return addOns
+      .filter((a) => !card || a.menu_card_id === card.id)
       .filter((a) => (activeFilter === "all" ? true : activeFilter === "active" ? a.is_active : !a.is_active))
       .filter((a) => !q || a.name.toLowerCase().includes(q))
       .map((a) => {
@@ -89,6 +91,8 @@ function AddOnsPage() {
           </Button>
         }
       />
+
+      <MenuCardSelector className="mb-4" />
 
       {loading && <Skeleton className="h-64 w-full" />}
 

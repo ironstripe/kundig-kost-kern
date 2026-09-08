@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SlidersHorizontal } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { EmptyState } from "@/components/layout/EmptyState";
+import { MenuCardSelector } from "@/components/menu-cards/MenuCardSelector";
 
 export const Route = createFileRoute("/_authenticated/_app/szenario")({
   head: () => ({
@@ -22,6 +23,7 @@ function ScenarioPage() {
         title="Szenario"
         description="Das Szenario zeigt später Umsatz, Wareneinsatz und DB I über die gesamte Laufzeit der Karte – abgeleitet aus Öffnungstagen, erwarteten Verkaufsmengen und Einkaufspreisen."
       />
+      <MenuCardSelector className="mb-4" />
       <EmptyState
         icon={SlidersHorizontal}
         title="Noch keine Szenario-Berechnung"

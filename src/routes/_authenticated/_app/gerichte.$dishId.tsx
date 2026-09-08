@@ -31,7 +31,7 @@ import {
 } from "@/lib/dishes";
 import { addOnLinksQuery, addOnsQuery, unlinkAddOn, type AddOn } from "@/lib/add-ons";
 import { ingredientsQuery } from "@/lib/ingredients";
-import { activeMenuCardQuery } from "@/lib/menu-cards";
+import { useMenuCardFor } from "@/lib/selected-menu-card";
 import { calculateVariant, combineResults, type CalculationStatus, type VariantResult } from "@/lib/costing";
 import { formatCHF } from "@/lib/format";
 import { calculationStatusLabels } from "@/lib/labels";
@@ -87,7 +87,7 @@ function DishDetailPage() {
   const { data: variants } = useQuery(dishVariantsQuery(dishId));
   const { data: allItems } = useQuery(allItemsQuery);
   const { data: ingredients } = useQuery(ingredientsQuery);
-  const { data: card } = useQuery(activeMenuCardQuery);
+  const { data: card } = useMenuCardFor(dish?.menu_card_id);
   const { data: addOns } = useQuery(addOnsQuery);
   const { data: links } = useQuery(addOnLinksQuery);
 

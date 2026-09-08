@@ -13,13 +13,16 @@ export function StatusBadge({
   children,
   tone = "neutral",
   className,
+  title,
 }: {
   children: React.ReactNode;
   tone?: Tone;
   className?: string;
+  title?: string | undefined;
 }) {
   return (
     <span
+      title={title}
       className={cn(
         "inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium",
         tones[tone],
