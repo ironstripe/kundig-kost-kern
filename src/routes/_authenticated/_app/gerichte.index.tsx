@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { ArrowUpDown, Plus, Search, UtensilsCrossed } from "lucide-react";
+import { ArrowUpDown, PackagePlus, Plus, Search, UtensilsCrossed } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { EmptyState } from "@/components/layout/EmptyState";
 import { StatusBadge } from "@/components/layout/StatusBadge";
@@ -178,9 +178,14 @@ function DishesPage() {
         title="Gerichte"
         description="Jede Variante wird einzeln kalkuliert: Netto-VK ohne 8.1 % MWST, Wareneinsatz aus zentralen Einkaufspreisen und DB I nach Wareneinsatz. Alle Werte werden live berechnet."
         actions={
-          <Button onClick={() => setDialogOpen(true)} disabled={!card}>
-            <Plus className="size-4" /> Gericht hinzufügen
-          </Button>
+          <>
+            <Button asChild variant="outline">
+              <Link to="/gerichte/add-ons"><PackagePlus className="size-4" /> Add-ons</Link>
+            </Button>
+            <Button onClick={() => setDialogOpen(true)} disabled={!card}>
+              <Plus className="size-4" /> Gericht hinzufügen
+            </Button>
+          </>
         }
       />
 

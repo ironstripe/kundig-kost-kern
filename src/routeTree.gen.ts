@@ -24,6 +24,8 @@ import { Route as AuthenticatedAppEinstellungenBenutzerRouteImport } from './rou
 import { Route as AuthenticatedAppEinstellungenKonfigurationRouteImport } from './routes/_authenticated/_app/einstellungen/konfiguration'
 import { Route as AuthenticatedAppGerichteIndexRouteImport } from './routes/_authenticated/_app/gerichte.index'
 import { Route as AuthenticatedAppGerichteDishIdRouteImport } from './routes/_authenticated/_app/gerichte.$dishId'
+import { Route as AuthenticatedAppGerichteAddOnsIndexRouteImport } from './routes/_authenticated/_app/gerichte.add-ons.index'
+import { Route as AuthenticatedAppGerichteAddOnsAddOnIdRouteImport } from './routes/_authenticated/_app/gerichte.add-ons.$addOnId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -107,6 +109,18 @@ const AuthenticatedAppGerichteDishIdRoute =
     path: '/gerichte/$dishId',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
+const AuthenticatedAppGerichteAddOnsIndexRoute =
+  AuthenticatedAppGerichteAddOnsIndexRouteImport.update({
+    id: '/gerichte/add-ons/',
+    path: '/gerichte/add-ons/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppGerichteAddOnsAddOnIdRoute =
+  AuthenticatedAppGerichteAddOnsAddOnIdRouteImport.update({
+    id: '/gerichte/add-ons/$addOnId',
+    path: '/gerichte/add-ons/$addOnId',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -122,6 +136,8 @@ export interface FileRoutesByFullPath {
   '/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
   '/einstellungen/': typeof AuthenticatedAppEinstellungenIndexRoute
   '/gerichte/': typeof AuthenticatedAppGerichteIndexRoute
+  '/gerichte/add-ons/$addOnId': typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
+  '/gerichte/add-ons/': typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -137,6 +153,8 @@ export interface FileRoutesByTo {
   '/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
   '/einstellungen': typeof AuthenticatedAppEinstellungenIndexRoute
   '/gerichte': typeof AuthenticatedAppGerichteIndexRoute
+  '/gerichte/add-ons/$addOnId': typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
+  '/gerichte/add-ons': typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -155,6 +173,8 @@ export interface FileRoutesById {
   '/_authenticated/_app/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
   '/_authenticated/_app/einstellungen/': typeof AuthenticatedAppEinstellungenIndexRoute
   '/_authenticated/_app/gerichte/': typeof AuthenticatedAppGerichteIndexRoute
+  '/_authenticated/_app/gerichte/add-ons/$addOnId': typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
+  '/_authenticated/_app/gerichte/add-ons/': typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -172,6 +192,8 @@ export interface FileRouteTypes {
     | '/gerichte/$dishId'
     | '/einstellungen/'
     | '/gerichte/'
+    | '/gerichte/add-ons/$addOnId'
+    | '/gerichte/add-ons/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -187,6 +209,8 @@ export interface FileRouteTypes {
     | '/gerichte/$dishId'
     | '/einstellungen'
     | '/gerichte'
+    | '/gerichte/add-ons/$addOnId'
+    | '/gerichte/add-ons'
   id:
     | '__root__'
     | '/'
@@ -204,6 +228,8 @@ export interface FileRouteTypes {
     | '/_authenticated/_app/gerichte/$dishId'
     | '/_authenticated/_app/einstellungen/'
     | '/_authenticated/_app/gerichte/'
+    | '/_authenticated/_app/gerichte/add-ons/$addOnId'
+    | '/_authenticated/_app/gerichte/add-ons/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -320,6 +346,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppGerichteDishIdRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
+    '/_authenticated/_app/gerichte/add-ons/': {
+      id: '/_authenticated/_app/gerichte/add-ons/'
+      path: '/gerichte/add-ons'
+      fullPath: '/gerichte/add-ons/'
+      preLoaderRoute: typeof AuthenticatedAppGerichteAddOnsIndexRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/gerichte/add-ons/$addOnId': {
+      id: '/_authenticated/_app/gerichte/add-ons/$addOnId'
+      path: '/gerichte/add-ons/$addOnId'
+      fullPath: '/gerichte/add-ons/$addOnId'
+      preLoaderRoute: typeof AuthenticatedAppGerichteAddOnsAddOnIdRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
   }
 }
 
@@ -333,6 +373,8 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppGerichteDishIdRoute: typeof AuthenticatedAppGerichteDishIdRoute
   AuthenticatedAppEinstellungenIndexRoute: typeof AuthenticatedAppEinstellungenIndexRoute
   AuthenticatedAppGerichteIndexRoute: typeof AuthenticatedAppGerichteIndexRoute
+  AuthenticatedAppGerichteAddOnsAddOnIdRoute: typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
+  AuthenticatedAppGerichteAddOnsIndexRoute: typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
 
 const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
@@ -348,6 +390,10 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppEinstellungenIndexRoute:
     AuthenticatedAppEinstellungenIndexRoute,
   AuthenticatedAppGerichteIndexRoute: AuthenticatedAppGerichteIndexRoute,
+  AuthenticatedAppGerichteAddOnsAddOnIdRoute:
+    AuthenticatedAppGerichteAddOnsAddOnIdRoute,
+  AuthenticatedAppGerichteAddOnsIndexRoute:
+    AuthenticatedAppGerichteAddOnsIndexRoute,
 }
 
 const AuthenticatedAppRouteRouteWithChildren =
