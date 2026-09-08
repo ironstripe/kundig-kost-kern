@@ -3,7 +3,7 @@ import type { Database } from "@/integrations/supabase/types";
 type Enums = Database["public"]["Enums"];
 
 export const smallMaterialModeLabels: Record<Enums["small_material_mode"], string> = {
-  percent: "Prozent vom Warenkosten (Zutaten)",
+  percent: "Prozent der Warenkosten (Zutaten)",
   fixed: "Fixbetrag pro Portion",
 };
 
