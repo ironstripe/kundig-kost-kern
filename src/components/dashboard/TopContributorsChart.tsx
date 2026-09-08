@@ -15,7 +15,7 @@ export function TopContributorsChart({ lines }: { lines: MenuLine[] }) {
     .slice(0, 8)
     .map((l) => ({
       key: l.key,
-      label: l.kind === "add_on" ? `${l.name} (Add-on)` : `${l.dishName} – ${l.name}`,
+      label: l.kind === "add_on" ? `${l.name} (Add-on)` : `${l.dishName.length > 22 ? l.dishName.slice(0, 21) + "…" : l.dishName} – ${l.name}`,
       value: Math.round((l.contributionMargin1 ?? 0) * 100) / 100,
       kind: l.kind,
     }));
@@ -43,11 +43,11 @@ export function TopContributorsChart({ lines }: { lines: MenuLine[] }) {
               <YAxis
                 type="category"
                 dataKey="label"
-                width={220}
+                width={250}
                 tickLine={false}
                 axisLine={false}
                 tick={{ fontSize: 12 }}
-                tickFormatter={(v: string) => (v.length > 34 ? `${v.slice(0, 33)}…` : v)}
+                tickFormatter={(v: string) => (v.length > 40 ? `${v.slice(0, 39)}…` : v)}
               />
               <ChartTooltip cursor={false} content={<ChartTooltipContent formatter={(v) => formatCHF(Number(v))} nameKey="kind" />} />
               <Bar dataKey="value" radius={3} isAnimationActive={false}>

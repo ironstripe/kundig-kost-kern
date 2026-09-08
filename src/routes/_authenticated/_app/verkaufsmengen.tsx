@@ -184,7 +184,7 @@ function SalesPlanningPage() {
     return Array.from(map.entries());
   }, [lines]);
 
-  const filtered = lines.filter((l) => {
+  const filtered = [...lines].sort((a, b) => (a.kind === b.kind ? 0 : a.kind === "variant" ? -1 : 1) || a.categoryName.localeCompare(b.categoryName, "de-CH") || a.dishName.localeCompare(b.dishName, "de-CH")).filter((l) => {
     if (category !== "all" && categoryKey(l) !== category) return false;
     if (type !== "all" && l.kind !== type) return false;
     if (status !== "all" && l.status !== status) return false;
@@ -382,7 +382,7 @@ function SalesPlanningPage() {
                               {dirty ? (
                                 <StatusBadge tone="neutral">Ungespeichert</StatusBadge>
                               ) : demo ? (
-                                <StatusBadge tone="warning">{DEMO_LABEL}</StatusBadge>
+                                <StatusBadge tone="warning" className="whitespace-nowrap" title={DEMO_LABEL}>Demo-Annahme</StatusBadge>
                               ) : (
                                 <StatusBadge tone="success">Manuell erfasst</StatusBadge>
                               )}
