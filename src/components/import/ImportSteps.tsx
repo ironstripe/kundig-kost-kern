@@ -3,10 +3,10 @@ import { IMPORT_STEPS } from "@/lib/import-schema";
 import { cn } from "@/lib/utils";
 
 /** 0-based index of the current step. */
-export function ImportSteps({ current }: { current: number }) {
+export function ImportSteps({ current, steps = IMPORT_STEPS }: { current: number; steps?: readonly string[] }) {
   return (
     <ol className="flex flex-wrap items-center gap-2 text-xs" aria-label="Import-Schritte">
-      {IMPORT_STEPS.map((label, i) => {
+      {steps.map((label, i) => {
         const done = i < current;
         const active = i === current;
         return (
@@ -23,7 +23,7 @@ export function ImportSteps({ current }: { current: number }) {
               {done ? <Check className="size-3" /> : i + 1}
             </span>
             <span className={cn("font-medium", active ? "text-foreground" : "text-muted-foreground")}>{label}</span>
-            {i < IMPORT_STEPS.length - 1 && <span className="mx-1 h-px w-6 bg-border" aria-hidden />}
+            {i < steps.length - 1 && <span className="mx-1 h-px w-6 bg-border" aria-hidden />}
           </li>
         );
       })}

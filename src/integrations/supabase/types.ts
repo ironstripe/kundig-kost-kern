@@ -310,21 +310,27 @@ export type Database = {
           content_type: string | null
           created_at: string
           created_by: string | null
+          created_count: number | null
           error_message: string | null
           estimation_confirmed_at: string | null
           estimation_payload: Json | null
           extracted_payload: Json | null
+          failed_count: number | null
+          failed_stage: string | null
           file_size: number | null
           file_url: string
           id: string
           import_type: Database["public"]["Enums"]["import_type"]
-          menu_card_id: string
+          menu_card_id: string | null
           review_payload: Json | null
+          row_count: number | null
+          skipped_count: number | null
           source_kind: string
           source_name: string | null
           status: Database["public"]["Enums"]["import_job_status"]
           storage_path: string | null
           updated_at: string
+          updated_count: number | null
         }
         Insert: {
           confirmed_at?: string | null
@@ -332,21 +338,27 @@ export type Database = {
           content_type?: string | null
           created_at?: string
           created_by?: string | null
+          created_count?: number | null
           error_message?: string | null
           estimation_confirmed_at?: string | null
           estimation_payload?: Json | null
           extracted_payload?: Json | null
+          failed_count?: number | null
+          failed_stage?: string | null
           file_size?: number | null
           file_url: string
           id?: string
           import_type: Database["public"]["Enums"]["import_type"]
-          menu_card_id: string
+          menu_card_id?: string | null
           review_payload?: Json | null
+          row_count?: number | null
+          skipped_count?: number | null
           source_kind?: string
           source_name?: string | null
           status?: Database["public"]["Enums"]["import_job_status"]
           storage_path?: string | null
           updated_at?: string
+          updated_count?: number | null
         }
         Update: {
           confirmed_at?: string | null
@@ -354,21 +366,27 @@ export type Database = {
           content_type?: string | null
           created_at?: string
           created_by?: string | null
+          created_count?: number | null
           error_message?: string | null
           estimation_confirmed_at?: string | null
           estimation_payload?: Json | null
           extracted_payload?: Json | null
+          failed_count?: number | null
+          failed_stage?: string | null
           file_size?: number | null
           file_url?: string
           id?: string
           import_type?: Database["public"]["Enums"]["import_type"]
-          menu_card_id?: string
+          menu_card_id?: string | null
           review_payload?: Json | null
+          row_count?: number | null
+          skipped_count?: number | null
           source_kind?: string
           source_name?: string | null
           status?: Database["public"]["Enums"]["import_job_status"]
           storage_path?: string | null
           updated_at?: string
+          updated_count?: number | null
         }
         Relationships: [
           {
@@ -648,6 +666,10 @@ export type Database = {
     }
     Functions: {
       import_estimation_payload: {
+        Args: { _job_id: string; _payload: Json }
+        Returns: Json
+      }
+      import_ingredient_rows: {
         Args: { _job_id: string; _payload: Json }
         Returns: Json
       }
