@@ -56,3 +56,26 @@ export function formatWeekdays(days: number[]): string {
     .map((d) => WEEKDAYS.find((w) => w.value === d)?.short ?? String(d))
     .join(", ");
 }
+
+/** Parse a user-entered decimal (accepts comma or point). Returns NaN when invalid. */
+export function parseDecimal(value: string): number {
+  const cleaned = value.trim().replace(/'/g, "").replace(",", ".");
+  if (cleaned === "") return NaN;
+  return Number(cleaned);
+}
+
+/** Quantity display: up to 3 decimals, trailing zeros trimmed. */
+export function formatQuantity(value: number, unit?: string): string {
+  const s = formatNumber(value, 3).replace(/\.?0+$/, "");
+  return unit ? `${s} ${unit}` : s;
+}
+
+/** CHF with 4 decimals for unit prices (CHF/g etc.). */
+export function formatUnitPrice(value: number, unit: string): string {
+  return `CHF ${formatNumber(value, 4)}/${unit}`;
+}
+
+/** Percentage given as already-multiplied value (23.0 → "23.0 %"). */
+export function formatPercentPoints(value: number, decimals = 1): string {
+  return `${formatNumber(value, decimals)} %`;
+}
