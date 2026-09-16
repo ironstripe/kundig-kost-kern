@@ -6,7 +6,7 @@ const mk=(id:string,active:boolean)=>({id,menu_card_id:"c",name:id,category_id:n
 const mv=(id:string,dish:string,active:boolean)=>({id,dish_id:dish,name:id,gross_price:20,sales_input_mode:"total",expected_per_open_day:0,expected_total:100,calculation_status:"reviewed",is_active:active,small_material_override_mode:null,small_material_override_value:null} as any);
 const item=(owner:any)=>({id:"it"+Math.random(),ingredient_id:"i",net_quantity:100,quantity_unit:"g",yield_percent:100,quantity_confirmed:true,...owner} as any);
 const addOn=(id:string,active:boolean)=>({id,menu_card_id:"c",name:id,gross_price:5,sales_input_mode:"total",expected_per_open_day:0,expected_total:50,calculation_status:"reviewed",is_active:active,small_material_override_mode:null,small_material_override_value:null} as any);
-function run(d:any,v:any,a:any,l:any,items:any){return calculateMenuTotals({card,dishes:d,variants:v,addOns:a,addOnLinks:l,items,ingredients:ing,excludedDays:[]} as any);}
+function run(d:any,v:any,a:any,l:any,items:any){return calculateMenuTotals({card,dishes:d,variants:v,addOns:a,addOnLinks:l,items,ingredients:ing,excludedDays:[],categories:[]} as any);}
 describe("eligibility",()=>{
  it("excludes inactive dish and its variants",()=>{
   const d=[mk("d1",true),mk("d2",false)];const v=[mv("v1","d1",true),mv("v2","d2",true)];
