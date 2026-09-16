@@ -114,9 +114,18 @@ export async function deleteIdeaNote(id: string) {
 // Idea -> calculation
 // ---------------------------------------------------------------------------
 
-/** Idempotent: returns the existing linked calculation instead of a second one. */
-export async function createEventFromIdea(ideaId: string): Promise<string> {
-  const { data, error } = await supabase.rpc("create_event_from_idea", { _idea_id: ideaId });
+/**
+ * Idempotent: returns the existing linked calculation instead of a second one.
+ *
+ * With `approve`, approval for calculation and creation happen atomically in
+ * one server call; the approving user and timestamp are derived server-side.
+ * This never approves the execution.
+ */
+export async function createEventFromIdea(ideaId: string, approve = false): Promise<string> {
+  const { data, error } = await supabase.rpc("create_event_from_idea", {
+    _idea_id: ideaId,
+    _approve: approve,
+  });
   if (error) throw error;
   return data as string;
 }
