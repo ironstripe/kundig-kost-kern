@@ -61,11 +61,23 @@ function AddOnsPage() {
       .filter((a) => !q || a.name.toLowerCase().includes(q))
       .map((a) => {
         const dishIds = links.filter((l) => l.add_on_id === a.id).map((l) => l.dish_id);
-        const dishNames = dishes.filter((d) => dishIds.includes(d.id)).map((d) => d.name);
+        const assignedDishes = dishes.filter((d) => dishIds.includes(d.id));
+        const dishNames = assignedDishes.map((d) => d.name);
         const dishVariants = variants.filter((v) => dishIds.includes(v.dish_id) && v.is_active);
+        const qualifies = assignedDishes.some(
+          (d) => d.is_active && dishVariants.some((v) => v.dish_id === d.id),
+        );
+        const eligibilityNote = !a.is_active
+          ? null
+          : assignedDishes.length === 0
+            ? ADD_ON_UNASSIGNED_NOTE
+            : qualifies
+              ? null
+              : ADD_ON_NO_ACTIVE_DISH_NOTE;
         return {
           addOn: a,
           dishNames,
+          eligibilityNote,
           result: calculateVariant(a, items.filter((it) => it.add_on_id === a.id), ingById, card ?? null),
           warning: addOnSalesWarning(a, dishVariants, openDays),
         };
