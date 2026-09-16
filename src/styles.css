@@ -192,3 +192,17 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
 }
+
+/* KundiCalc icon colour: stroke icons in navigation, sections, features and
+   actions. Icons always sit next to a text label, so meaning never depends on
+   the colour alone. */
+@utility icon-brand {
+  color: var(--color-icon-brand);
+}
+
+/* Filled icon surface (e.g. empty states): yellow background with a dark
+   foreground for sufficient contrast. */
+@utility icon-brand-surface {
+  background-color: var(--color-icon-brand);
+  color: var(--color-icon-brand-foreground);
+}
