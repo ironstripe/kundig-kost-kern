@@ -37,6 +37,7 @@ import { EventCompletenessPanel, EventResultPanel } from "@/components/events/Ev
 import { EventMenuPanel } from "@/components/events/EventMenuPanel";
 import { EventAssumptionsPanel } from "@/components/events/EventAssumptionsPanel";
 import { EventPostCalculation } from "@/components/events/EventPostCalculation";
+import { EventApprovalPanel } from "@/components/events/EventApprovalPanel";
 import { useAppContext } from "@/lib/app-route";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -128,6 +129,7 @@ function EventDetailPage() {
             onEdit={(line) => setLineDialog({ line })}
             onDelete={(line) => setToDelete(line)}
           />
+          <EventApprovalPanel event={event} result={result} />
         </TabsContent>
 
         <TabsContent value="nach">
