@@ -45,9 +45,11 @@ function IdeaDetailPage() {
   const { data: idea, isPending } = useQuery(eventIdeaQuery(ideaId));
   const { data: notes } = useQuery(ideaNotesQuery(ideaId));
   const { data: events } = useQuery(eventsQuery);
+  const { data: assumptions } = useQuery(eventAssumptionsQuery);
   const [edit, setEdit] = useState(false);
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
+  const [createdId, setCreatedId] = useState<string | null>(null);
 
   if (isPending) return <Skeleton className="h-64 w-full" />;
   if (!idea) return <p className="text-sm text-muted-foreground">Idee nicht gefunden.</p>;
