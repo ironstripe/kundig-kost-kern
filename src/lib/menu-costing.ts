@@ -116,24 +116,27 @@ export function calculateMenuVariant(
     .filter((p) => p.menu_variant_id === menuVariant.id)
     .sort((a, b) => a.sort_order - b.sort_order);
   const results = own.map((p) => calculateMenuPosition(p, ctx));
-  const problems: string[] = [];
+  const costProblems: string[] = [];
   const blockingDishes: string[] = [];
 
-  if (results.length === 0) problems.push("Keine Menü-Positionen erfasst");
+  if (results.length === 0) costProblems.push("Keine Menü-Positionen erfasst");
 
   for (const r of results) {
     if (r.foodCostPerGuest === null) {
       const label = r.dishName ? `${r.dishName}${r.variantName ? ` – ${r.variantName}` : ""}` : "Position";
       blockingDishes.push(label);
-      problems.push(`${label}: ${r.problem ?? "unvollständig"}`);
+      costProblems.push(`${label}: ${r.problem ?? "unvollständig"}`);
     }
   }
 
+  const problems = [...costProblems];
   const vat = Number(menu.vat_rate);
   const gross = menu.gross_price_per_person === null ? NaN : Number(menu.gross_price_per_person);
   let grossPrice: number | null = null;
   let netPrice: number | null = null;
+  let priceMissing = false;
   if (!Number.isFinite(gross) || gross <= 0) {
+    priceMissing = true;
     problems.push("Brutto-Menüpreis pro Person fehlt");
   } else {
     grossPrice = gross;
