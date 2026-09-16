@@ -94,7 +94,9 @@ function ImportPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [job?.id, job?.status, job?.updated_at]);
 
-  const openJob = (id: string | undefined) => navigate({ search: id ? { job: id } : {} });
+  const openJob = (id: string | undefined) =>
+    navigate({ search: (prev) => ({ ...prev, job: id }) });
+
   const refreshJobs = () => queryClient.invalidateQueries({ queryKey: ["import_jobs"] });
   const refreshAll = () => Promise.all(IMPORT_RESULT_KEYS.map((k) => queryClient.invalidateQueries({ queryKey: [...k] })));
 
