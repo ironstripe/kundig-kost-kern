@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { UserIdField } from "@/components/users/UserIdField";
 
 type Props = { open: boolean; onOpenChange: (open: boolean) => void };
 
@@ -26,14 +27,15 @@ export function CreateUserDialog({ open, onOpenChange }: Props) {
   const create = useServerFn(createUser);
   const [form, setForm] = useState(initial);
   const [error, setError] = useState<string | null>(null);
+  const [created, setCreated] = useState<{ id: string; displayName: string } | null>(null);
 
   const mutation = useMutation({
     mutationFn: () => create({ data: form }),
-    onSuccess: async () => {
+    onSuccess: async (result) => {
       await queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
       toast.success(`Benutzer «${form.displayName}» angelegt.`);
+      setCreated({ id: result.id, displayName: form.displayName });
       setForm(initial);
-      onOpenChange(false);
     },
     onError: (err) => setError(err instanceof Error ? err.message : "Anlegen fehlgeschlagen."),
   });
@@ -46,8 +48,40 @@ export function CreateUserDialog({ open, onOpenChange }: Props) {
     mutation.mutate();
   }
 
+  function handleOpenChange(next: boolean) {
+    if (!next) {
+      setCreated(null);
+      setError(null);
+    }
+    onOpenChange(next);
+  }
+
+  if (created) {
+    return (
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Benutzer angelegt</DialogTitle>
+            <DialogDescription>
+              «{created.displayName}» wurde erstellt und muss das temporäre Passwort bei der ersten
+              Anmeldung ändern.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-5">
+            <UserIdField userId={created.id} fieldId={`kundicalc-id-${created.id}`} />
+          </div>
+          <DialogFooter className="mt-6">
+            <Button type="button" onClick={() => handleOpenChange(false)}>
+              Fertig
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
