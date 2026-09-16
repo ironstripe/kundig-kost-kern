@@ -21,7 +21,8 @@ import {
   setIdeaStage,
   type IdeaStage,
 } from "@/lib/event-ideas";
-import { eventsQuery } from "@/lib/events";
+import { eventsQuery, fetchEvent } from "@/lib/events";
+import { copyDefaultsToEvent, eventAssumptionsQuery } from "@/lib/event-assumptions";
 import { EventIdeaDialog } from "@/components/events/EventIdeaDialog";
 import { useAppContext } from "@/lib/app-route";
 
