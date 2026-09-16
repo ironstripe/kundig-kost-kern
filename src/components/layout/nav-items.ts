@@ -6,6 +6,8 @@ import {
   SlidersHorizontal,
   Settings,
   BarChart3,
+  ClipboardList,
+  CalendarDays,
   type LucideIcon,
 } from "lucide-react";
 
