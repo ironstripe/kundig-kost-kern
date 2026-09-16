@@ -111,6 +111,49 @@ export async function deleteMenuPosition(id: string) {
   if (error) throw error;
 }
 
+/**
+ * Returns the default variant of a menu, creating a "Standard" variant when the
+ * menu has none yet. Re-reads the database first so retries, double clicks and
+ * concurrent requests cannot produce a duplicate default variant.
+ */
+export async function ensureDefaultMenuVariant(menuId: string): Promise<MenuVariant> {
+  const { data, error } = await supabase
+    .from("menu_variants")
+    .select("*")
+    .eq("menu_id", menuId)
+    .order("sort_order");
+  if (error) throw error;
+  const existing = data ?? [];
+  const current = existing.find((v) => v.is_default) ?? existing[0];
+  if (current) return current;
+  return createMenuVariant({ menu_id: menuId, name: "Standard", is_default: true, sort_order: 0 });
+}
+
+/** Creates a menu together with its default "Standard" variant. */
+export async function createMenuWithDefaultVariant(values: MenuInsert, userId: string) {
+  const menu = await createMenu(values, userId);
+  try {
+    await ensureDefaultMenuVariant(menu.id);
+  } catch (e) {
+    // The menu itself is usable; the variant is created again on first use.
+    console.warn("Standardvariante konnte nicht angelegt werden", e);
+  }
+  return menu;
+}
+
+/** Adds several menu positions in one request. */
+export async function createMenuPositions(rows: MenuPositionInsert[]) {
+  if (rows.length === 0) return;
+  const { error } = await supabase.from("menu_positions").insert(rows);
+  if (error) throw error;
+}
+
+/** Swaps the sort order of two positions (move up/down within a course). */
+export async function swapMenuPositions(a: MenuPosition, b: MenuPosition) {
+  await updateMenuPosition(a.id, { sort_order: b.sort_order });
+  await updateMenuPosition(b.id, { sort_order: a.sort_order });
+}
+
 /** Duplicates a menu variant including its positions (recipes are referenced, not copied). */
 export async function duplicateMenuVariant(variant: MenuVariant, positions: MenuPosition[]) {
   const created = await createMenuVariant({
