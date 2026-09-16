@@ -56,6 +56,12 @@ export type MenuVariantResult = {
   contributionMargin1: number | null;
   contributionMarginRatio: number | null;
   problems: string[];
+  /** Problems of the food-cost calculation only (price independent). */
+  costProblems: string[];
+  /** The menu selling price is not set yet – food cost is still valid. */
+  priceMissing: boolean;
+  /** Food cost per person is fully calculable. */
+  costComplete: boolean;
   /** Dishes that block a complete calculation. */
   blockingDishes: string[];
   complete: boolean;
