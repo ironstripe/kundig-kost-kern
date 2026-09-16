@@ -37,6 +37,7 @@ import { EventCompletenessPanel, EventResultPanel } from "@/components/events/Ev
 import { EventMenuPanel } from "@/components/events/EventMenuPanel";
 import { EventAssumptionsPanel } from "@/components/events/EventAssumptionsPanel";
 import { EventPostCalculation } from "@/components/events/EventPostCalculation";
+import { EventApprovalPanel } from "@/components/events/EventApprovalPanel";
 import { useAppContext } from "@/lib/app-route";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -84,11 +85,20 @@ function EventDetailPage() {
 
   return (
     <>
-      <Button variant="ghost" size="sm" className="mb-3 -ml-2" asChild>
-        <Link to="/events">
-          <ArrowLeft className="size-4" /> Alle Events
-        </Link>
-      </Button>
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <Button variant="ghost" size="sm" className="-ml-2" asChild>
+          <Link to="/events">
+            <ArrowLeft className="size-4" /> Alle Events
+          </Link>
+        </Button>
+        {event.idea_id && (
+          <Button variant="ghost" size="sm" asChild>
+            <Link to="/events/ideen/$ideaId" params={{ ideaId: event.idea_id }}>
+              Zur Idee
+            </Link>
+          </Button>
+        )}
+      </div>
 
       <PageHeader
         title={event.name}
@@ -128,6 +138,7 @@ function EventDetailPage() {
             onEdit={(line) => setLineDialog({ line })}
             onDelete={(line) => setToDelete(line)}
           />
+          <EventApprovalPanel event={event} result={result} />
         </TabsContent>
 
         <TabsContent value="nach">

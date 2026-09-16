@@ -33,6 +33,8 @@ import { Route as AuthenticatedAppSpeisekartenMenuCardIdRouteImport } from './ro
 import { Route as AuthenticatedAppSpeisekartenImportierenRouteImport } from './routes/_authenticated/_app/speisekarten.importieren'
 import { Route as AuthenticatedAppZutatenIndexRouteImport } from './routes/_authenticated/_app/zutaten.index'
 import { Route as AuthenticatedAppZutatenImportierenRouteImport } from './routes/_authenticated/_app/zutaten.importieren'
+import { Route as AuthenticatedAppEventsIdeenIndexRouteImport } from './routes/_authenticated/_app/events.ideen.index'
+import { Route as AuthenticatedAppEventsIdeenIdeaIdRouteImport } from './routes/_authenticated/_app/events.ideen.$ideaId'
 import { Route as AuthenticatedAppGerichteAddOnsIndexRouteImport } from './routes/_authenticated/_app/gerichte.add-ons.index'
 import { Route as AuthenticatedAppGerichteAddOnsAddOnIdRouteImport } from './routes/_authenticated/_app/gerichte.add-ons.$addOnId'
 
@@ -173,6 +175,18 @@ const AuthenticatedAppZutatenImportierenRoute =
     path: '/zutaten/importieren',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
+const AuthenticatedAppEventsIdeenIndexRoute =
+  AuthenticatedAppEventsIdeenIndexRouteImport.update({
+    id: '/events/ideen/',
+    path: '/events/ideen/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppEventsIdeenIdeaIdRoute =
+  AuthenticatedAppEventsIdeenIdeaIdRouteImport.update({
+    id: '/events/ideen/$ideaId',
+    path: '/events/ideen/$ideaId',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
 const AuthenticatedAppGerichteAddOnsIndexRoute =
   AuthenticatedAppGerichteAddOnsIndexRouteImport.update({
     id: '/gerichte/add-ons/',
@@ -209,7 +223,9 @@ export interface FileRoutesByFullPath {
   '/menues/': typeof AuthenticatedAppMenuesIndexRoute
   '/speisekarten/': typeof AuthenticatedAppSpeisekartenIndexRoute
   '/zutaten/': typeof AuthenticatedAppZutatenIndexRoute
+  '/events/ideen/$ideaId': typeof AuthenticatedAppEventsIdeenIdeaIdRoute
   '/gerichte/add-ons/$addOnId': typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
+  '/events/ideen/': typeof AuthenticatedAppEventsIdeenIndexRoute
   '/gerichte/add-ons/': typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -235,7 +251,9 @@ export interface FileRoutesByTo {
   '/menues': typeof AuthenticatedAppMenuesIndexRoute
   '/speisekarten': typeof AuthenticatedAppSpeisekartenIndexRoute
   '/zutaten': typeof AuthenticatedAppZutatenIndexRoute
+  '/events/ideen/$ideaId': typeof AuthenticatedAppEventsIdeenIdeaIdRoute
   '/gerichte/add-ons/$addOnId': typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
+  '/events/ideen': typeof AuthenticatedAppEventsIdeenIndexRoute
   '/gerichte/add-ons': typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
 export interface FileRoutesById {
@@ -264,7 +282,9 @@ export interface FileRoutesById {
   '/_authenticated/_app/menues/': typeof AuthenticatedAppMenuesIndexRoute
   '/_authenticated/_app/speisekarten/': typeof AuthenticatedAppSpeisekartenIndexRoute
   '/_authenticated/_app/zutaten/': typeof AuthenticatedAppZutatenIndexRoute
+  '/_authenticated/_app/events/ideen/$ideaId': typeof AuthenticatedAppEventsIdeenIdeaIdRoute
   '/_authenticated/_app/gerichte/add-ons/$addOnId': typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
+  '/_authenticated/_app/events/ideen/': typeof AuthenticatedAppEventsIdeenIndexRoute
   '/_authenticated/_app/gerichte/add-ons/': typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
 export interface FileRouteTypes {
@@ -292,7 +312,9 @@ export interface FileRouteTypes {
     | '/menues/'
     | '/speisekarten/'
     | '/zutaten/'
+    | '/events/ideen/$ideaId'
     | '/gerichte/add-ons/$addOnId'
+    | '/events/ideen/'
     | '/gerichte/add-ons/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -318,7 +340,9 @@ export interface FileRouteTypes {
     | '/menues'
     | '/speisekarten'
     | '/zutaten'
+    | '/events/ideen/$ideaId'
     | '/gerichte/add-ons/$addOnId'
+    | '/events/ideen'
     | '/gerichte/add-ons'
   id:
     | '__root__'
@@ -346,7 +370,9 @@ export interface FileRouteTypes {
     | '/_authenticated/_app/menues/'
     | '/_authenticated/_app/speisekarten/'
     | '/_authenticated/_app/zutaten/'
+    | '/_authenticated/_app/events/ideen/$ideaId'
     | '/_authenticated/_app/gerichte/add-ons/$addOnId'
+    | '/_authenticated/_app/events/ideen/'
     | '/_authenticated/_app/gerichte/add-ons/'
   fileRoutesById: FileRoutesById
 }
@@ -527,6 +553,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppZutatenImportierenRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
+    '/_authenticated/_app/events/ideen/': {
+      id: '/_authenticated/_app/events/ideen/'
+      path: '/events/ideen'
+      fullPath: '/events/ideen/'
+      preLoaderRoute: typeof AuthenticatedAppEventsIdeenIndexRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/events/ideen/$ideaId': {
+      id: '/_authenticated/_app/events/ideen/$ideaId'
+      path: '/events/ideen/$ideaId'
+      fullPath: '/events/ideen/$ideaId'
+      preLoaderRoute: typeof AuthenticatedAppEventsIdeenIdeaIdRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
     '/_authenticated/_app/gerichte/add-ons/': {
       id: '/_authenticated/_app/gerichte/add-ons/'
       path: '/gerichte/add-ons'
@@ -563,7 +603,9 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppMenuesIndexRoute: typeof AuthenticatedAppMenuesIndexRoute
   AuthenticatedAppSpeisekartenIndexRoute: typeof AuthenticatedAppSpeisekartenIndexRoute
   AuthenticatedAppZutatenIndexRoute: typeof AuthenticatedAppZutatenIndexRoute
+  AuthenticatedAppEventsIdeenIdeaIdRoute: typeof AuthenticatedAppEventsIdeenIdeaIdRoute
   AuthenticatedAppGerichteAddOnsAddOnIdRoute: typeof AuthenticatedAppGerichteAddOnsAddOnIdRoute
+  AuthenticatedAppEventsIdeenIndexRoute: typeof AuthenticatedAppEventsIdeenIndexRoute
   AuthenticatedAppGerichteAddOnsIndexRoute: typeof AuthenticatedAppGerichteAddOnsIndexRoute
 }
 
@@ -594,8 +636,11 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppSpeisekartenIndexRoute:
     AuthenticatedAppSpeisekartenIndexRoute,
   AuthenticatedAppZutatenIndexRoute: AuthenticatedAppZutatenIndexRoute,
+  AuthenticatedAppEventsIdeenIdeaIdRoute:
+    AuthenticatedAppEventsIdeenIdeaIdRoute,
   AuthenticatedAppGerichteAddOnsAddOnIdRoute:
     AuthenticatedAppGerichteAddOnsAddOnIdRoute,
+  AuthenticatedAppEventsIdeenIndexRoute: AuthenticatedAppEventsIdeenIndexRoute,
   AuthenticatedAppGerichteAddOnsIndexRoute:
     AuthenticatedAppGerichteAddOnsIndexRoute,
 }

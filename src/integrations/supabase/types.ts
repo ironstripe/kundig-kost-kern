@@ -402,6 +402,184 @@ export type Database = {
           },
         ]
       }
+      event_execution_approvals: {
+        Row: {
+          approved_at: string
+          approved_by: string | null
+          basis_fingerprint: string
+          basis_snapshot: Json
+          created_at: string
+          event_id: string
+          id: string
+          note: string | null
+          superseded_at: string | null
+        }
+        Insert: {
+          approved_at?: string
+          approved_by?: string | null
+          basis_fingerprint: string
+          basis_snapshot: Json
+          created_at?: string
+          event_id: string
+          id?: string
+          note?: string | null
+          superseded_at?: string | null
+        }
+        Update: {
+          approved_at?: string
+          approved_by?: string | null
+          basis_fingerprint?: string
+          basis_snapshot?: Json
+          created_at?: string
+          event_id?: string
+          id?: string
+          note?: string | null
+          superseded_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_execution_approvals_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_execution_approvals_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_idea_notes: {
+        Row: {
+          author_id: string | null
+          body: string
+          created_at: string
+          id: string
+          idea_id: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          idea_id: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          idea_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_idea_notes_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_idea_notes_idea_id_fkey"
+            columns: ["idea_id"]
+            isOneToOne: false
+            referencedRelation: "event_ideas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_ideas: {
+        Row: {
+          calc_approved_at: string | null
+          calc_approved_by: string | null
+          created_at: string
+          created_by: string | null
+          desired_date: string | null
+          desired_period: string | null
+          event_type: Database["public"]["Enums"]["event_type"] | null
+          expected_guests: number | null
+          id: string
+          notes: string | null
+          owner_name: string | null
+          partner: string | null
+          stage: Database["public"]["Enums"]["event_idea_stage"]
+          summary: string
+          target_audience: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          calc_approved_at?: string | null
+          calc_approved_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          desired_date?: string | null
+          desired_period?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"] | null
+          expected_guests?: number | null
+          id?: string
+          notes?: string | null
+          owner_name?: string | null
+          partner?: string | null
+          stage?: Database["public"]["Enums"]["event_idea_stage"]
+          summary: string
+          target_audience?: string | null
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          calc_approved_at?: string | null
+          calc_approved_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          desired_date?: string | null
+          desired_period?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"] | null
+          expected_guests?: number | null
+          id?: string
+          notes?: string | null
+          owner_name?: string | null
+          partner?: string | null
+          stage?: Database["public"]["Enums"]["event_idea_stage"]
+          summary?: string
+          target_audience?: string | null
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_ideas_calc_approved_by_fkey"
+            columns: ["calc_approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_ideas_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_ideas_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_lines: {
         Row: {
           actual_quantity: number | null
@@ -585,12 +763,17 @@ export type Database = {
           demo_key: string | null
           event_date: string | null
           event_type: Database["public"]["Enums"]["event_type"]
+          handover_ref: string | null
+          handover_state: Database["public"]["Enums"]["event_handover_state"]
+          handover_url: string | null
           id: string
+          idea_id: string | null
           is_demo: boolean
           name: string
           notes: string | null
           planned_free_guests: number | null
           planned_paying_guests: number | null
+          source_key: string
           status: Database["public"]["Enums"]["event_status"]
           updated_at: string
           updated_by: string | null
@@ -603,12 +786,17 @@ export type Database = {
           demo_key?: string | null
           event_date?: string | null
           event_type?: Database["public"]["Enums"]["event_type"]
+          handover_ref?: string | null
+          handover_state?: Database["public"]["Enums"]["event_handover_state"]
+          handover_url?: string | null
           id?: string
+          idea_id?: string | null
           is_demo?: boolean
           name: string
           notes?: string | null
           planned_free_guests?: number | null
           planned_paying_guests?: number | null
+          source_key?: string
           status?: Database["public"]["Enums"]["event_status"]
           updated_at?: string
           updated_by?: string | null
@@ -621,12 +809,17 @@ export type Database = {
           demo_key?: string | null
           event_date?: string | null
           event_type?: Database["public"]["Enums"]["event_type"]
+          handover_ref?: string | null
+          handover_state?: Database["public"]["Enums"]["event_handover_state"]
+          handover_url?: string | null
           id?: string
+          idea_id?: string | null
           is_demo?: boolean
           name?: string
           notes?: string | null
           planned_free_guests?: number | null
           planned_paying_guests?: number | null
+          source_key?: string
           status?: Database["public"]["Enums"]["event_status"]
           updated_at?: string
           updated_by?: string | null
@@ -637,6 +830,13 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_idea_id_fkey"
+            columns: ["idea_id"]
+            isOneToOne: false
+            referencedRelation: "event_ideas"
             referencedColumns: ["id"]
           },
           {
@@ -1197,6 +1397,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      approve_event_execution: {
+        Args: { _event_id: string; _note?: string }
+        Returns: string
+      }
+      create_event_from_idea: { Args: { _idea_id: string }; Returns: string }
+      event_basis_fingerprint: { Args: { _event_id: string }; Returns: string }
       import_estimation_payload: {
         Args: { _job_id: string; _payload: Json }
         Returns: Json
@@ -1222,6 +1428,13 @@ export type Database = {
       base_unit: "g" | "ml" | "piece"
       calculation_status: "estimated" | "partially_reviewed" | "reviewed"
       dish_source_type: "menu_import" | "manual"
+      event_handover_state: "not_ready" | "ready" | "handed_over"
+      event_idea_stage:
+        | "new"
+        | "in_discussion"
+        | "approved_for_calculation"
+        | "deferred"
+        | "rejected"
       event_line_calc_mode: "fixed" | "per_guest"
       event_line_kind:
         | "revenue"
@@ -1390,6 +1603,14 @@ export const Constants = {
       base_unit: ["g", "ml", "piece"],
       calculation_status: ["estimated", "partially_reviewed", "reviewed"],
       dish_source_type: ["menu_import", "manual"],
+      event_handover_state: ["not_ready", "ready", "handed_over"],
+      event_idea_stage: [
+        "new",
+        "in_discussion",
+        "approved_for_calculation",
+        "deferred",
+        "rejected",
+      ],
       event_line_calc_mode: ["fixed", "per_guest"],
       event_line_kind: [
         "revenue",
