@@ -24,6 +24,7 @@ import { Route as AuthenticatedAppEinstellungenKonfigurationRouteImport } from '
 import { Route as AuthenticatedAppGerichteIndexRouteImport } from './routes/_authenticated/_app/gerichte.index'
 import { Route as AuthenticatedAppGerichteDishIdRouteImport } from './routes/_authenticated/_app/gerichte.$dishId'
 import { Route as AuthenticatedAppMenuesIndexRouteImport } from './routes/_authenticated/_app/menues.index'
+import { Route as AuthenticatedAppMenuesMenuIdRouteImport } from './routes/_authenticated/_app/menues.$menuId'
 import { Route as AuthenticatedAppSpeisekartenIndexRouteImport } from './routes/_authenticated/_app/speisekarten.index'
 import { Route as AuthenticatedAppSpeisekartenMenuCardIdRouteImport } from './routes/_authenticated/_app/speisekarten.$menuCardId'
 import { Route as AuthenticatedAppSpeisekartenImportierenRouteImport } from './routes/_authenticated/_app/speisekarten.importieren'
@@ -115,6 +116,12 @@ const AuthenticatedAppMenuesIndexRoute =
     path: '/menues/',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
+const AuthenticatedAppMenuesMenuIdRoute =
+  AuthenticatedAppMenuesMenuIdRouteImport.update({
+    id: '/menues/$menuId',
+    path: '/menues/$menuId',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
 const AuthenticatedAppSpeisekartenIndexRoute =
   AuthenticatedAppSpeisekartenIndexRouteImport.update({
     id: '/speisekarten/',
@@ -169,6 +176,7 @@ export interface FileRoutesByFullPath {
   '/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
   '/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
+  '/menues/$menuId': typeof AuthenticatedAppMenuesMenuIdRoute
   '/speisekarten/$menuCardId': typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   '/speisekarten/importieren': typeof AuthenticatedAppSpeisekartenImportierenRoute
   '/zutaten/importieren': typeof AuthenticatedAppZutatenImportierenRoute
@@ -191,6 +199,7 @@ export interface FileRoutesByTo {
   '/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
   '/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
+  '/menues/$menuId': typeof AuthenticatedAppMenuesMenuIdRoute
   '/speisekarten/$menuCardId': typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   '/speisekarten/importieren': typeof AuthenticatedAppSpeisekartenImportierenRoute
   '/zutaten/importieren': typeof AuthenticatedAppZutatenImportierenRoute
@@ -216,6 +225,7 @@ export interface FileRoutesById {
   '/_authenticated/_app/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/_authenticated/_app/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
   '/_authenticated/_app/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
+  '/_authenticated/_app/menues/$menuId': typeof AuthenticatedAppMenuesMenuIdRoute
   '/_authenticated/_app/speisekarten/$menuCardId': typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   '/_authenticated/_app/speisekarten/importieren': typeof AuthenticatedAppSpeisekartenImportierenRoute
   '/_authenticated/_app/zutaten/importieren': typeof AuthenticatedAppZutatenImportierenRoute
@@ -240,6 +250,7 @@ export interface FileRouteTypes {
     | '/einstellungen/benutzer'
     | '/einstellungen/konfiguration'
     | '/gerichte/$dishId'
+    | '/menues/$menuId'
     | '/speisekarten/$menuCardId'
     | '/speisekarten/importieren'
     | '/zutaten/importieren'
@@ -262,6 +273,7 @@ export interface FileRouteTypes {
     | '/einstellungen/benutzer'
     | '/einstellungen/konfiguration'
     | '/gerichte/$dishId'
+    | '/menues/$menuId'
     | '/speisekarten/$menuCardId'
     | '/speisekarten/importieren'
     | '/zutaten/importieren'
@@ -286,6 +298,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_app/einstellungen/benutzer'
     | '/_authenticated/_app/einstellungen/konfiguration'
     | '/_authenticated/_app/gerichte/$dishId'
+    | '/_authenticated/_app/menues/$menuId'
     | '/_authenticated/_app/speisekarten/$menuCardId'
     | '/_authenticated/_app/speisekarten/importieren'
     | '/_authenticated/_app/zutaten/importieren'
@@ -412,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppMenuesIndexRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
+    '/_authenticated/_app/menues/$menuId': {
+      id: '/_authenticated/_app/menues/$menuId'
+      path: '/menues/$menuId'
+      fullPath: '/menues/$menuId'
+      preLoaderRoute: typeof AuthenticatedAppMenuesMenuIdRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
     '/_authenticated/_app/speisekarten/': {
       id: '/_authenticated/_app/speisekarten/'
       path: '/speisekarten'
@@ -471,6 +491,7 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppEinstellungenBenutzerRoute: typeof AuthenticatedAppEinstellungenBenutzerRoute
   AuthenticatedAppEinstellungenKonfigurationRoute: typeof AuthenticatedAppEinstellungenKonfigurationRoute
   AuthenticatedAppGerichteDishIdRoute: typeof AuthenticatedAppGerichteDishIdRoute
+  AuthenticatedAppMenuesMenuIdRoute: typeof AuthenticatedAppMenuesMenuIdRoute
   AuthenticatedAppSpeisekartenMenuCardIdRoute: typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   AuthenticatedAppSpeisekartenImportierenRoute: typeof AuthenticatedAppSpeisekartenImportierenRoute
   AuthenticatedAppZutatenImportierenRoute: typeof AuthenticatedAppZutatenImportierenRoute
@@ -492,6 +513,7 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppEinstellungenKonfigurationRoute:
     AuthenticatedAppEinstellungenKonfigurationRoute,
   AuthenticatedAppGerichteDishIdRoute: AuthenticatedAppGerichteDishIdRoute,
+  AuthenticatedAppMenuesMenuIdRoute: AuthenticatedAppMenuesMenuIdRoute,
   AuthenticatedAppSpeisekartenMenuCardIdRoute:
     AuthenticatedAppSpeisekartenMenuCardIdRoute,
   AuthenticatedAppSpeisekartenImportierenRoute:
