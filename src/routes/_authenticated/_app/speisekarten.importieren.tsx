@@ -172,22 +172,38 @@ function ImportPage() {
   return (
     <>
       <PageHeader
-        title="Speisekarte importieren"
+        title={fromDishes ? "Gerichte aus Speisekarte übernehmen" : "Speisekarte importieren"}
         description="PDF oder Bild hochladen, Analyse bewusst starten, Ergebnis prüfen und erst dann übernehmen. Kein Schritt läuft automatisch; nichts wird ohne Bestätigung gespeichert."
-        actions={<Button variant="outline" asChild><Link to="/speisekarten"><ArrowLeft className="size-4" /> Zu den Speisekarten</Link></Button>}
+        actions={
+          fromDishes ? (
+            <Button variant="outline" asChild><Link to="/gerichte"><ArrowLeft className="size-4" /> Zu den Gerichten</Link></Button>
+          ) : (
+            <Button variant="outline" asChild><Link to="/speisekarten"><ArrowLeft className="size-4" /> Zu den Speisekarten</Link></Button>
+          )
+        }
       />
 
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <MenuCardSelector />
+        <div className="flex flex-wrap items-center gap-3">
+          <MenuCardSelector />
+          <span className="text-sm text-muted-foreground">
+            Ziel-Speisekarte: <span className="font-medium text-foreground">{card?.name ?? "keine ausgewählt"}</span>
+          </span>
+        </div>
         <ImportSteps current={step} />
       </div>
 
       {cardPending && <Skeleton className="h-40 w-full" />}
       {!cardPending && !card && (
-        <EmptyState icon={BookOpen} title="Keine Speisekarte" description="Legen Sie zuerst eine Ziel-Speisekarte an. Importierte Gerichte werden immer einer Karte zugeordnet.">
+        <EmptyState
+          icon={BookOpen}
+          title="Keine Speisekarte"
+          description="Für die Zuordnung der importierten Gerichte wird eine Speisekarte benötigt. Danach können Sie den Import mit dieser Karte fortsetzen."
+        >
           <Button asChild><Link to="/speisekarten">Speisekarte anlegen</Link></Button>
         </EmptyState>
       )}
+
 
       {card && (
         <div className="space-y-8">
