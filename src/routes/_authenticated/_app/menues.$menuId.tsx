@@ -22,6 +22,7 @@ import {
   type MenuVariant,
 } from "@/lib/menus";
 import { calculateMenu } from "@/lib/menu-costing";
+import { MENU_POSITION_INACTIVE_NOTE } from "@/lib/menu-totals";
 import { useMenuCostingContext } from "@/lib/menu-costing-context";
 import { courseLabels, courseOrder, menuStatusLabels } from "@/lib/event-labels";
 import { formatCHF, formatDate, formatQuantity } from "@/lib/format";
@@ -273,6 +274,9 @@ function MenuDetailPage() {
                         <TableCell>
                           {p.dishName ? `${p.dishName} – ${p.variantName}` : "Gericht nicht gefunden"}
                           {p.position.notes && <div className="text-xs text-muted-foreground">{p.position.notes}</div>}
+                          {p.aLaCarteInactive && (
+                            <div className="text-xs text-muted-foreground">{MENU_POSITION_INACTIVE_NOTE}</div>
+                          )}
                         </TableCell>
                         <TableCell className="text-right tabular">{formatQuantity(p.quantityPerGuest)}</TableCell>
                         <TableCell className="text-right">

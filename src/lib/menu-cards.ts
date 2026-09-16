@@ -208,7 +208,21 @@ export const MENU_RESULT_KEYS = [
   ["menu_card_data"],
   ["menu_cards"],
   ["menu_card_counts"],
+  ["dishes"],
   ["variants"],
   ["add_ons"],
+  ["add_on_links"],
+  ["calculation_items"],
+  ["categories"],
   ["excluded_days"],
 ] as const;
+
+type Invalidator = { invalidateQueries: (filters: { queryKey: readonly unknown[] }) => Promise<void> };
+
+/**
+ * Refreshes every query that feeds an aggregate à-la-carte result
+ * (dashboard, category totals, sales planning, scenario baseline).
+ */
+export function invalidateMenuResults(client: Invalidator) {
+  return Promise.all(MENU_RESULT_KEYS.map((k) => client.invalidateQueries({ queryKey: [...k] })));
+}

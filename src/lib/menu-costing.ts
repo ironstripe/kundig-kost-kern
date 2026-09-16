@@ -16,7 +16,7 @@ import {
 } from "@/lib/costing";
 import type { Menu, MenuPosition, MenuVariant } from "@/lib/menus";
 
-export type DishLike = { id: string; name: string; menu_card_id: string };
+export type DishLike = { id: string; name: string; menu_card_id: string; is_active?: boolean };
 
 export type MenuCostingContext = {
   /** All dish variants by id. */
@@ -39,6 +39,11 @@ export type MenuPositionResult = {
   /** Food cost per guest for this position. */
   foodCostPerGuest: number | null;
   problem: string | null;
+  /**
+   * Informational only: the source dish or variant is inactive for à-la-carte
+   * use. The position stays fully costed and part of this menu.
+   */
+  aLaCarteInactive: boolean;
 };
 
 export type MenuVariantResult = {
@@ -75,11 +80,13 @@ export function calculateMenuPosition(
     quantityPerGuest: Number.isFinite(qty) && qty > 0 ? qty : 1,
     foodCostPerGuest: null,
     problem: null,
+    aLaCarteInactive: false,
   };
   const variant = ctx.variantsById.get(position.variant_id);
   if (!variant) return { ...base, problem: "Gericht-Variante nicht gefunden" };
   const dish = ctx.dishesById.get(variant.dish_id) ?? null;
   const card = dish ? (ctx.cardsById.get(dish.menu_card_id) ?? null) : null;
+  // Explicitly assigned positions stay fully costed even when inactive à la carte.
   const result = calculateVariant(variant, buildItems(ctx, variant.id), ctx.ingredientsById, card);
   const foodCost = result.foodCost;
   return {
@@ -89,6 +96,7 @@ export function calculateMenuPosition(
     dish: result,
     foodCostPerGuest: foodCost === null ? null : foodCost * base.quantityPerGuest,
     problem: foodCost === null ? "Gerichtskalkulation unvollständig" : null,
+    aLaCarteInactive: dish?.is_active === false || variant.is_active === false,
   };
 }
 

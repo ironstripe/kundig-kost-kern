@@ -6,6 +6,7 @@ import type { Dish } from "@/lib/dishes";
 import type { SmallMaterialMode } from "@/lib/costing";
 import type { Database } from "@/integrations/supabase/types";
 import { parseDecimal } from "@/lib/format";
+import { invalidateMenuResults } from "@/lib/menu-cards";
 import { smallMaterialModeLabels } from "@/lib/labels";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -85,10 +86,7 @@ export function AddOnDialog({ addOn, menuCardId, dishes, links, presetDishId, ca
       return id;
     },
     onSuccess: async (id) => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["add_ons"] }),
-        queryClient.invalidateQueries({ queryKey: ["add_on_links"] }),
-      ]);
+      await invalidateMenuResults(queryClient);
       toast.success(isEdit ? "Add-on gespeichert." : `Add-on «${name.trim()}» angelegt.`);
       onOpenChange(false);
       onSaved?.(id);

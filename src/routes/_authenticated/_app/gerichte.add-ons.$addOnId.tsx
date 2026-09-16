@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, Pencil, Power, TriangleAlert } from "lucide-react";
+import { ArrowLeft, Info, Pencil, Power, TriangleAlert } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StatusBadge } from "@/components/layout/StatusBadge";
 import { CalculationItemDialog } from "@/components/dishes/CalculationItemDialog";
@@ -12,6 +12,12 @@ import { addOnLinksQuery, addOnQuery, updateAddOn } from "@/lib/add-ons";
 import { allItemsQuery, allVariantsQuery, deleteItem, dishesQuery, reorderItems, updateItem, type CalculationItem } from "@/lib/dishes";
 import { ingredientsQuery } from "@/lib/ingredients";
 import { useMenuCardFor } from "@/lib/selected-menu-card";
+import { invalidateMenuResults } from "@/lib/menu-cards";
+import {
+  ADD_ON_INACTIVE_NOTE,
+  ADD_ON_NO_ACTIVE_DISH_NOTE,
+  ADD_ON_UNASSIGNED_NOTE,
+} from "@/lib/menu-totals";
 import { calculateVariant, type CalculationStatus } from "@/lib/costing";
 import { addOnSalesWarning, expectedTotalSales, openDaysCount } from "@/lib/sales";
 import { calculationStatusLabels } from "@/lib/labels";
@@ -78,6 +84,18 @@ function AddOnDetailPage() {
     return addOnSalesWarning(addOn, variants.filter((v) => dishIds.has(v.dish_id) && v.is_active), openDays);
   }, [addOn, variants, assignedDishes, openDays]);
 
+  /** À-la-carte eligibility: own active flag + at least one active dish with an active variant. */
+  const eligibilityNote = useMemo(() => {
+    if (!addOn) return null;
+    if (!addOn.is_active) return ADD_ON_INACTIVE_NOTE;
+    if (assignedDishes.length === 0) return ADD_ON_UNASSIGNED_NOTE;
+    const qualifies = assignedDishes.some(
+      (d) => d.is_active && (variants ?? []).some((v) => v.dish_id === d.id && v.is_active),
+    );
+    return qualifies ? null : ADD_ON_NO_ACTIVE_DISH_NOTE;
+  }, [addOn, assignedDishes, variants]);
+
+
   const invalidateItems = () => queryClient.invalidateQueries({ queryKey: ["calculation_items"] });
 
   const toggleConfirm = useMutation({
@@ -117,7 +135,7 @@ function AddOnDetailPage() {
   const toggleActive = useMutation({
     mutationFn: () => updateAddOn(addOnId, { is_active: !addOn!.is_active }),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["add_ons"] });
+      await invalidateMenuResults(queryClient);
       toast.success(addOn!.is_active ? "Add-on deaktiviert. Zuordnungen und Kalkulation bleiben erhalten." : "Add-on reaktiviert.");
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Aktualisierung fehlgeschlagen."),
@@ -165,6 +183,19 @@ function AddOnDetailPage() {
           <Link key={d.id} to="/gerichte/$dishId" params={{ dishId: d.id }} className="rounded-md border px-2 py-0.5 hover:bg-muted/50">{d.name}</Link>
         ))}
       </div>
+
+      {eligibilityNote && (
+        <div className="mb-6 flex items-start gap-2 rounded-md border bg-muted/40 px-3 py-2 text-sm">
+          <Info className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+          <div>
+            <p className="font-medium">{eligibilityNote}</p>
+            <p className="text-muted-foreground">
+              Preise, Mengen und Zuordnungen bleiben gespeichert. Die Einzelkalkulation unten ist weiterhin gültig.
+            </p>
+          </div>
+        </div>
+      )}
+
 
       {warning && (
         <div className="mb-6 flex items-start gap-2 rounded-md border border-warning/40 bg-warning/10 px-3 py-2 text-sm">

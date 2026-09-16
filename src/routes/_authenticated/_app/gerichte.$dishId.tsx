@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, Copy, GitCompareArrows, Link2Off, Pencil, Plus, PlusCircle, Star, Trash2 } from "lucide-react";
+import { ArrowLeft, Copy, GitCompareArrows, Info, Link2Off, Pencil, Plus, PlusCircle, Star, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StatusBadge } from "@/components/layout/StatusBadge";
 import { DishDialog } from "@/components/dishes/DishDialog";
@@ -32,6 +32,8 @@ import {
 import { addOnLinksQuery, addOnsQuery, unlinkAddOn, type AddOn } from "@/lib/add-ons";
 import { ingredientsQuery } from "@/lib/ingredients";
 import { useMenuCardFor } from "@/lib/selected-menu-card";
+import { invalidateMenuResults } from "@/lib/menu-cards";
+import { DISH_INACTIVE_NOTE, VARIANT_INACTIVE_NOTE } from "@/lib/menu-totals";
 import { calculateVariant, combineResults, type CalculationStatus, type VariantResult } from "@/lib/costing";
 import { formatCHF } from "@/lib/format";
 import { calculationStatusLabels } from "@/lib/labels";
@@ -137,11 +139,7 @@ function DishDetailPage() {
     return combineResults([base, ...extras]);
   }, [results, addOnResults, previewVariant, previewAddOnIds]);
 
-  const invalidate = () =>
-    Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["variants"] }),
-      queryClient.invalidateQueries({ queryKey: ["calculation_items"] }),
-    ]);
+  const invalidate = () => invalidateMenuResults(queryClient);
 
   const toggleConfirm = useMutation({
     mutationFn: (it: CalculationItem) => updateItem(it.id, { quantity_confirmed: !it.quantity_confirmed }),
@@ -203,7 +201,7 @@ function DishDetailPage() {
   const unlink = useMutation({
     mutationFn: (addOnId: string) => unlinkAddOn(dishId, addOnId),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["add_on_links"] });
+      await invalidateMenuResults(queryClient);
       toast.success("Zuordnung entfernt. Das Add-on bleibt bestehen.");
       setDialog({ kind: "none" });
     },
@@ -250,6 +248,25 @@ function DishDetailPage() {
           </>
         }
       />
+
+      {!dish.is_active && (
+        <div className="mb-6 flex items-start gap-2 rounded-md border bg-muted/40 px-3 py-2 text-sm">
+          <Info className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+          <div>
+            <p className="font-medium">{DISH_INACTIVE_NOTE}</p>
+            <p className="text-muted-foreground">
+              Rezepturen, Mengen, Preise, Absatzannahmen, Varianten und Zuordnungen bleiben vollständig erhalten und
+              kalkulierbar. Bestehende Menüzuordnungen bleiben bestehen.
+            </p>
+          </div>
+        </div>
+      )}
+      {dish.is_active && selected && !selected.is_active && (
+        <div className="mb-6 flex items-start gap-2 rounded-md border bg-muted/40 px-3 py-2 text-sm">
+          <Info className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+          <p className="font-medium">{VARIANT_INACTIVE_NOTE}</p>
+        </div>
+      )}
 
       {dish.notes && <p className="mb-6 rounded-md bg-muted/50 px-3 py-2 text-sm text-muted-foreground">{dish.notes}</p>}
 
