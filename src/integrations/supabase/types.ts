@@ -1498,7 +1498,10 @@ export type Database = {
         Args: { _event_id: string; _note?: string }
         Returns: string
       }
-      create_event_from_idea: { Args: { _idea_id: string }; Returns: string }
+      create_event_from_idea: {
+        Args: { _approve?: boolean; _idea_id: string }
+        Returns: string
+      }
       event_basis_fingerprint: { Args: { _event_id: string }; Returns: string }
       import_estimation_payload: {
         Args: { _job_id: string; _payload: Json }
