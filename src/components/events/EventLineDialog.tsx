@@ -34,9 +34,9 @@ type Props = {
   eventId: string;
   line?: EventLineRow | undefined;
   /** Pre-selected section when adding a new line. */
-  defaultKind?: Enums["event_line_kind"];
+  defaultKind?: Enums["event_line_kind"] | undefined;
   /** Post-calculation mode focuses the actual values. */
-  actualMode?: boolean;
+  actualMode?: boolean | undefined;
 };
 
 function numOrNull(value: string): number | null | "invalid" {

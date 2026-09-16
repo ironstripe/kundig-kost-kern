@@ -44,7 +44,7 @@ function actualTotalOf(lines: EventLineRow[], category: string): number | null {
   if (rows.length === 0) return null;
   const totals = rows.map((l) => calculateLine(l).actualTotal);
   if (totals.some((t) => t === null)) return null;
-  return totals.reduce((s, t) => s + (t ?? 0), 0);
+  return totals.reduce<number>((s, t) => s + (t ?? 0), 0);
 }
 
 function actualQuantityOf(lines: EventLineRow[], category: string): number | null {
@@ -52,7 +52,7 @@ function actualQuantityOf(lines: EventLineRow[], category: string): number | nul
   if (rows.length === 0) return null;
   const q = rows.map((l) => (l.actual_quantity === null ? null : Number(l.actual_quantity)));
   if (q.some((v) => v === null || !Number.isFinite(v))) return null;
-  return q.reduce((s, v) => s + (v ?? 0), 0);
+  return q.reduce<number>((s, v) => s + (v ?? 0), 0);
 }
 
 function perGuest(value: number | null, event: Event): number | null {
@@ -114,7 +114,7 @@ const METRICS: MetricDef[] = [
       if (rows.length === 0) return null;
       const totals = rows.map((x) => calculateLine(x).actualTotal);
       if (totals.some((t) => t === null)) return null;
-      return totals.reduce((s, t) => s + (t ?? 0), 0);
+      return totals.reduce<number>((s, t) => s + (t ?? 0), 0);
     },
   },
   {
@@ -126,8 +126,8 @@ const METRICS: MetricDef[] = [
       const planned = rows.map((r) => r.plannedTotal);
       const actual = rows.map((r) => r.actualTotal);
       if (rows.length === 0 || planned.some((v) => v === null) || actual.some((v) => v === null)) return null;
-      const p = planned.reduce((s, v) => s + (v ?? 0), 0);
-      const a = actual.reduce((s, v) => s + (v ?? 0), 0);
+      const p = planned.reduce<number>((s, v) => s + (v ?? 0), 0);
+      const a = actual.reduce<number>((s, v) => s + (v ?? 0), 0);
       if (p === 0) return null;
       return ((a - p) / Math.abs(p)) * 100;
     },

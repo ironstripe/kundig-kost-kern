@@ -35,7 +35,7 @@ export function EventMenuPanel({ event, link, variants, userId }: Props) {
   const { data: menu } = useQuery({ ...menuQuery(link?.menu_id ?? ""), enabled: Boolean(link?.menu_id) });
   const { data: menuVariants } = useQuery(menuVariantsQuery);
   const { data: positions } = useQuery(menuPositionsQuery);
-  const ctx = useMenuCostingContext();
+  const { ctx, isPending: ctxPending } = useMenuCostingContext();
   const [busy, setBusy] = useState(false);
 
   if (!link || !snapshot) {
@@ -54,10 +54,10 @@ export function EventMenuPanel({ event, link, variants, userId }: Props) {
   }
 
   const refresh = async () => {
-    if (!menu || !menuVariants || !positions || !ctx.data) return;
+    if (!menu || !menuVariants || !positions || ctxPending) return;
     setBusy(true);
     try {
-      const results = calculateMenu(menu, menuVariants, positions, ctx.data);
+      const results = calculateMenu(menu, menuVariants, positions, ctx);
       await linkMenuToEvent(event.id, menu.id, buildMenuSnapshot(menu, results), userId);
       await qc.invalidateQueries({ queryKey: ["event_menu_links"] });
       toast.success("Snapshot wurde bewusst aktualisiert.");

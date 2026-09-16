@@ -45,8 +45,8 @@ export function GlobalAssumptionsPanel({ userId, isAdmin }: { userId: string; is
   const invalidate = () => qc.invalidateQueries({ queryKey: ["event_assumptions"] });
 
   const save = async (id: string, raw: string) => {
-    const v = raw.trim() === "" ? null : parseDecimal(raw);
-    if (v !== null && (!Number.isFinite(v) || v < 0)) {
+    const v = parseDecimal(raw);
+    if (!Number.isFinite(v) || v < 0) {
       toast.error("Wert muss eine Zahl ab 0 sein.");
       return;
     }
@@ -60,8 +60,8 @@ export function GlobalAssumptionsPanel({ userId, isAdmin }: { userId: string; is
       toast.error("Schlüssel und Bezeichnung sind erforderlich.");
       return;
     }
-    const v = value.trim() === "" ? null : parseDecimal(value);
-    if (v !== null && (!Number.isFinite(v) || v < 0)) {
+    const v = parseDecimal(value);
+    if (!Number.isFinite(v) || v < 0) {
       toast.error("Wert muss eine Zahl ab 0 sein.");
       return;
     }
