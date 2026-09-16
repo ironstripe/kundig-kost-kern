@@ -114,6 +114,7 @@ function IdeasPage() {
                 <TableHead className="text-right">Erwartete Gäste</TableHead>
                 <TableHead>Stufe</TableHead>
                 <TableHead>Kalkulation</TableHead>
+                <TableHead className="text-right">Aktion</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
