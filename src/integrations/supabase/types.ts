@@ -217,6 +217,27 @@ export type Database = {
           },
         ]
       }
+      demo_seeds: {
+        Row: {
+          created_at: string
+          key: string
+          removed_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          key: string
+          removed_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          key?: string
+          removed_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       dishes: {
         Row: {
           category_id: string | null
@@ -270,6 +291,359 @@ export type Database = {
             columns: ["menu_card_id"]
             isOneToOne: false
             referencedRelation: "menu_cards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_assumption_values: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          key: string
+          label: string
+          origin: Database["public"]["Enums"]["assumption_origin"]
+          source_assumption_id: string | null
+          unit: Database["public"]["Enums"]["assumption_unit"]
+          updated_at: string
+          value: number | null
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          key: string
+          label: string
+          origin?: Database["public"]["Enums"]["assumption_origin"]
+          source_assumption_id?: string | null
+          unit: Database["public"]["Enums"]["assumption_unit"]
+          updated_at?: string
+          value?: number | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          key?: string
+          label?: string
+          origin?: Database["public"]["Enums"]["assumption_origin"]
+          source_assumption_id?: string | null
+          unit?: Database["public"]["Enums"]["assumption_unit"]
+          updated_at?: string
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_assumption_values_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_assumption_values_source_assumption_id_fkey"
+            columns: ["source_assumption_id"]
+            isOneToOne: false
+            referencedRelation: "event_assumptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_assumptions: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_type: Database["public"]["Enums"]["event_type"] | null
+          id: string
+          is_active: boolean
+          key: string
+          label: string
+          unit: Database["public"]["Enums"]["assumption_unit"]
+          updated_at: string
+          updated_by: string | null
+          valid_from: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"] | null
+          id?: string
+          is_active?: boolean
+          key: string
+          label: string
+          unit: Database["public"]["Enums"]["assumption_unit"]
+          updated_at?: string
+          updated_by?: string | null
+          valid_from?: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"] | null
+          id?: string
+          is_active?: boolean
+          key?: string
+          label?: string
+          unit?: Database["public"]["Enums"]["assumption_unit"]
+          updated_at?: string
+          updated_by?: string | null
+          valid_from?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_assumptions_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_lines: {
+        Row: {
+          actual_quantity: number | null
+          actual_unit_amount: number | null
+          assumption_key: string | null
+          calc_mode: Database["public"]["Enums"]["event_line_calc_mode"]
+          category: string
+          created_at: string
+          event_id: string
+          id: string
+          is_required: boolean
+          kind: Database["public"]["Enums"]["event_line_kind"]
+          name: string
+          notes: string | null
+          origin: Database["public"]["Enums"]["assumption_origin"] | null
+          planned_quantity: number | null
+          planned_unit_amount: number | null
+          sort_order: number
+          updated_at: string
+          value_status: Database["public"]["Enums"]["event_value_status"]
+          variance_note: string | null
+        }
+        Insert: {
+          actual_quantity?: number | null
+          actual_unit_amount?: number | null
+          assumption_key?: string | null
+          calc_mode?: Database["public"]["Enums"]["event_line_calc_mode"]
+          category: string
+          created_at?: string
+          event_id: string
+          id?: string
+          is_required?: boolean
+          kind: Database["public"]["Enums"]["event_line_kind"]
+          name: string
+          notes?: string | null
+          origin?: Database["public"]["Enums"]["assumption_origin"] | null
+          planned_quantity?: number | null
+          planned_unit_amount?: number | null
+          sort_order?: number
+          updated_at?: string
+          value_status?: Database["public"]["Enums"]["event_value_status"]
+          variance_note?: string | null
+        }
+        Update: {
+          actual_quantity?: number | null
+          actual_unit_amount?: number | null
+          assumption_key?: string | null
+          calc_mode?: Database["public"]["Enums"]["event_line_calc_mode"]
+          category?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          is_required?: boolean
+          kind?: Database["public"]["Enums"]["event_line_kind"]
+          name?: string
+          notes?: string | null
+          origin?: Database["public"]["Enums"]["assumption_origin"] | null
+          planned_quantity?: number | null
+          planned_unit_amount?: number | null
+          sort_order?: number
+          updated_at?: string
+          value_status?: Database["public"]["Enums"]["event_value_status"]
+          variance_note?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_lines_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_menu_links: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          event_id: string
+          id: string
+          menu_id: string
+          snapshot: Json
+          snapshot_at: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          event_id: string
+          id?: string
+          menu_id: string
+          snapshot: Json
+          snapshot_at?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          event_id?: string
+          id?: string
+          menu_id?: string
+          snapshot?: Json
+          snapshot_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_menu_links_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_menu_links_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: true
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_menu_links_menu_id_fkey"
+            columns: ["menu_id"]
+            isOneToOne: false
+            referencedRelation: "menus"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_menu_variants: {
+        Row: {
+          actual_guests: number | null
+          created_at: string
+          event_id: string
+          id: string
+          menu_variant_id: string
+          planned_guests: number | null
+          updated_at: string
+        }
+        Insert: {
+          actual_guests?: number | null
+          created_at?: string
+          event_id: string
+          id?: string
+          menu_variant_id: string
+          planned_guests?: number | null
+          updated_at?: string
+        }
+        Update: {
+          actual_guests?: number | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          menu_variant_id?: string
+          planned_guests?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_menu_variants_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_menu_variants_menu_variant_id_fkey"
+            columns: ["menu_variant_id"]
+            isOneToOne: false
+            referencedRelation: "menu_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          actual_free_guests: number | null
+          actual_paying_guests: number | null
+          created_at: string
+          created_by: string | null
+          demo_key: string | null
+          event_date: string | null
+          event_type: Database["public"]["Enums"]["event_type"]
+          id: string
+          is_demo: boolean
+          name: string
+          notes: string | null
+          planned_free_guests: number | null
+          planned_paying_guests: number | null
+          status: Database["public"]["Enums"]["event_status"]
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          actual_free_guests?: number | null
+          actual_paying_guests?: number | null
+          created_at?: string
+          created_by?: string | null
+          demo_key?: string | null
+          event_date?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"]
+          id?: string
+          is_demo?: boolean
+          name: string
+          notes?: string | null
+          planned_free_guests?: number | null
+          planned_paying_guests?: number | null
+          status?: Database["public"]["Enums"]["event_status"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          actual_free_guests?: number | null
+          actual_paying_guests?: number | null
+          created_at?: string
+          created_by?: string | null
+          demo_key?: string | null
+          event_date?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"]
+          id?: string
+          is_demo?: boolean
+          name?: string
+          notes?: string | null
+          planned_free_guests?: number | null
+          planned_paying_guests?: number | null
+          status?: Database["public"]["Enums"]["event_status"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -552,6 +926,164 @@ export type Database = {
           },
         ]
       }
+      menu_positions: {
+        Row: {
+          course: string
+          created_at: string
+          id: string
+          menu_variant_id: string
+          notes: string | null
+          quantity_per_guest: number
+          sort_order: number
+          updated_at: string
+          variant_id: string
+        }
+        Insert: {
+          course?: string
+          created_at?: string
+          id?: string
+          menu_variant_id: string
+          notes?: string | null
+          quantity_per_guest?: number
+          sort_order?: number
+          updated_at?: string
+          variant_id: string
+        }
+        Update: {
+          course?: string
+          created_at?: string
+          id?: string
+          menu_variant_id?: string
+          notes?: string | null
+          quantity_per_guest?: number
+          sort_order?: number
+          updated_at?: string
+          variant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_positions_menu_variant_id_fkey"
+            columns: ["menu_variant_id"]
+            isOneToOne: false
+            referencedRelation: "menu_variants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "menu_positions_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      menu_variants: {
+        Row: {
+          created_at: string
+          expected_guests: number | null
+          id: string
+          is_default: boolean
+          menu_id: string
+          name: string
+          notes: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          expected_guests?: number | null
+          id?: string
+          is_default?: boolean
+          menu_id: string
+          name: string
+          notes?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          expected_guests?: number | null
+          id?: string
+          is_default?: boolean
+          menu_id?: string
+          name?: string
+          notes?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_variants_menu_id_fkey"
+            columns: ["menu_id"]
+            isOneToOne: false
+            referencedRelation: "menus"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      menus: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          demo_key: string | null
+          gross_price_per_person: number | null
+          id: string
+          name: string
+          notes: string | null
+          status: Database["public"]["Enums"]["menu_status"]
+          updated_at: string
+          updated_by: string | null
+          valid_from: string | null
+          valid_to: string | null
+          vat_rate: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          demo_key?: string | null
+          gross_price_per_person?: number | null
+          id?: string
+          name: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["menu_status"]
+          updated_at?: string
+          updated_by?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+          vat_rate?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          demo_key?: string | null
+          gross_price_per_person?: number | null
+          id?: string
+          name?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["menu_status"]
+          updated_at?: string
+          updated_by?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+          vat_rate?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menus_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "menus_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -681,9 +1213,31 @@ export type Database = {
       is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
+      assumption_origin: "global_default" | "manual_override"
+      assumption_unit:
+        | "chf_per_hour"
+        | "chf_per_guest"
+        | "chf_fixed"
+        | "percent"
       base_unit: "g" | "ml" | "piece"
       calculation_status: "estimated" | "partially_reviewed" | "reviewed"
       dish_source_type: "menu_import" | "manual"
+      event_line_calc_mode: "fixed" | "per_guest"
+      event_line_kind:
+        | "revenue"
+        | "variable_cost"
+        | "personnel_cost"
+        | "fixed_cost"
+        | "informational"
+      event_status:
+        | "draft"
+        | "precalculated"
+        | "released"
+        | "executed"
+        | "postcalculated"
+        | "archived"
+      event_type: "beer_dine" | "banquet" | "lounge" | "other"
+      event_value_status: "open" | "assumption" | "confirmed" | "effective"
       import_job_status:
         | "pending"
         | "processing"
@@ -693,6 +1247,7 @@ export type Database = {
       import_status: "draft" | "processing" | "review" | "confirmed" | "failed"
       import_type: "menu_document" | "ingredient_excel"
       ingredient_source_type: "ai_estimate" | "manual" | "excel_import"
+      menu_status: "draft" | "partially_reviewed" | "reviewed" | "archived"
       package_unit: "kg" | "g" | "l" | "ml" | "piece"
       price_status: "estimated" | "confirmed"
       quantity_source: "ai_estimate" | "manual"
@@ -825,9 +1380,34 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      assumption_origin: ["global_default", "manual_override"],
+      assumption_unit: [
+        "chf_per_hour",
+        "chf_per_guest",
+        "chf_fixed",
+        "percent",
+      ],
       base_unit: ["g", "ml", "piece"],
       calculation_status: ["estimated", "partially_reviewed", "reviewed"],
       dish_source_type: ["menu_import", "manual"],
+      event_line_calc_mode: ["fixed", "per_guest"],
+      event_line_kind: [
+        "revenue",
+        "variable_cost",
+        "personnel_cost",
+        "fixed_cost",
+        "informational",
+      ],
+      event_status: [
+        "draft",
+        "precalculated",
+        "released",
+        "executed",
+        "postcalculated",
+        "archived",
+      ],
+      event_type: ["beer_dine", "banquet", "lounge", "other"],
+      event_value_status: ["open", "assumption", "confirmed", "effective"],
       import_job_status: [
         "pending",
         "processing",
@@ -838,6 +1418,7 @@ export const Constants = {
       import_status: ["draft", "processing", "review", "confirmed", "failed"],
       import_type: ["menu_document", "ingredient_excel"],
       ingredient_source_type: ["ai_estimate", "manual", "excel_import"],
+      menu_status: ["draft", "partially_reviewed", "reviewed", "archived"],
       package_unit: ["kg", "g", "l", "ml", "piece"],
       price_status: ["estimated", "confirmed"],
       quantity_source: ["ai_estimate", "manual"],
