@@ -73,7 +73,7 @@ function ScenarioPage() {
 
   const headerBadges = card && base && (
     <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-      <span className="inline-flex items-center gap-1"><BookOpen className="size-3.5" />{card.name}</span>
+      <span className="inline-flex items-center gap-1"><BookOpen className="icon-brand size-3.5" />{card.name}</span>
       <span>·</span>
       <span>{formatDate(card.valid_from)} – {formatDate(card.valid_to)}</span>
       <span>·</span>

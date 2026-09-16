@@ -181,7 +181,7 @@ function DishesPage() {
         actions={
           <>
             <Button asChild variant="outline">
-              <Link to="/gerichte/add-ons"><PackagePlus className="size-4" /> Add-ons</Link>
+              <Link to="/gerichte/add-ons"><PackagePlus className="icon-brand size-4" /> Add-ons</Link>
             </Button>
             <Button onClick={() => setDialogOpen(true)} disabled={!card}>
               <Plus className="size-4" /> Gericht hinzufügen

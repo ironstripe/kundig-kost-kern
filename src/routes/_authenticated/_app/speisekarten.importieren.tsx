@@ -218,7 +218,7 @@ function ImportPage() {
                     Die KI liest nur die Speisen-Struktur (Kategorien, Gerichte, Varianten, Add-ons, Preise). Getränke werden ignoriert. Das Ergebnis erscheint zur Prüfung; nichts wird automatisch gespeichert.
                   </p>
                   <Button onClick={() => analyzeM.mutate(job.id)} disabled={busy || job.status === "processing"}>
-                    {analyzeM.isPending || job.status === "processing" ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+                    {analyzeM.isPending || job.status === "processing" ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="icon-brand size-4" />}
                     {job.status === "failed" ? "Analyse erneut starten" : "Analyse starten"}
                   </Button>
                   {(analyzeM.isPending || job.status === "processing") && <p className="text-xs text-muted-foreground">Die Analyse dauert je nach Dokument 10–40 Sekunden.</p>}
@@ -278,7 +278,7 @@ function ImportPage() {
                     onClick={() => estimateM.mutate(Object.entries(estimationDishes).filter(([, v]) => v).map(([k]) => k))}
                     disabled={busy || !Object.values(estimationDishes).some(Boolean)}
                   >
-                    {estimateM.isPending ? <Loader2 className="size-4 animate-spin" /> : <Wand2 className="size-4" />} Zutaten und Mengen schätzen
+                    {estimateM.isPending ? <Loader2 className="size-4 animate-spin" /> : <Wand2 className="icon-brand size-4" />} Zutaten und Mengen schätzen
                   </Button>
                   {estimateM.isPending && <p className="text-xs text-muted-foreground">Der Vorschlag dauert je nach Anzahl Gerichte 20–60 Sekunden.</p>}
                 </div>
