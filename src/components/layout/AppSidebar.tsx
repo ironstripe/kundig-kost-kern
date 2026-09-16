@@ -55,10 +55,12 @@ export function AppSidebar({ isAdmin, onNavigate, className }: Props) {
                       (!onImport || child.to !== "/speisekarten/importieren" || item.to === importOwner);
 
                     return (
-                      <li key={child.to}>
+                      <li key={`${item.to}${child.to}`}>
                         <Link
                           to={child.to}
+                          search={child.search ?? {}}
                           onClick={onNavigate}
+
                           aria-current={childActive ? "page" : undefined}
                           className={cn(
                             "block rounded-md px-3 py-1.5 text-sm transition-colors",
