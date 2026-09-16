@@ -453,6 +453,103 @@ export type Database = {
           },
         ]
       }
+      event_handover_attempts: {
+        Row: {
+          approval_fingerprint: string
+          approval_id: string
+          approved_at: string
+          attempt_count: number
+          completed_at: string | null
+          created_at: string
+          error_code: string | null
+          error_message: string | null
+          event_id: string
+          handover_id: string | null
+          id: string
+          idempotency_key: string
+          initiated_by: string | null
+          operation: Database["public"]["Enums"]["handover_operation"]
+          payload: Json
+          receipt: Json | null
+          sent_at: string | null
+          state: Database["public"]["Enums"]["handover_attempt_state"]
+          target_event_deleted: boolean
+          target_event_id: string | null
+          target_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          approval_fingerprint: string
+          approval_id: string
+          approved_at: string
+          attempt_count?: number
+          completed_at?: string | null
+          created_at?: string
+          error_code?: string | null
+          error_message?: string | null
+          event_id: string
+          handover_id?: string | null
+          id?: string
+          idempotency_key: string
+          initiated_by?: string | null
+          operation: Database["public"]["Enums"]["handover_operation"]
+          payload: Json
+          receipt?: Json | null
+          sent_at?: string | null
+          state?: Database["public"]["Enums"]["handover_attempt_state"]
+          target_event_deleted?: boolean
+          target_event_id?: string | null
+          target_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          approval_fingerprint?: string
+          approval_id?: string
+          approved_at?: string
+          attempt_count?: number
+          completed_at?: string | null
+          created_at?: string
+          error_code?: string | null
+          error_message?: string | null
+          event_id?: string
+          handover_id?: string | null
+          id?: string
+          idempotency_key?: string
+          initiated_by?: string | null
+          operation?: Database["public"]["Enums"]["handover_operation"]
+          payload?: Json
+          receipt?: Json | null
+          sent_at?: string | null
+          state?: Database["public"]["Enums"]["handover_attempt_state"]
+          target_event_deleted?: boolean
+          target_event_id?: string | null
+          target_url?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_handover_attempts_approval_id_fkey"
+            columns: ["approval_id"]
+            isOneToOne: false
+            referencedRelation: "event_execution_approvals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_handover_attempts_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_handover_attempts_initiated_by_fkey"
+            columns: ["initiated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_idea_notes: {
         Row: {
           author_id: string | null
@@ -1451,6 +1548,13 @@ export type Database = {
         | "archived"
       event_type: "beer_dine" | "banquet" | "lounge" | "other"
       event_value_status: "open" | "assumption" | "confirmed" | "effective"
+      handover_attempt_state:
+        | "ready"
+        | "sending"
+        | "unknown"
+        | "failed"
+        | "succeeded"
+      handover_operation: "create" | "link"
       import_job_status:
         | "pending"
         | "processing"
@@ -1629,6 +1733,14 @@ export const Constants = {
       ],
       event_type: ["beer_dine", "banquet", "lounge", "other"],
       event_value_status: ["open", "assumption", "confirmed", "effective"],
+      handover_attempt_state: [
+        "ready",
+        "sending",
+        "unknown",
+        "failed",
+        "succeeded",
+      ],
+      handover_operation: ["create", "link"],
       import_job_status: [
         "pending",
         "processing",
