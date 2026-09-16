@@ -68,6 +68,9 @@ function EventsPage() {
         actions={
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" asChild>
+              <Link to="/events/ideen">Ideen</Link>
+            </Button>
+            <Button variant="outline" asChild>
               <Link to="/events/erfahrungswerte">Erfahrungswerte</Link>
             </Button>
             {!hasDemo && (

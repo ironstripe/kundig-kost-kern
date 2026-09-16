@@ -43,7 +43,11 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Events",
     to: "/events",
     icon: CalendarDays,
-    children: [{ label: "Erfahrungswerte", to: "/events/erfahrungswerte" }],
+    children: [
+      { label: "Ideen", to: "/events/ideen" },
+      { label: "Kalkulationen", to: "/events" },
+      { label: "Erfahrungswerte", to: "/events/erfahrungswerte" },
+    ],
   },
   { label: "Zutaten & EK", to: "/zutaten", icon: Carrot, children: [{ label: "Excel importieren", to: "/zutaten/importieren" }] },
   { label: "Verkaufsmengen", to: "/verkaufsmengen", icon: BarChart3 },
