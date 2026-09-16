@@ -174,13 +174,13 @@ function IdeaDetailPage() {
 
         <section className="surface px-5 py-4">
           <h2 className="section-title">Kalkulation</h2>
-          {linked ? (
+          {linked || createdId ? (
             <>
               <p className="mt-2 text-sm text-muted-foreground">
                 Mit dieser Idee ist eine Kalkulation verknüpft. Änderungen an der Idee verändern sie nicht.
               </p>
               <Button className="mt-3" asChild>
-                <Link to="/events/$eventId" params={{ eventId: linked.id }}>
+                <Link to="/events/$eventId" params={{ eventId: (linked?.id ?? createdId)! }}>
                   Kalkulation öffnen
                 </Link>
               </Button>
@@ -191,14 +191,38 @@ function IdeaDetailPage() {
                 Übernommen werden nur bekannte Angaben. Unbekannte Werte bleiben offen und werden nie als Null
                 gerechnet.
               </p>
-              <Button className="mt-3" onClick={createCalculation} disabled={busy}>
-                Bierdeckel erstellen
+              <Button className="mt-3" onClick={() => createCalculation(false)} disabled={busy}>
+                {busy ? "Wird erstellt …" : "Bierdeckel erstellen"}
+              </Button>
+            </>
+          ) : idea.stage === "new" || idea.stage === "in_discussion" ? (
+            <>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Gibt die Idee zur Berechnung frei. Die Durchführung wird später separat entschieden.
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Übernommen werden nur bekannte Angaben. Unbekannte Werte bleiben offen und werden nie als Null
+                gerechnet.
+              </p>
+              <Button className="mt-3" onClick={() => createCalculation(true)} disabled={busy}>
+                {busy ? "Wird freigegeben …" : "Zur Kalkulation freigeben und starten"}
               </Button>
             </>
           ) : (
-            <p className="mt-2 text-sm text-muted-foreground">
-              Die Idee muss zuerst zur Kalkulation freigegeben werden.
-            </p>
+            <>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Diese Idee ist {ideaStageLabels[idea.stage].toLowerCase()}. Sie muss zuerst zurück in die Diskussion,
+                bevor gerechnet wird.
+              </p>
+              <Button
+                variant="outline"
+                className="mt-3"
+                onClick={() => changeStage("in_discussion")}
+                disabled={busy}
+              >
+                Zurück in Diskussion
+              </Button>
+            </>
           )}
         </section>
       </div>
