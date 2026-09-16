@@ -148,10 +148,13 @@ export async function createMenuPositions(rows: MenuPositionInsert[]) {
   if (error) throw error;
 }
 
-/** Swaps the sort order of two positions (move up/down within a course). */
-export async function swapMenuPositions(a: MenuPosition, b: MenuPosition) {
-  await updateMenuPosition(a.id, { sort_order: b.sort_order });
-  await updateMenuPosition(b.id, { sort_order: a.sort_order });
+/** Writes a new, gap-free display order for the given positions. */
+export async function reorderMenuPositions(ordered: MenuPosition[]) {
+  for (let i = 0; i < ordered.length; i++) {
+    const p = ordered[i]!;
+    const next = (i + 1) * 10;
+    if (p.sort_order !== next) await updateMenuPosition(p.id, { sort_order: next });
+  }
 }
 
 /** Duplicates a menu variant including its positions (recipes are referenced, not copied). */
