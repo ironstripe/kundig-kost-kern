@@ -114,13 +114,20 @@ function IdeasPage() {
                 <TableHead className="text-right">Erwartete Gäste</TableHead>
                 <TableHead>Stufe</TableHead>
                 <TableHead>Kalkulation</TableHead>
+                <TableHead className="text-right">Aktion</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {list.map((idea) => {
                 const linked = (events ?? []).find((e) => e.idea_id === idea.id) ?? null;
+                const openIdea = () => navigate({ to: "/events/ideen/$ideaId", params: { ideaId: idea.id } });
                 return (
-                  <TableRow key={idea.id}>
+                  <TableRow
+                    key={idea.id}
+                    onClick={openIdea}
+                    className="cursor-pointer"
+                    title={`${idea.title} öffnen`}
+                  >
                     <TableCell>
                       <Link
                         to="/events/ideen/$ideaId"
@@ -139,7 +146,7 @@ function IdeasPage() {
                     <TableCell>
                       <StatusBadge tone={stageTone(idea.stage)}>{ideaStageLabels[idea.stage]}</StatusBadge>
                     </TableCell>
-                    <TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
                       {linked ? (
                         <Link
                           to="/events/$eventId"
@@ -151,6 +158,15 @@ function IdeasPage() {
                       ) : (
                         <span className="text-xs text-muted-foreground">Keine</span>
                       )}
+                    </TableCell>
+                    <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                      <Link
+                        to="/events/ideen/$ideaId"
+                        params={{ ideaId: idea.id }}
+                        className="text-sm font-medium hover:underline"
+                      >
+                        Details
+                      </Link>
                     </TableCell>
                   </TableRow>
                 );
