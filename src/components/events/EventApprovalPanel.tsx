@@ -7,7 +7,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { AlertTriangle, CheckCircle2, Send } from "lucide-react";
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -26,9 +26,9 @@ import {
   basisFingerprintQuery,
   executionApprovalsQuery,
   handoverStateLabels,
-  HANDOVER_NOT_CONFIGURED,
 } from "@/lib/event-approvals";
 import type { EventResult } from "@/lib/event-costing";
+import { HandoverPanel } from "@/components/events/HandoverPanel";
 import type { Event } from "@/lib/events";
 
 function dateTime(value: string | null): string {
@@ -112,18 +112,10 @@ export function EventApprovalPanel({ event, result }: { event: Event; result: Ev
         <Button onClick={() => setOpen(true)} disabled={blocked}>
           <CheckCircle2 className="size-4" /> Durchführung freigeben
         </Button>
-        <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Send className="size-3.5" /> {HANDOVER_NOT_CONFIGURED}
-        </span>
       </div>
 
-      {event.handover_state === "handed_over" && event.handover_url && (
-        <p className="mt-3 text-sm">
-          <a className="underline" href={event.handover_url} target="_blank" rel="noreferrer">
-            Event in Kundivent öffnen
-          </a>
-        </p>
-      )}
+      <HandoverPanel event={event} />
+
 
       {(approvals ?? []).length > 0 && (
         <div className="mt-5">
