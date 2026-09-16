@@ -150,7 +150,7 @@ function AddOnsPage() {
                 {rows.length === 0 && (
                   <TableRow><TableCell colSpan={9} className="py-8 text-center text-sm text-muted-foreground">Keine Add-ons für diesen Filter.</TableCell></TableRow>
                 )}
-                {rows.map(({ addOn, dishNames, result, warning }) => (
+                {rows.map(({ addOn, dishNames, result, warning, eligibilityNote }) => (
                   <TableRow
                     key={addOn.id}
                     className={cn("cursor-pointer", !addOn.is_active && "opacity-60")}
@@ -163,6 +163,7 @@ function AddOnsPage() {
                         {(result.hasEstimatedPrices || result.hasUnconfirmedQuantities) && <span>Annahmen enthalten</span>}
                         {warning && <span className="text-warning-foreground">Absatz prüfen</span>}
                       </div>
+                      {eligibilityNote && <div className="text-xs text-muted-foreground">{eligibilityNote}</div>}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">{dishNames.length ? dishNames.join(", ") : <span className="italic">nicht zugeordnet</span>}</TableCell>
                     <TableCell className="text-right"><MetricValue value={result.grossPrice} kind="chf" problems={result.problems} /></TableCell>
