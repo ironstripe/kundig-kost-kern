@@ -10,6 +10,7 @@ import {
 } from "@/lib/dishes";
 import type { SmallMaterialMode } from "@/lib/costing";
 import { parseDecimal } from "@/lib/format";
+import { invalidateMenuResults } from "@/lib/menu-cards";
 import { smallMaterialModeLabels } from "@/lib/labels";
 import {
   Dialog,
@@ -104,10 +105,7 @@ export function VariantDialog({ mode, dishId, userId, variant, sourceItems = [],
       return created.id;
     },
     onSuccess: async (id) => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["variants"] }),
-        queryClient.invalidateQueries({ queryKey: ["calculation_items"] }),
-      ]);
+      await invalidateMenuResults(queryClient);
       toast.success(
         mode === "duplicate"
           ? `Variante «${name.trim()}» als unabhängige Kopie angelegt (${sourceItems.length} Positionen übernommen).`

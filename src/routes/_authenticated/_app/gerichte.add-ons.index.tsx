@@ -15,6 +15,7 @@ import { useSelectedMenuCard } from "@/lib/selected-menu-card";
 import { MenuCardSelector } from "@/components/menu-cards/MenuCardSelector";
 import { calculateVariant } from "@/lib/costing";
 import { addOnSalesWarning, openDaysCount } from "@/lib/sales";
+import { ADD_ON_NO_ACTIVE_DISH_NOTE, ADD_ON_UNASSIGNED_NOTE } from "@/lib/menu-totals";
 import { calculationStatusLabels } from "@/lib/labels";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,11 +62,23 @@ function AddOnsPage() {
       .filter((a) => !q || a.name.toLowerCase().includes(q))
       .map((a) => {
         const dishIds = links.filter((l) => l.add_on_id === a.id).map((l) => l.dish_id);
-        const dishNames = dishes.filter((d) => dishIds.includes(d.id)).map((d) => d.name);
+        const assignedDishes = dishes.filter((d) => dishIds.includes(d.id));
+        const dishNames = assignedDishes.map((d) => d.name);
         const dishVariants = variants.filter((v) => dishIds.includes(v.dish_id) && v.is_active);
+        const qualifies = assignedDishes.some(
+          (d) => d.is_active && dishVariants.some((v) => v.dish_id === d.id),
+        );
+        const eligibilityNote = !a.is_active
+          ? null
+          : assignedDishes.length === 0
+            ? ADD_ON_UNASSIGNED_NOTE
+            : qualifies
+              ? null
+              : ADD_ON_NO_ACTIVE_DISH_NOTE;
         return {
           addOn: a,
           dishNames,
+          eligibilityNote,
           result: calculateVariant(a, items.filter((it) => it.add_on_id === a.id), ingById, card ?? null),
           warning: addOnSalesWarning(a, dishVariants, openDays),
         };
@@ -138,7 +151,7 @@ function AddOnsPage() {
                 {rows.length === 0 && (
                   <TableRow><TableCell colSpan={9} className="py-8 text-center text-sm text-muted-foreground">Keine Add-ons für diesen Filter.</TableCell></TableRow>
                 )}
-                {rows.map(({ addOn, dishNames, result, warning }) => (
+                {rows.map(({ addOn, dishNames, result, warning, eligibilityNote }) => (
                   <TableRow
                     key={addOn.id}
                     className={cn("cursor-pointer", !addOn.is_active && "opacity-60")}
@@ -151,6 +164,7 @@ function AddOnsPage() {
                         {(result.hasEstimatedPrices || result.hasUnconfirmedQuantities) && <span>Annahmen enthalten</span>}
                         {warning && <span className="text-warning-foreground">Absatz prüfen</span>}
                       </div>
+                      {eligibilityNote && <div className="text-xs text-muted-foreground">{eligibilityNote}</div>}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">{dishNames.length ? dishNames.join(", ") : <span className="italic">nicht zugeordnet</span>}</TableCell>
                     <TableCell className="text-right"><MetricValue value={result.grossPrice} kind="chf" problems={result.problems} /></TableCell>

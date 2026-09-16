@@ -37,7 +37,10 @@ export type MenuLine = {
   exclusionReasons: string[];
   /** Non-blocking add-on plausibility warning. */
   salesWarning: string | null;
+  /** Eligible for the à-la-carte total calculation (active + qualifying). */
   isActive: boolean;
+  /** Plain-language reason why a line is not part of the à-la-carte total. */
+  eligibilityNote: string | null;
 };
 
 export type OverallTotals = {
@@ -98,6 +101,15 @@ export type MenuTotals = {
 
 const UNCATEGORISED = "Ohne Kategorie";
 
+/** Plain-language eligibility notes (also used in the detail views). */
+export const DISH_INACTIVE_NOTE = "Inaktiv – nicht in der À-la-carte-Gesamtkalkulation berücksichtigt.";
+export const VARIANT_INACTIVE_NOTE =
+  "Variante inaktiv – nicht in der À-la-carte-Gesamtkalkulation berücksichtigt.";
+export const ADD_ON_INACTIVE_NOTE = "Inaktiv – nicht in der À-la-carte-Gesamtkalkulation berücksichtigt.";
+export const ADD_ON_UNASSIGNED_NOTE = "Nicht berücksichtigt – keinem Gericht zugeordnet.";
+export const ADD_ON_NO_ACTIVE_DISH_NOTE = "Nicht berücksichtigt – keine aktive Gerichtzuordnung.";
+export const MENU_POSITION_INACTIVE_NOTE = "À la carte inaktiv – weiterhin Bestandteil dieses Menüs.";
+
 /**
  * @param baseline saved source data
  * @param overrides optional temporary scenario overrides (never persisted)
@@ -133,12 +145,17 @@ export function calculateMenuTotals(baseline: MenuCardData, overrides?: Override
         sales: v,
         sellingDays,
         isActive: v.is_active && dish.is_active,
+        eligibilityNote: !dish.is_active
+          ? DISH_INACTIVE_NOTE
+          : !v.is_active
+            ? VARIANT_INACTIVE_NOTE
+            : null,
         salesWarning: null,
       }),
     );
   }
 
-  // Add-ons
+  // Add-ons: eligible only with at least one active dish that has an active variant.
   const activeVariantsByDish = new Map<string, typeof variants>();
   for (const v of variants) {
     const dish = dishById.get(v.dish_id);
@@ -149,6 +166,15 @@ export function calculateMenuTotals(baseline: MenuCardData, overrides?: Override
     const result = calculateVariant(a, items.filter((it) => it.add_on_id === a.id), ingById, card);
     const assignedDishes = links.filter((l) => l.add_on_id === a.id).map((l) => dishById.get(l.dish_id)).filter(Boolean);
     const assignedVariants = assignedDishes.flatMap((d) => activeVariantsByDish.get(d!.id) ?? []);
+    // One qualifying assignment is enough; sales are counted exactly once.
+    const hasQualifyingAssignment = assignedVariants.length > 0;
+    const note = !a.is_active
+      ? ADD_ON_INACTIVE_NOTE
+      : assignedDishes.length === 0
+        ? ADD_ON_UNASSIGNED_NOTE
+        : !hasQualifyingAssignment
+          ? ADD_ON_NO_ACTIVE_DISH_NOTE
+          : null;
     lines.push(
       buildLine({
         key: `a:${a.id}`,
@@ -163,7 +189,8 @@ export function calculateMenuTotals(baseline: MenuCardData, overrides?: Override
         result,
         sales: a,
         sellingDays,
-        isActive: a.is_active,
+        isActive: a.is_active && hasQualifyingAssignment,
+        eligibilityNote: note,
         salesWarning: a.is_active ? addOnSalesWarning(a, assignedVariants, sellingDays) : null,
       }),
     );
@@ -293,6 +320,7 @@ function buildLine(input: {
   sales: { sales_input_mode: SalesInputMode; expected_per_open_day: number | string; expected_total: number | string | null };
   sellingDays: number;
   isActive: boolean;
+  eligibilityNote?: string | null;
   salesWarning: string | null;
 }): MenuLine {
   const { result, sales, sellingDays } = input;
@@ -328,5 +356,6 @@ function buildLine(input: {
     exclusionReasons: reasons,
     salesWarning: input.salesWarning,
     isActive: input.isActive,
+    eligibilityNote: input.eligibilityNote ?? null,
   };
 }

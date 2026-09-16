@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Plus } from "lucide-react";
 import { linkAddOn, type AddOn, type AddOnLink } from "@/lib/add-ons";
 import { formatCHF } from "@/lib/format";
+import { invalidateMenuResults } from "@/lib/menu-cards";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,7 +30,7 @@ export function AssignAddOnDialog({ dishId, addOns, links, open, onOpenChange, o
       for (const id of selected) await linkAddOn(dishId, id);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["add_on_links"] });
+      await invalidateMenuResults(queryClient);
       toast.success(selected.length === 1 ? "Add-on zugeordnet." : `${selected.length} Add-ons zugeordnet.`);
       onOpenChange(false);
     },

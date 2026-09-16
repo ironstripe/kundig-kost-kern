@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { createCategory, createDish, createVariant, updateDish, type Category, type Dish } from "@/lib/dishes";
 import { parseDecimal } from "@/lib/format";
+import { invalidateMenuResults } from "@/lib/menu-cards";
 import {
   Dialog,
   DialogContent,
@@ -73,11 +74,7 @@ export function DishDialog({ dish, categories, menuCardId, open, onOpenChange, o
       return created.id;
     },
     onSuccess: async (id) => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["dishes"] }),
-        queryClient.invalidateQueries({ queryKey: ["variants"] }),
-        queryClient.invalidateQueries({ queryKey: ["categories"] }),
-      ]);
+      await invalidateMenuResults(queryClient);
       toast.success(isEdit ? "Gericht gespeichert." : `Gericht «${name.trim()}» angelegt.`);
       onOpenChange(false);
       if (!isEdit) onCreated?.(id);
@@ -153,10 +150,16 @@ export function DishDialog({ dish, categories, menuCardId, open, onOpenChange, o
               <Label htmlFor="d-notes">Notizen</Label>
               <Textarea id="d-notes" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} />
             </div>
-            <label className="flex items-center gap-2 text-sm">
-              <Checkbox checked={isActive} onCheckedChange={(c) => setIsActive(c === true)} />
-              Aktiv
-            </label>
+            <div className="rounded-md border p-3">
+              <label className="flex items-center gap-2 text-sm font-medium">
+                <Checkbox checked={isActive} onCheckedChange={(c) => setIsActive(c === true)} />
+                Aktiv
+              </label>
+              <p className="mt-1.5 text-xs text-muted-foreground">
+                Inaktive Gerichte bleiben bearbeitbar und kalkulierbar. Ihre Varianten zählen nicht zur
+                À-la-carte-Gesamtkalkulation. Bestehende Menüzuordnungen bleiben erhalten.
+              </p>
+            </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
           </div>
           <DialogFooter className="mt-6">
