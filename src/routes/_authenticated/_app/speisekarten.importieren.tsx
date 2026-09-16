@@ -264,7 +264,9 @@ function ImportPage() {
                   <p>
                     Übernommen am {formatDateTime(job.confirmed_at)}. {confirmResult && <>{confirmResult.dishes_created} Gerichte neu, {confirmResult.dishes_updated} aktualisiert, {confirmResult.dishes_skipped} übersprungen, {confirmResult.variants_created} Varianten und {confirmResult.add_ons_created} Add-ons angelegt.</>}
                   </p>
-                  <p className="text-muted-foreground">Alle neuen Varianten stehen auf «geschätzt» mit Verkaufsmenge 1 pro Öffnungstag – bitte in den Verkaufsmengen anpassen. <Link to="/gerichte" className="underline">Zu den Gerichten</Link></p>
+                  <p className="text-muted-foreground">Alle neuen Varianten stehen auf «geschätzt» mit Verkaufsmenge 1 pro Öffnungstag – bitte in den Verkaufsmengen anpassen.</p>
+                  <Button asChild><Link to="/gerichte">Zu den Gerichten</Link></Button>
+
                 </div>
               )}
             </section>
