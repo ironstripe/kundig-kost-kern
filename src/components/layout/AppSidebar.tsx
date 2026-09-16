@@ -11,6 +11,13 @@ type Props = {
 
 export function AppSidebar({ isAdmin, onNavigate, className }: Props) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const search = useRouterState({ select: (s) => s.location.search as { from?: string } });
+
+  // The menu-card import is reachable from Gerichte and from Speisekarten.
+  // The ?from marker keeps exactly one section highlighted.
+  const onImport = pathname.startsWith("/speisekarten/importieren");
+  const importOwner = search.from === "gerichte" ? "/gerichte" : "/speisekarten";
+  const isActive = (to: string) => (onImport ? to === importOwner : pathname.startsWith(to));
 
   return (
     <nav
@@ -22,7 +29,7 @@ export function AppSidebar({ isAdmin, onNavigate, className }: Props) {
       </div>
       <ul className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4">
         {NAV_ITEMS.map((item) => {
-          const active = pathname.startsWith(item.to);
+          const active = isActive(item.to);
           const children = item.children?.filter((c) => !c.adminOnly || isAdmin);
           return (
             <li key={item.to}>
@@ -43,7 +50,10 @@ export function AppSidebar({ isAdmin, onNavigate, className }: Props) {
               {children && children.length > 0 && active && (
                 <ul className="mt-0.5 ml-4 space-y-0.5 border-l border-sidebar-border pl-3">
                   {children.map((child) => {
-                    const childActive = pathname.startsWith(child.to);
+                    const childActive =
+                      pathname.startsWith(child.to) &&
+                      (!onImport || child.to !== "/speisekarten/importieren" || item.to === importOwner);
+
                     return (
                       <li key={child.to}>
                         <Link
