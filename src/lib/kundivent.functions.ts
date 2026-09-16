@@ -26,7 +26,6 @@ export type HandoverAttempt = {
   state: "ready" | "sending" | "unknown" | "failed" | "succeeded";
   target_event_id: string | null;
   idempotency_key: string;
-  payload: Record<string, unknown>;
   error_code: string | null;
   error_message: string | null;
   handover_id: string | null;
@@ -37,6 +36,14 @@ export type HandoverAttempt = {
   created_at: string;
   attempt_count: number;
 };
+
+/** Row shape including the immutable payload; never leaves the server. */
+type HandoverAttemptRow = HandoverAttempt & { payload: Record<string, unknown> };
+
+function strip(row: HandoverAttemptRow): HandoverAttempt {
+  const { payload: _payload, ...rest } = row;
+  return rest;
+}
 
 export type HandoverContext = {
   configured: boolean;
@@ -107,7 +114,8 @@ async function loadAttempt(context: Ctx, eventId: string): Promise<HandoverAttem
     .eq("event_id", eventId)
     .order("created_at", { ascending: false })
     .limit(1);
-  return ((data ?? [])[0] as HandoverAttempt | undefined) ?? null;
+  const row = (data ?? [])[0] as HandoverAttemptRow | undefined;
+  return row ? strip(row) : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -275,7 +283,7 @@ export const prepareHandover = createServerFn({ method: "POST" })
       .select("*")
       .single();
     if (error) throw new Error("Der Übergabeversuch konnte nicht vorbereitet werden.");
-    return row as unknown as HandoverAttempt;
+    return strip(row as unknown as HandoverAttemptRow);
   });
 
 // ---------------------------------------------------------------------------
@@ -300,7 +308,7 @@ async function persistReceipt(attemptId: string, receipt: Receipt, trustedUrl: b
     .eq("id", attemptId)
     .select("*")
     .single();
-  return row as unknown as HandoverAttempt;
+  return strip(row as unknown as HandoverAttemptRow);
 }
 
 async function markEventHandedOver(eventId: string, receipt: Receipt, targetUrl: string | null) {
@@ -338,7 +346,7 @@ export const sendHandover = createServerFn({ method: "POST" })
       .select("*")
       .maybeSingle();
     if (!claimed) throw new Error("Dieser Übergabeversuch ist nicht mehr bereit zum Senden.");
-    const attempt = claimed as unknown as HandoverAttempt;
+    const attempt = claimed as unknown as HandoverAttemptRow;
 
     // The actor identity of the original attempt is preserved.
     if (attempt.initiated_by && attempt.initiated_by !== context.userId) {
@@ -362,7 +370,7 @@ export const sendHandover = createServerFn({ method: "POST" })
           .eq("id", attempt.id)
           .select("*")
           .single();
-        return row as unknown as HandoverAttempt;
+        return strip(row as unknown as HandoverAttemptRow);
       }
       const saved = await persistReceipt(attempt.id, receipt, trusted);
       await markEventHandedOver(attempt.event_id, receipt, receipt.target_url);
@@ -376,7 +384,7 @@ export const sendHandover = createServerFn({ method: "POST" })
         .eq("id", attempt.id)
         .select("*")
         .single();
-      return row as unknown as HandoverAttempt;
+      return strip(row as unknown as HandoverAttemptRow);
     }
   });
 
@@ -395,8 +403,8 @@ export const resolveHandover = createServerFn({ method: "POST" })
       .eq("id", data.attemptId)
       .maybeSingle();
     if (!found) throw new Error("Übergabeversuch nicht gefunden.");
-    const attempt = found as unknown as HandoverAttempt;
-    if (attempt.state === "succeeded") return attempt;
+    const attempt = found as unknown as HandoverAttemptRow;
+    if (attempt.state === "succeeded") return strip(attempt);
 
     try {
       const receipt = await getReceipt(cfg, attempt.initiated_by ?? context.userId, attempt.event_id);
@@ -409,7 +417,7 @@ export const resolveHandover = createServerFn({ method: "POST" })
           .eq("id", attempt.id)
           .select("*")
           .single();
-        return row as unknown as HandoverAttempt;
+        return strip(row as unknown as HandoverAttemptRow);
       }
       const trusted = isTrustedTargetUrl(receipt.target_url, cfg);
       const problem = validateReceipt(receipt, attempt, trusted);
@@ -425,7 +433,7 @@ export const resolveHandover = createServerFn({ method: "POST" })
           .eq("id", attempt.id)
           .select("*")
           .single();
-        return row as unknown as HandoverAttempt;
+        return strip(row as unknown as HandoverAttemptRow);
       }
       throw error;
     }
