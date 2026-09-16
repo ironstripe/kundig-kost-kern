@@ -54,7 +54,7 @@ export const basisFingerprintQuery = (eventId: string) =>
 export async function approveEventExecution(eventId: string, note: string | null) {
   const { error } = await supabase.rpc("approve_event_execution", {
     _event_id: eventId,
-    _note: note,
+    ...(note ? { _note: note } : {}),
   });
   if (error) throw error;
 }
