@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { ArrowUpDown, PackagePlus, Plus, Search, UtensilsCrossed } from "lucide-react";
+import { ArrowUpDown, FileUp, PackagePlus, Plus, Search, UtensilsCrossed } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { EmptyState } from "@/components/layout/EmptyState";
 import { StatusBadge } from "@/components/layout/StatusBadge";
