@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { EmptyState } from "@/components/layout/EmptyState";
 import { MenuCardSummary } from "@/components/menu-cards/MenuCardSummary";
 import { MenuCardConfigDialog } from "@/components/menu-cards/MenuCardConfigDialog";
+import { GlobalAssumptionsPanel } from "@/components/settings/GlobalAssumptionsPanel";
 import { activeMenuCardQuery } from "@/lib/menu-cards";
 import { useAppContext } from "@/lib/app-route";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,7 @@ export const Route = createFileRoute("/_authenticated/_app/einstellungen/konfigu
 });
 
 function ConfigPage() {
-  const { user } = useAppContext();
+  const { user, profile } = useAppContext();
   const { data: card, isPending } = useQuery(activeMenuCardQuery);
   const [open, setOpen] = useState(false);
 
@@ -69,6 +70,8 @@ function ConfigPage() {
           </section>
         </>
       )}
+
+      <GlobalAssumptionsPanel userId={user.id} isAdmin={profile.is_admin} />
     </>
   );
 }
