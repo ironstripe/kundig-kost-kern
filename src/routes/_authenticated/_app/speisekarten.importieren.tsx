@@ -43,7 +43,8 @@ import {
 import { BookOpen } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/_app/speisekarten/importieren")({
-  validateSearch: z.object({ job: z.string().uuid().optional() }),
+  validateSearch: z.object({ job: z.string().uuid().optional(), from: z.literal("gerichte").optional() }),
+
   head: () => ({
     meta: [
       { title: "Speisekarte importieren – KundiCalc" },
