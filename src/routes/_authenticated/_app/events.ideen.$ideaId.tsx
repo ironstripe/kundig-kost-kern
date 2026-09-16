@@ -21,7 +21,8 @@ import {
   setIdeaStage,
   type IdeaStage,
 } from "@/lib/event-ideas";
-import { eventsQuery } from "@/lib/events";
+import { eventsQuery, fetchEvent } from "@/lib/events";
+import { copyDefaultsToEvent, eventAssumptionsQuery } from "@/lib/event-assumptions";
 import { EventIdeaDialog } from "@/components/events/EventIdeaDialog";
 import { useAppContext } from "@/lib/app-route";
 
@@ -45,9 +46,11 @@ function IdeaDetailPage() {
   const { data: idea, isPending } = useQuery(eventIdeaQuery(ideaId));
   const { data: notes } = useQuery(ideaNotesQuery(ideaId));
   const { data: events } = useQuery(eventsQuery);
+  const { data: assumptions } = useQuery(eventAssumptionsQuery);
   const [edit, setEdit] = useState(false);
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
+  const [createdId, setCreatedId] = useState<string | null>(null);
 
   if (isPending) return <Skeleton className="h-64 w-full" />;
   if (!idea) return <p className="text-sm text-muted-foreground">Idee nicht gefunden.</p>;
@@ -67,12 +70,23 @@ function IdeaDetailPage() {
     }
   };
 
-  const createCalculation = async () => {
+  /**
+   * One deliberate action. Approval for calculation and creation happen
+   * atomically server-side; the execution approval stays a separate decision.
+   */
+  const createCalculation = async (approve: boolean) => {
     if (busy) return;
     setBusy(true);
     try {
-      const id = await createEventFromIdea(idea.id);
-      await qc.invalidateQueries({ queryKey: ["events"] });
+      const id = await createEventFromIdea(idea.id, approve);
+      setCreatedId(id);
+      const created = await fetchEvent(id);
+      if (created) await copyDefaultsToEvent(id, assumptions ?? [], created.event_type);
+      await Promise.all([
+        qc.invalidateQueries({ queryKey: ["events"] }),
+        qc.invalidateQueries({ queryKey: ["event_ideas"] }),
+        qc.invalidateQueries({ queryKey: ["event_assumption_values", id] }),
+      ]);
       navigate({ to: "/events/$eventId", params: { eventId: id } });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Kalkulation konnte nicht erstellt werden.");
@@ -161,13 +175,13 @@ function IdeaDetailPage() {
 
         <section className="surface px-5 py-4">
           <h2 className="section-title">Kalkulation</h2>
-          {linked ? (
+          {linked || createdId ? (
             <>
               <p className="mt-2 text-sm text-muted-foreground">
                 Mit dieser Idee ist eine Kalkulation verknüpft. Änderungen an der Idee verändern sie nicht.
               </p>
               <Button className="mt-3" asChild>
-                <Link to="/events/$eventId" params={{ eventId: linked.id }}>
+                <Link to="/events/$eventId" params={{ eventId: (linked?.id ?? createdId)! }}>
                   Kalkulation öffnen
                 </Link>
               </Button>
@@ -178,14 +192,38 @@ function IdeaDetailPage() {
                 Übernommen werden nur bekannte Angaben. Unbekannte Werte bleiben offen und werden nie als Null
                 gerechnet.
               </p>
-              <Button className="mt-3" onClick={createCalculation} disabled={busy}>
-                Bierdeckel erstellen
+              <Button className="mt-3" onClick={() => createCalculation(false)} disabled={busy}>
+                {busy ? "Wird erstellt …" : "Bierdeckel erstellen"}
+              </Button>
+            </>
+          ) : idea.stage === "new" || idea.stage === "in_discussion" ? (
+            <>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Gibt die Idee zur Berechnung frei. Die Durchführung wird später separat entschieden.
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Übernommen werden nur bekannte Angaben. Unbekannte Werte bleiben offen und werden nie als Null
+                gerechnet.
+              </p>
+              <Button className="mt-3" onClick={() => createCalculation(true)} disabled={busy}>
+                {busy ? "Wird freigegeben …" : "Zur Kalkulation freigeben und starten"}
               </Button>
             </>
           ) : (
-            <p className="mt-2 text-sm text-muted-foreground">
-              Die Idee muss zuerst zur Kalkulation freigegeben werden.
-            </p>
+            <>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Diese Idee ist {ideaStageLabels[idea.stage].toLowerCase()}. Sie muss zuerst zurück in die Diskussion,
+                bevor gerechnet wird.
+              </p>
+              <Button
+                variant="outline"
+                className="mt-3"
+                onClick={() => changeStage("in_discussion")}
+                disabled={busy}
+              >
+                Zurück in Diskussion
+              </Button>
+            </>
           )}
         </section>
       </div>
