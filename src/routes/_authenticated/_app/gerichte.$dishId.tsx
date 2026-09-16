@@ -241,7 +241,7 @@ function DishDetailPage() {
           <>
             {variants.length >= 2 && (
               <Button variant="outline" onClick={() => setDialog({ kind: "compare" })}>
-                <GitCompareArrows className="size-4" /> Varianten vergleichen
+                <GitCompareArrows className="icon-brand size-4" /> Varianten vergleichen
               </Button>
             )}
             <Button variant="outline" onClick={() => setDialog({ kind: "dish" })}>

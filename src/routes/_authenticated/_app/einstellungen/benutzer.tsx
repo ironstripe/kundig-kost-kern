@@ -150,7 +150,7 @@ function UsersPage() {
                           onClick={() => setResetTarget(u)}
                           aria-label={`Passwort von ${u.display_name} zurücksetzen`}
                         >
-                          <KeyRound className="size-4" />
+                          <KeyRound className="icon-brand size-4" />
                           <span className="hidden xl:inline">Passwort</span>
                         </Button>
                         {u.is_active ? (

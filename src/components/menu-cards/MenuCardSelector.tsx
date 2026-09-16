@@ -12,7 +12,7 @@ export function MenuCardSelector({ className }: { className?: string }) {
   return (
     <div className={className}>
       <div className="flex flex-wrap items-center gap-2">
-        <BookOpen className="size-4 text-muted-foreground" />
+        <BookOpen className="icon-brand size-4" />
         <span className="text-xs font-medium text-muted-foreground">Speisekarte</span>
         <Select value={card?.id ?? ""} onValueChange={(v) => {
             if (v === card?.id) return;

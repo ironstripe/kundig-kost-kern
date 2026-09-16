@@ -72,7 +72,7 @@ export function ImportSourcePanel({ menuCardId, onCreated }: Props) {
   return (
     <Tabs defaultValue="file" className="w-full">
       <TabsList>
-        <TabsTrigger value="file"><FileUp className="mr-1 size-4" /> Datei hochladen</TabsTrigger>
+        <TabsTrigger value="file"><FileUp className="icon-brand mr-1 size-4" /> Datei hochladen</TabsTrigger>
         <TabsTrigger value="url"><Link2 className="mr-1 size-4" /> Von Link laden</TabsTrigger>
       </TabsList>
 
@@ -87,7 +87,7 @@ export function ImportSourcePanel({ menuCardId, onCreated }: Props) {
           onDrop={(e) => { e.preventDefault(); setDragging(false); pick(e.dataTransfer.files); }}
           className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed px-4 py-8 text-center text-sm transition-colors ${dragging ? "border-primary bg-accent/40" : "border-border hover:bg-muted/40"}`}
         >
-          <FileUp className="mb-2 size-6 text-muted-foreground" />
+          <FileUp className="icon-brand mb-2 size-6" />
           <p className="font-medium">Speisekarte als PDF oder Bild hierher ziehen</p>
           <p className="mt-1 text-xs text-muted-foreground">PDF, JPG, PNG oder WEBP · maximal 15 MB · wird privat gespeichert</p>
           <input

@@ -37,7 +37,7 @@ export function AppSidebar({ isAdmin, onNavigate, className }: Props) {
                     : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
                 )}
               >
-                <item.icon className="size-4 shrink-0" strokeWidth={1.75} />
+                <item.icon className="icon-brand size-4 shrink-0" strokeWidth={2} />
                 <span>{item.label}</span>
               </Link>
               {children && children.length > 0 && active && (

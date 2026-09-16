@@ -182,7 +182,7 @@ function IngredientImportPage() {
           <>
             <Button variant="outline" asChild><Link to="/zutaten"><ArrowLeft className="size-4" /> Zu Zutaten & EK</Link></Button>
             <Button variant="outline" onClick={() => downloadTemplate.mutate()} disabled={downloadTemplate.isPending}>
-              {downloadTemplate.isPending ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />} Excel-Vorlage herunterladen
+              {downloadTemplate.isPending ? <Loader2 className="size-4 animate-spin" /> : <Download className="icon-brand size-4" />} Excel-Vorlage herunterladen
             </Button>
           </>
         }
@@ -209,7 +209,7 @@ function IngredientImportPage() {
               disabled={phase === "checking"}
             />
             <Button onClick={() => file && check.mutate(file)} disabled={!file || phase === "checking" || ingPending}>
-              {phase === "checking" ? <Loader2 className="size-4 animate-spin" /> : <FileSpreadsheet className="size-4" />} Datei prüfen
+              {phase === "checking" ? <Loader2 className="size-4 animate-spin" /> : <FileSpreadsheet className="icon-brand size-4" />} Datei prüfen
             </Button>
           </div>
           {file && <p className="text-xs text-muted-foreground">{file.name} · {formatBytes(file.size)}</p>}
@@ -260,7 +260,7 @@ function IngredientImportPage() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <Button variant="ghost" onClick={reset}>Andere Datei wählen</Button>
             <Button onClick={() => setConfirmOpen(true)} disabled={summary.blocking > 0 || summary.created + summary.updated === 0}>
-              <ShieldCheck className="size-4" /> Weiter zur Bestätigung
+              <ShieldCheck className="icon-brand size-4" /> Weiter zur Bestätigung
             </Button>
           </div>
         </div>

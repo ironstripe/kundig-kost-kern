@@ -58,6 +58,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-icon-brand: var(--icon-brand);
+  --color-icon-brand-foreground: var(--icon-brand-foreground);
 }
 
 :root {
@@ -98,6 +100,10 @@
   --sidebar-accent-foreground: oklch(0.3 0.07 155);
   --sidebar-border: oklch(0.9 0.008 80);
   --sidebar-ring: oklch(0.5 0.08 155);
+  /* KundiCalc icon colour – used for navigation, section, feature and
+     empty-state icons. Never for status, warning or chart colours. */
+  --icon-brand: #f8d04f;
+  --icon-brand-foreground: oklch(0.28 0.03 70);
 }
 
 .dark {
@@ -137,6 +143,8 @@
   --sidebar-accent-foreground: oklch(0.92 0.05 150);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.6 0.08 155);
+  --icon-brand: #f8d04f;
+  --icon-brand-foreground: oklch(0.25 0.03 70);
 }
 
 @layer base {
@@ -183,4 +191,18 @@
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
+}
+
+/* KundiCalc icon colour: stroke icons in navigation, sections, features and
+   actions. Icons always sit next to a text label, so meaning never depends on
+   the colour alone. */
+@utility icon-brand {
+  color: var(--color-icon-brand);
+}
+
+/* Filled icon surface (e.g. empty states): yellow background with a dark
+   foreground for sufficient contrast. */
+@utility icon-brand-surface {
+  background-color: var(--color-icon-brand);
+  color: var(--color-icon-brand-foreground);
 }

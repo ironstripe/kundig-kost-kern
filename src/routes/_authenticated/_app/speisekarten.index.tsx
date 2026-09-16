@@ -117,7 +117,7 @@ function MenuCardsPage() {
         actions={
           <>
             <Button variant="outline" asChild>
-              <Link to="/speisekarten/importieren"><FileUp className="size-4" /> Importieren</Link>
+              <Link to="/speisekarten/importieren"><FileUp className="icon-brand size-4" /> Importieren</Link>
             </Button>
             <Button onClick={() => setDialog({ kind: "create" })}>
               <Plus className="size-4" /> Speisekarte anlegen

@@ -41,7 +41,7 @@ export function NewCalculationDialog({ open, onOpenChange, onChooseMenu }: Props
             onClick={() => choose("card")}
             className="surface flex flex-col items-start gap-2 px-4 py-4 text-left transition-colors hover:bg-accent/40"
           >
-            <BookOpen className="size-5 text-muted-foreground" strokeWidth={1.75} />
+            <BookOpen className="icon-brand size-5" strokeWidth={2} />
             <span className="text-sm font-semibold">À-la-carte-Speisekarte</span>
             <span className="text-xs text-muted-foreground">
               Bestehender Ablauf: Karte, Kategorien, Gerichte und Varianten mit Verkaufsmengen.
@@ -52,7 +52,7 @@ export function NewCalculationDialog({ open, onOpenChange, onChooseMenu }: Props
             onClick={() => choose("menu")}
             className="surface flex flex-col items-start gap-2 px-4 py-4 text-left transition-colors hover:bg-accent/40"
           >
-            <ClipboardList className="size-5 text-muted-foreground" strokeWidth={1.75} />
+            <ClipboardList className="icon-brand size-5" strokeWidth={2} />
             <span className="text-sm font-semibold">Menü</span>
             <span className="text-xs text-muted-foreground">
               Wiederverwendbares Mehrgang-Menü aus bestehenden Gericht-Varianten, optional mit Event.
