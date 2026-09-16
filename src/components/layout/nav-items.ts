@@ -11,18 +11,33 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+export type NavChild = {
+  label: string;
+  to: string;
+  adminOnly?: boolean;
+  search?: Record<string, string>;
+};
+
 export type NavItem = {
   label: string;
   to: string;
   icon: LucideIcon;
   adminOnly?: boolean;
-  children?: { label: string; to: string; adminOnly?: boolean }[];
+  children?: NavChild[];
 };
 
+/** Shared source of truth for desktop and mobile navigation. */
 export const NAV_ITEMS: NavItem[] = [
   { label: "Übersicht", to: "/uebersicht", icon: LayoutDashboard },
-  { label: "Speisekarten", to: "/speisekarten", icon: BookOpen, children: [{ label: "Speisekarte importieren", to: "/speisekarten/importieren" }] },
-  { label: "Gerichte", to: "/gerichte", icon: UtensilsCrossed, children: [{ label: "Add-ons", to: "/gerichte/add-ons" }] },
+  {
+    label: "Gerichte",
+    to: "/gerichte",
+    icon: UtensilsCrossed,
+    children: [
+      { label: "Add-ons", to: "/gerichte/add-ons" },
+      { label: "Gerichte aus Speisekarte übernehmen", to: "/speisekarten/importieren", search: { from: "gerichte" } },
+    ],
+  },
   { label: "Menüs", to: "/menues", icon: ClipboardList },
   {
     label: "Events",
@@ -33,6 +48,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Zutaten & EK", to: "/zutaten", icon: Carrot, children: [{ label: "Excel importieren", to: "/zutaten/importieren" }] },
   { label: "Verkaufsmengen", to: "/verkaufsmengen", icon: BarChart3 },
   { label: "Szenario", to: "/szenario", icon: SlidersHorizontal },
+  { label: "Speisekarten", to: "/speisekarten", icon: BookOpen, children: [{ label: "Speisekarte importieren", to: "/speisekarten/importieren" }] },
   {
     label: "Einstellungen",
     to: "/einstellungen",
@@ -43,3 +59,4 @@ export const NAV_ITEMS: NavItem[] = [
     ],
   },
 ];
+
