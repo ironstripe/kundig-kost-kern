@@ -15,6 +15,7 @@ import { useSelectedMenuCard } from "@/lib/selected-menu-card";
 import { MenuCardSelector } from "@/components/menu-cards/MenuCardSelector";
 import { calculateVariant } from "@/lib/costing";
 import { addOnSalesWarning, openDaysCount } from "@/lib/sales";
+import { ADD_ON_NO_ACTIVE_DISH_NOTE, ADD_ON_UNASSIGNED_NOTE } from "@/lib/menu-totals";
 import { calculationStatusLabels } from "@/lib/labels";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
