@@ -213,7 +213,21 @@ export async function ensureBeerDineDemo(userId: string, force = false): Promise
     .single();
   if (eventError) throw eventError;
 
-  const { error: linesError } = await supabase.from("event_lines").insert(demoLines(event.id));
+  // Every row must carry the same keys: PostgREST bulk inserts send NULL for
+  // keys missing in a single row, which would violate NOT NULL defaults.
+  const rows = demoLines(event.id).map((line) => ({
+    planned_unit_amount: null,
+    planned_quantity: null,
+    actual_unit_amount: null,
+    actual_quantity: null,
+    is_required: true,
+    origin: null,
+    assumption_key: null,
+    variance_note: null,
+    notes: null,
+    ...line,
+  }));
+  const { error: linesError } = await supabase.from("event_lines").insert(rows);
   if (linesError) throw linesError;
 
   const { error: linkError } = await supabase.from("event_menu_links").insert({
