@@ -56,6 +56,12 @@ export type MenuVariantResult = {
   contributionMargin1: number | null;
   contributionMarginRatio: number | null;
   problems: string[];
+  /** Problems of the food-cost calculation only (price independent). */
+  costProblems: string[];
+  /** The menu selling price is not set yet – food cost is still valid. */
+  priceMissing: boolean;
+  /** Food cost per person is fully calculable. */
+  costComplete: boolean;
   /** Dishes that block a complete calculation. */
   blockingDishes: string[];
   complete: boolean;
@@ -110,24 +116,27 @@ export function calculateMenuVariant(
     .filter((p) => p.menu_variant_id === menuVariant.id)
     .sort((a, b) => a.sort_order - b.sort_order);
   const results = own.map((p) => calculateMenuPosition(p, ctx));
-  const problems: string[] = [];
+  const costProblems: string[] = [];
   const blockingDishes: string[] = [];
 
-  if (results.length === 0) problems.push("Keine Menü-Positionen erfasst");
+  if (results.length === 0) costProblems.push("Keine Menü-Positionen erfasst");
 
   for (const r of results) {
     if (r.foodCostPerGuest === null) {
       const label = r.dishName ? `${r.dishName}${r.variantName ? ` – ${r.variantName}` : ""}` : "Position";
       blockingDishes.push(label);
-      problems.push(`${label}: ${r.problem ?? "unvollständig"}`);
+      costProblems.push(`${label}: ${r.problem ?? "unvollständig"}`);
     }
   }
 
+  const problems = [...costProblems];
   const vat = Number(menu.vat_rate);
   const gross = menu.gross_price_per_person === null ? NaN : Number(menu.gross_price_per_person);
   let grossPrice: number | null = null;
   let netPrice: number | null = null;
+  let priceMissing = false;
   if (!Number.isFinite(gross) || gross <= 0) {
+    priceMissing = true;
     problems.push("Brutto-Menüpreis pro Person fehlt");
   } else {
     grossPrice = gross;
@@ -155,6 +164,9 @@ export function calculateMenuVariant(
     contributionMargin1,
     contributionMarginRatio,
     problems,
+    costProblems,
+    priceMissing,
+    costComplete: costProblems.length === 0 && foodCost !== null,
     blockingDishes,
     complete: problems.length === 0 && contributionMarginRatio !== null,
     hasEstimatedPrices: results.some((r) => r.dish?.hasEstimatedPrices ?? false),

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { createMenu, updateMenu, type Menu } from "@/lib/menus";
+import { createMenuWithDefaultVariant, updateMenu, type Menu } from "@/lib/menus";
 import { menuStatusLabels } from "@/lib/event-labels";
 import { parseDecimal } from "@/lib/format";
 import { Button } from "@/components/ui/button";
@@ -42,6 +42,7 @@ export function MenuDialog({ open, onOpenChange, userId, menu, onCreated }: Prop
   const [saving, setSaving] = useState(false);
 
   const submit = async () => {
+    if (saving) return;
     if (!name.trim()) {
       toast.error("Bitte einen Menünamen erfassen.");
       return;
@@ -71,8 +72,9 @@ export function MenuDialog({ open, onOpenChange, userId, menu, onCreated }: Prop
         await updateMenu(menu.id, values, userId);
         toast.success("Menü gespeichert.");
       } else {
-        const created = await createMenu(values, userId);
-        toast.success("Menü angelegt.");
+        const created = await createMenuWithDefaultVariant(values, userId);
+        toast.success("Menü angelegt. Fügen Sie nun bestehende Gerichte hinzu.");
+        await qc.invalidateQueries({ queryKey: ["menu_variants"] });
         onCreated?.(created.id);
       }
       await qc.invalidateQueries({ queryKey: ["menus"] });
@@ -150,7 +152,7 @@ export function MenuDialog({ open, onOpenChange, userId, menu, onCreated }: Prop
             Abbrechen
           </Button>
           <Button onClick={submit} disabled={saving}>
-            Speichern
+            {menu ? "Speichern" : "Weiter: Gerichte hinzufügen"}
           </Button>
         </DialogFooter>
       </DialogContent>
