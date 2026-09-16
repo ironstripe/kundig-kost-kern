@@ -2,7 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { KeyRound, Plus, UserCheck, UserX, Users } from "lucide-react";
+import { Info, KeyRound, Plus, UserCheck, UserX, Users } from "lucide-react";
 import { toast } from "sonner";
 import { listUsers, setUserActive, type ManagedUser } from "@/lib/user-admin.functions";
 import { formatDateTime } from "@/lib/format";
@@ -12,6 +12,7 @@ import { EmptyState } from "@/components/layout/EmptyState";
 import { StatusBadge } from "@/components/layout/StatusBadge";
 import { CreateUserDialog } from "@/components/users/CreateUserDialog";
 import { ResetPasswordDialog } from "@/components/users/ResetPasswordDialog";
+import { UserDetailDialog } from "@/components/users/UserDetailDialog";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -63,6 +64,7 @@ function UsersPage() {
 
   const [createOpen, setCreateOpen] = useState(false);
   const [resetTarget, setResetTarget] = useState<ManagedUser | null>(null);
+  const [detailTarget, setDetailTarget] = useState<ManagedUser | null>(null);
   const [deactivateTarget, setDeactivateTarget] = useState<ManagedUser | null>(null);
 
   const activeMutation = useMutation({
@@ -147,6 +149,15 @@ function UsersPage() {
                         <Button
                           variant="ghost"
                           size="sm"
+                          onClick={() => setDetailTarget(u)}
+                          aria-label={`Details von ${u.display_name} anzeigen`}
+                        >
+                          <Info className="icon-brand size-4" />
+                          <span className="hidden xl:inline">Details</span>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           onClick={() => setResetTarget(u)}
                           aria-label={`Passwort von ${u.display_name} zurücksetzen`}
                         >
@@ -189,6 +200,7 @@ function UsersPage() {
 
       <CreateUserDialog open={createOpen} onOpenChange={setCreateOpen} />
       <ResetPasswordDialog user={resetTarget} onClose={() => setResetTarget(null)} />
+      <UserDetailDialog user={detailTarget} onClose={() => setDetailTarget(null)} />
 
       <AlertDialog open={!!deactivateTarget} onOpenChange={(o) => !o && setDeactivateTarget(null)}>
         <AlertDialogContent>
