@@ -69,12 +69,23 @@ function IdeaDetailPage() {
     }
   };
 
-  const createCalculation = async () => {
+  /**
+   * One deliberate action. Approval for calculation and creation happen
+   * atomically server-side; the execution approval stays a separate decision.
+   */
+  const createCalculation = async (approve: boolean) => {
     if (busy) return;
     setBusy(true);
     try {
-      const id = await createEventFromIdea(idea.id);
-      await qc.invalidateQueries({ queryKey: ["events"] });
+      const id = await createEventFromIdea(idea.id, approve);
+      setCreatedId(id);
+      const created = await fetchEvent(id);
+      if (created) await copyDefaultsToEvent(id, assumptions ?? [], created.event_type);
+      await Promise.all([
+        qc.invalidateQueries({ queryKey: ["events"] }),
+        qc.invalidateQueries({ queryKey: ["event_ideas"] }),
+        qc.invalidateQueries({ queryKey: ["event_assumption_values", id] }),
+      ]);
       navigate({ to: "/events/$eventId", params: { eventId: id } });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Kalkulation konnte nicht erstellt werden.");
