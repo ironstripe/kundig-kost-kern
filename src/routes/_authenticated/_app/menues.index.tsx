@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { ClipboardList, Plus } from "lucide-react";
@@ -31,6 +31,7 @@ export const Route = createFileRoute("/_authenticated/_app/menues/")({
 
 function MenusPage() {
   const { user } = useAppContext();
+  const navigate = useNavigate();
   const { data: menus, isPending, error } = useQuery(menusQuery);
   const { data: variants } = useQuery(menuVariantsQuery);
   const { data: positions } = useQuery(menuPositionsQuery);
@@ -137,7 +138,14 @@ function MenusPage() {
         </div>
       )}
 
-      {dialogOpen && <MenuDialog open={dialogOpen} onOpenChange={setDialogOpen} userId={user.id} />}
+      {dialogOpen && (
+        <MenuDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          userId={user.id}
+          onCreated={(menuId) => navigate({ to: "/menues/$menuId", params: { menuId }, search: { add: true } })}
+        />
+      )}
       <NewCalculationDialog
         open={chooserOpen}
         onOpenChange={setChooserOpen}
