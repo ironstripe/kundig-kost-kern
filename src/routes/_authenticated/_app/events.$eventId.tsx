@@ -85,11 +85,20 @@ function EventDetailPage() {
 
   return (
     <>
-      <Button variant="ghost" size="sm" className="mb-3 -ml-2" asChild>
-        <Link to="/events">
-          <ArrowLeft className="size-4" /> Alle Events
-        </Link>
-      </Button>
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <Button variant="ghost" size="sm" className="-ml-2" asChild>
+          <Link to="/events">
+            <ArrowLeft className="size-4" /> Alle Events
+          </Link>
+        </Button>
+        {event.idea_id && (
+          <Button variant="ghost" size="sm" asChild>
+            <Link to="/events/ideen/$ideaId" params={{ ideaId: event.idea_id }}>
+              Zur Idee
+            </Link>
+          </Button>
+        )}
+      </div>
 
       <PageHeader
         title={event.name}
