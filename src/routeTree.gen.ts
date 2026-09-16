@@ -21,6 +21,8 @@ import { Route as AuthenticatedAppVerkaufsmengenRouteImport } from './routes/_au
 import { Route as AuthenticatedAppEinstellungenIndexRouteImport } from './routes/_authenticated/_app/einstellungen/index'
 import { Route as AuthenticatedAppEinstellungenBenutzerRouteImport } from './routes/_authenticated/_app/einstellungen/benutzer'
 import { Route as AuthenticatedAppEinstellungenKonfigurationRouteImport } from './routes/_authenticated/_app/einstellungen/konfiguration'
+import { Route as AuthenticatedAppEventsIndexRouteImport } from './routes/_authenticated/_app/events.index'
+import { Route as AuthenticatedAppEventsErfahrungswerteRouteImport } from './routes/_authenticated/_app/events.erfahrungswerte'
 import { Route as AuthenticatedAppGerichteIndexRouteImport } from './routes/_authenticated/_app/gerichte.index'
 import { Route as AuthenticatedAppGerichteDishIdRouteImport } from './routes/_authenticated/_app/gerichte.$dishId'
 import { Route as AuthenticatedAppMenuesIndexRouteImport } from './routes/_authenticated/_app/menues.index'
@@ -96,6 +98,18 @@ const AuthenticatedAppEinstellungenKonfigurationRoute =
   AuthenticatedAppEinstellungenKonfigurationRouteImport.update({
     id: '/einstellungen/konfiguration',
     path: '/einstellungen/konfiguration',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppEventsIndexRoute =
+  AuthenticatedAppEventsIndexRouteImport.update({
+    id: '/events/',
+    path: '/events/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppEventsErfahrungswerteRoute =
+  AuthenticatedAppEventsErfahrungswerteRouteImport.update({
+    id: '/events/erfahrungswerte',
+    path: '/events/erfahrungswerte',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
 const AuthenticatedAppGerichteIndexRoute =
@@ -175,12 +189,14 @@ export interface FileRoutesByFullPath {
   '/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
   '/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
+  '/events/erfahrungswerte': typeof AuthenticatedAppEventsErfahrungswerteRoute
   '/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
   '/menues/$menuId': typeof AuthenticatedAppMenuesMenuIdRoute
   '/speisekarten/$menuCardId': typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   '/speisekarten/importieren': typeof AuthenticatedAppSpeisekartenImportierenRoute
   '/zutaten/importieren': typeof AuthenticatedAppZutatenImportierenRoute
   '/einstellungen/': typeof AuthenticatedAppEinstellungenIndexRoute
+  '/events/': typeof AuthenticatedAppEventsIndexRoute
   '/gerichte/': typeof AuthenticatedAppGerichteIndexRoute
   '/menues/': typeof AuthenticatedAppMenuesIndexRoute
   '/speisekarten/': typeof AuthenticatedAppSpeisekartenIndexRoute
@@ -198,12 +214,14 @@ export interface FileRoutesByTo {
   '/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
   '/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
+  '/events/erfahrungswerte': typeof AuthenticatedAppEventsErfahrungswerteRoute
   '/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
   '/menues/$menuId': typeof AuthenticatedAppMenuesMenuIdRoute
   '/speisekarten/$menuCardId': typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   '/speisekarten/importieren': typeof AuthenticatedAppSpeisekartenImportierenRoute
   '/zutaten/importieren': typeof AuthenticatedAppZutatenImportierenRoute
   '/einstellungen': typeof AuthenticatedAppEinstellungenIndexRoute
+  '/events': typeof AuthenticatedAppEventsIndexRoute
   '/gerichte': typeof AuthenticatedAppGerichteIndexRoute
   '/menues': typeof AuthenticatedAppMenuesIndexRoute
   '/speisekarten': typeof AuthenticatedAppSpeisekartenIndexRoute
@@ -224,12 +242,14 @@ export interface FileRoutesById {
   '/_authenticated/_app/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
   '/_authenticated/_app/einstellungen/benutzer': typeof AuthenticatedAppEinstellungenBenutzerRoute
   '/_authenticated/_app/einstellungen/konfiguration': typeof AuthenticatedAppEinstellungenKonfigurationRoute
+  '/_authenticated/_app/events/erfahrungswerte': typeof AuthenticatedAppEventsErfahrungswerteRoute
   '/_authenticated/_app/gerichte/$dishId': typeof AuthenticatedAppGerichteDishIdRoute
   '/_authenticated/_app/menues/$menuId': typeof AuthenticatedAppMenuesMenuIdRoute
   '/_authenticated/_app/speisekarten/$menuCardId': typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   '/_authenticated/_app/speisekarten/importieren': typeof AuthenticatedAppSpeisekartenImportierenRoute
   '/_authenticated/_app/zutaten/importieren': typeof AuthenticatedAppZutatenImportierenRoute
   '/_authenticated/_app/einstellungen/': typeof AuthenticatedAppEinstellungenIndexRoute
+  '/_authenticated/_app/events/': typeof AuthenticatedAppEventsIndexRoute
   '/_authenticated/_app/gerichte/': typeof AuthenticatedAppGerichteIndexRoute
   '/_authenticated/_app/menues/': typeof AuthenticatedAppMenuesIndexRoute
   '/_authenticated/_app/speisekarten/': typeof AuthenticatedAppSpeisekartenIndexRoute
@@ -249,12 +269,14 @@ export interface FileRouteTypes {
     | '/verkaufsmengen'
     | '/einstellungen/benutzer'
     | '/einstellungen/konfiguration'
+    | '/events/erfahrungswerte'
     | '/gerichte/$dishId'
     | '/menues/$menuId'
     | '/speisekarten/$menuCardId'
     | '/speisekarten/importieren'
     | '/zutaten/importieren'
     | '/einstellungen/'
+    | '/events/'
     | '/gerichte/'
     | '/menues/'
     | '/speisekarten/'
@@ -272,12 +294,14 @@ export interface FileRouteTypes {
     | '/verkaufsmengen'
     | '/einstellungen/benutzer'
     | '/einstellungen/konfiguration'
+    | '/events/erfahrungswerte'
     | '/gerichte/$dishId'
     | '/menues/$menuId'
     | '/speisekarten/$menuCardId'
     | '/speisekarten/importieren'
     | '/zutaten/importieren'
     | '/einstellungen'
+    | '/events'
     | '/gerichte'
     | '/menues'
     | '/speisekarten'
@@ -297,12 +321,14 @@ export interface FileRouteTypes {
     | '/_authenticated/_app/verkaufsmengen'
     | '/_authenticated/_app/einstellungen/benutzer'
     | '/_authenticated/_app/einstellungen/konfiguration'
+    | '/_authenticated/_app/events/erfahrungswerte'
     | '/_authenticated/_app/gerichte/$dishId'
     | '/_authenticated/_app/menues/$menuId'
     | '/_authenticated/_app/speisekarten/$menuCardId'
     | '/_authenticated/_app/speisekarten/importieren'
     | '/_authenticated/_app/zutaten/importieren'
     | '/_authenticated/_app/einstellungen/'
+    | '/_authenticated/_app/events/'
     | '/_authenticated/_app/gerichte/'
     | '/_authenticated/_app/menues/'
     | '/_authenticated/_app/speisekarten/'
@@ -404,6 +430,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppEinstellungenKonfigurationRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
+    '/_authenticated/_app/events/': {
+      id: '/_authenticated/_app/events/'
+      path: '/events'
+      fullPath: '/events/'
+      preLoaderRoute: typeof AuthenticatedAppEventsIndexRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/events/erfahrungswerte': {
+      id: '/_authenticated/_app/events/erfahrungswerte'
+      path: '/events/erfahrungswerte'
+      fullPath: '/events/erfahrungswerte'
+      preLoaderRoute: typeof AuthenticatedAppEventsErfahrungswerteRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
     '/_authenticated/_app/gerichte/': {
       id: '/_authenticated/_app/gerichte/'
       path: '/gerichte'
@@ -490,12 +530,14 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppVerkaufsmengenRoute: typeof AuthenticatedAppVerkaufsmengenRoute
   AuthenticatedAppEinstellungenBenutzerRoute: typeof AuthenticatedAppEinstellungenBenutzerRoute
   AuthenticatedAppEinstellungenKonfigurationRoute: typeof AuthenticatedAppEinstellungenKonfigurationRoute
+  AuthenticatedAppEventsErfahrungswerteRoute: typeof AuthenticatedAppEventsErfahrungswerteRoute
   AuthenticatedAppGerichteDishIdRoute: typeof AuthenticatedAppGerichteDishIdRoute
   AuthenticatedAppMenuesMenuIdRoute: typeof AuthenticatedAppMenuesMenuIdRoute
   AuthenticatedAppSpeisekartenMenuCardIdRoute: typeof AuthenticatedAppSpeisekartenMenuCardIdRoute
   AuthenticatedAppSpeisekartenImportierenRoute: typeof AuthenticatedAppSpeisekartenImportierenRoute
   AuthenticatedAppZutatenImportierenRoute: typeof AuthenticatedAppZutatenImportierenRoute
   AuthenticatedAppEinstellungenIndexRoute: typeof AuthenticatedAppEinstellungenIndexRoute
+  AuthenticatedAppEventsIndexRoute: typeof AuthenticatedAppEventsIndexRoute
   AuthenticatedAppGerichteIndexRoute: typeof AuthenticatedAppGerichteIndexRoute
   AuthenticatedAppMenuesIndexRoute: typeof AuthenticatedAppMenuesIndexRoute
   AuthenticatedAppSpeisekartenIndexRoute: typeof AuthenticatedAppSpeisekartenIndexRoute
@@ -512,6 +554,8 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
     AuthenticatedAppEinstellungenBenutzerRoute,
   AuthenticatedAppEinstellungenKonfigurationRoute:
     AuthenticatedAppEinstellungenKonfigurationRoute,
+  AuthenticatedAppEventsErfahrungswerteRoute:
+    AuthenticatedAppEventsErfahrungswerteRoute,
   AuthenticatedAppGerichteDishIdRoute: AuthenticatedAppGerichteDishIdRoute,
   AuthenticatedAppMenuesMenuIdRoute: AuthenticatedAppMenuesMenuIdRoute,
   AuthenticatedAppSpeisekartenMenuCardIdRoute:
@@ -522,6 +566,7 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
     AuthenticatedAppZutatenImportierenRoute,
   AuthenticatedAppEinstellungenIndexRoute:
     AuthenticatedAppEinstellungenIndexRoute,
+  AuthenticatedAppEventsIndexRoute: AuthenticatedAppEventsIndexRoute,
   AuthenticatedAppGerichteIndexRoute: AuthenticatedAppGerichteIndexRoute,
   AuthenticatedAppMenuesIndexRoute: AuthenticatedAppMenuesIndexRoute,
   AuthenticatedAppSpeisekartenIndexRoute:

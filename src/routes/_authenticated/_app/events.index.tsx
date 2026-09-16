@@ -18,7 +18,7 @@ import { BEER_DINE_KEY, demoSeedQuery, ensureBeerDineDemo } from "@/lib/demo-eve
 import { EventDialog } from "@/components/events/EventDialog";
 import { useAppContext } from "@/lib/app-route";
 
-export const Route = createFileRoute("/_authenticated/_app/events")({
+export const Route = createFileRoute("/_authenticated/_app/events/")({
   head: () => ({
     meta: [
       { title: "Events – KundiCalc" },
