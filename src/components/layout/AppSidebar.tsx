@@ -36,7 +36,9 @@ export function AppSidebar({ isAdmin, onNavigate, className }: Props) {
               <Link
                 to={item.to}
                 onClick={onNavigate}
+                activeOptions={{ exact: true }}
                 aria-current={active ? "page" : undefined}
+
                 className={cn(
                   "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                   active
@@ -60,8 +62,9 @@ export function AppSidebar({ isAdmin, onNavigate, className }: Props) {
                           to={child.to}
                           search={child.search ?? {}}
                           onClick={onNavigate}
-
+                          activeOptions={{ exact: true, includeSearch: true }}
                           aria-current={childActive ? "page" : undefined}
+
                           className={cn(
                             "block rounded-md px-3 py-1.5 text-sm transition-colors",
                             childActive
