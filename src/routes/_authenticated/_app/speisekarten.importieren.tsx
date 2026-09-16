@@ -43,7 +43,8 @@ import {
 import { BookOpen } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/_app/speisekarten/importieren")({
-  validateSearch: z.object({ job: z.string().uuid().optional() }),
+  validateSearch: z.object({ job: z.string().uuid().optional(), from: z.literal("gerichte").optional() }),
+
   head: () => ({
     meta: [
       { title: "Speisekarte importieren – KundiCalc" },
@@ -65,7 +66,9 @@ function stepOf(job: ImportJob | null, estimation: EstimationState | null): numb
 }
 
 function ImportPage() {
-  const { job: jobId } = Route.useSearch();
+  const { job: jobId, from } = Route.useSearch();
+  const fromDishes = from === "gerichte";
+
   const navigate = useNavigate({ from: Route.fullPath });
   const queryClient = useQueryClient();
   const { data: card, isPending: cardPending } = useSelectedMenuCard();
@@ -91,7 +94,9 @@ function ImportPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [job?.id, job?.status, job?.updated_at]);
 
-  const openJob = (id: string | undefined) => navigate({ search: id ? { job: id } : {} });
+  const openJob = (id: string | undefined) =>
+    navigate({ search: (prev) => ({ ...prev, job: id }) });
+
   const refreshJobs = () => queryClient.invalidateQueries({ queryKey: ["import_jobs"] });
   const refreshAll = () => Promise.all(IMPORT_RESULT_KEYS.map((k) => queryClient.invalidateQueries({ queryKey: [...k] })));
 
@@ -167,22 +172,38 @@ function ImportPage() {
   return (
     <>
       <PageHeader
-        title="Speisekarte importieren"
+        title={fromDishes ? "Gerichte aus Speisekarte übernehmen" : "Speisekarte importieren"}
         description="PDF oder Bild hochladen, Analyse bewusst starten, Ergebnis prüfen und erst dann übernehmen. Kein Schritt läuft automatisch; nichts wird ohne Bestätigung gespeichert."
-        actions={<Button variant="outline" asChild><Link to="/speisekarten"><ArrowLeft className="size-4" /> Zu den Speisekarten</Link></Button>}
+        actions={
+          fromDishes ? (
+            <Button variant="outline" asChild><Link to="/gerichte"><ArrowLeft className="size-4" /> Zu den Gerichten</Link></Button>
+          ) : (
+            <Button variant="outline" asChild><Link to="/speisekarten"><ArrowLeft className="size-4" /> Zu den Speisekarten</Link></Button>
+          )
+        }
       />
 
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <MenuCardSelector />
+        <div className="flex flex-wrap items-center gap-3">
+          <MenuCardSelector />
+          <span className="text-sm text-muted-foreground">
+            Ziel-Speisekarte: <span className="font-medium text-foreground">{card?.name ?? "keine ausgewählt"}</span>
+          </span>
+        </div>
         <ImportSteps current={step} />
       </div>
 
       {cardPending && <Skeleton className="h-40 w-full" />}
       {!cardPending && !card && (
-        <EmptyState icon={BookOpen} title="Keine Speisekarte" description="Legen Sie zuerst eine Ziel-Speisekarte an. Importierte Gerichte werden immer einer Karte zugeordnet.">
+        <EmptyState
+          icon={BookOpen}
+          title="Keine Speisekarte"
+          description="Für die Zuordnung der importierten Gerichte wird eine Speisekarte benötigt. Danach können Sie den Import mit dieser Karte fortsetzen."
+        >
           <Button asChild><Link to="/speisekarten">Speisekarte anlegen</Link></Button>
         </EmptyState>
       )}
+
 
       {card && (
         <div className="space-y-8">
@@ -243,7 +264,9 @@ function ImportPage() {
                   <p>
                     Übernommen am {formatDateTime(job.confirmed_at)}. {confirmResult && <>{confirmResult.dishes_created} Gerichte neu, {confirmResult.dishes_updated} aktualisiert, {confirmResult.dishes_skipped} übersprungen, {confirmResult.variants_created} Varianten und {confirmResult.add_ons_created} Add-ons angelegt.</>}
                   </p>
-                  <p className="text-muted-foreground">Alle neuen Varianten stehen auf «geschätzt» mit Verkaufsmenge 1 pro Öffnungstag – bitte in den Verkaufsmengen anpassen. <Link to="/gerichte" className="underline">Zu den Gerichten</Link></p>
+                  <p className="text-muted-foreground">Alle neuen Varianten stehen auf «geschätzt» mit Verkaufsmenge 1 pro Öffnungstag – bitte in den Verkaufsmengen anpassen.</p>
+                  <Button asChild><Link to="/gerichte">Zu den Gerichten</Link></Button>
+
                 </div>
               )}
             </section>

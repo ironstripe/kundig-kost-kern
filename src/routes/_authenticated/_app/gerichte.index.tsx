@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { ArrowUpDown, PackagePlus, Plus, Search, UtensilsCrossed } from "lucide-react";
+import { ArrowUpDown, FileUp, PackagePlus, Plus, Search, UtensilsCrossed } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { EmptyState } from "@/components/layout/EmptyState";
 import { StatusBadge } from "@/components/layout/StatusBadge";
@@ -183,11 +183,17 @@ function DishesPage() {
             <Button asChild variant="outline">
               <Link to="/gerichte/add-ons"><PackagePlus className="icon-brand size-4" /> Add-ons</Link>
             </Button>
+            <Button asChild variant="outline">
+              <Link to="/speisekarten/importieren" search={{ from: "gerichte" }}>
+                <FileUp className="icon-brand size-4" /> Gerichte aus Speisekarte übernehmen
+              </Link>
+            </Button>
             <Button onClick={() => setDialogOpen(true)} disabled={!card}>
               <Plus className="size-4" /> Gericht hinzufügen
             </Button>
           </>
         }
+
       />
 
       <MenuCardSelector className="mb-4" />
