@@ -66,7 +66,9 @@ function stepOf(job: ImportJob | null, estimation: EstimationState | null): numb
 }
 
 function ImportPage() {
-  const { job: jobId } = Route.useSearch();
+  const { job: jobId, from } = Route.useSearch();
+  const fromDishes = from === "gerichte";
+
   const navigate = useNavigate({ from: Route.fullPath });
   const queryClient = useQueryClient();
   const { data: card, isPending: cardPending } = useSelectedMenuCard();
