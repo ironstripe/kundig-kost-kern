@@ -35,7 +35,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export const Route = createFileRoute("/_authenticated/_app/menues/$menuId")({
-  validateSearch: (search: Record<string, unknown>) => ({ add: search.add === true || search.add === "true" }),
+  validateSearch: (search: Record<string, unknown>): { add?: boolean } =>
+    search["add"] === true || search["add"] === "true" ? { add: true } : {},
   head: () => ({
     meta: [
       { title: "Menü – KundiCalc" },
