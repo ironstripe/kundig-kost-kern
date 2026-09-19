@@ -48,6 +48,8 @@ export function CalculationItemDialog({ owner, item, ingredients, nextSortOrder,
   const [notes, setNotes] = useState(item?.notes ?? "");
   const [search, setSearch] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [priceEditor, setPriceEditor] = useState(false);
+  const { profile } = useAppContext();
 
   const ingredient = ingredients.find((i) => i.id === ingredientId) ?? null;
   const unit: BaseUnit | null = ingredient?.base_unit ?? null;
