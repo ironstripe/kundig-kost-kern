@@ -1,6 +1,9 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Coins } from "lucide-react";
 import { toast } from "sonner";
+import { useAppContext } from "@/lib/app-route";
+import { IngredientPriceDialog } from "@/components/ingredients/IngredientPriceDialog";
 import { createItem, updateItem, type CalculationItem } from "@/lib/dishes";
 import type { Ingredient } from "@/lib/ingredients";
 import { calculateItem, unitPrice, type BaseUnit } from "@/lib/costing";
@@ -45,6 +48,8 @@ export function CalculationItemDialog({ owner, item, ingredients, nextSortOrder,
   const [notes, setNotes] = useState(item?.notes ?? "");
   const [search, setSearch] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [priceEditor, setPriceEditor] = useState(false);
+  const { profile } = useAppContext();
 
   const ingredient = ingredients.find((i) => i.id === ingredientId) ?? null;
   const unit: BaseUnit | null = ingredient?.base_unit ?? null;
@@ -164,6 +169,15 @@ export function CalculationItemDialog({ owner, item, ingredients, nextSortOrder,
                   <span>
                     EK: {ingUnitPrice !== null ? formatUnitPrice(ingUnitPrice, baseUnitLabels[ingredient.base_unit]) : "–"}
                   </span>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="h-7 px-2 text-xs"
+                    onClick={() => setPriceEditor(true)}
+                  >
+                    <Coins className="size-3.5" /> Einkaufspreis bearbeiten
+                  </Button>
                   <StatusBadge tone={ingredient.price_status === "confirmed" ? "success" : "warning"}>
                     {priceStatusLabels[ingredient.price_status]}
                   </StatusBadge>
@@ -228,6 +242,14 @@ export function CalculationItemDialog({ owner, item, ingredients, nextSortOrder,
             <Button type="submit" disabled={mutation.isPending}>{mutation.isPending ? "Speichern …" : "Speichern"}</Button>
           </DialogFooter>
         </form>
+        {ingredient && priceEditor && (
+          <IngredientPriceDialog
+            ingredient={ingredient}
+            userId={profile.id}
+            open
+            onOpenChange={(o) => setPriceEditor(o)}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

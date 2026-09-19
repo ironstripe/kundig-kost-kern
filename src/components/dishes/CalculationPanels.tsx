@@ -4,8 +4,13 @@
  * - LiveSummary: financial summary of one VariantResult
  * - ReviewPanel: review blockers and status actions
  */
-import { ArrowDown, ArrowUp, CheckCircle2, Info, Pencil, Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { ArrowDown, ArrowUp, CheckCircle2, Coins, Info, Pencil, Plus, Trash2 } from "lucide-react";
 import { StatusBadge } from "@/components/layout/StatusBadge";
+import { IngredientPriceDialog } from "@/components/ingredients/IngredientPriceDialog";
+import { useAppContext } from "@/lib/app-route";
+import { useQuery } from "@tanstack/react-query";
+import { ingredientsQuery } from "@/lib/ingredients";
 import { MetricValue } from "@/components/dishes/Metric";
 import type { CalculationItem } from "@/lib/dishes";
 import { reviewBlockers, suggestedStatus, type CalculationStatus, type ItemResult, type VariantResult } from "@/lib/costing";
@@ -47,6 +52,10 @@ type TableProps = {
 };
 
 export function CalculationItemsTable({ result, items, emptyHint, onAdd, onEdit, onDelete, onToggle, onMove }: TableProps) {
+  const { profile } = useAppContext();
+  const { data: allIngredients } = useQuery(ingredientsQuery);
+  const [priceIngredientId, setPriceIngredientId] = useState<string | null>(null);
+  const priceIngredient = (allIngredients ?? []).find((i) => i.id === priceIngredientId) ?? null;
   const grouped = new Map<string, ItemResult[]>();
   for (const r of result.items) {
     const g = r.item.component_group;
@@ -95,6 +104,7 @@ export function CalculationItemsTable({ result, items, emptyHint, onAdd, onEdit,
                 onDelete={onDelete}
                 onToggle={onToggle}
                 onMove={onMove}
+                onEditPrice={setPriceIngredientId}
               />
             ))}
             <TableRow className="bg-muted/30 font-medium">
@@ -108,6 +118,14 @@ export function CalculationItemsTable({ result, items, emptyHint, onAdd, onEdit,
       <Button variant="outline" onClick={onAdd}>
         <Plus className="size-4" /> Position hinzufügen
       </Button>
+      {priceIngredient && (
+        <IngredientPriceDialog
+          ingredient={priceIngredient}
+          userId={profile.id}
+          open
+          onOpenChange={(o) => !o && setPriceIngredientId(null)}
+        />
+      )}
     </>
   );
 }
@@ -120,6 +138,7 @@ function GroupRows({
   onDelete,
   onToggle,
   onMove,
+  onEditPrice,
 }: {
   label: string;
   rows: ItemResult[];
@@ -128,6 +147,7 @@ function GroupRows({
   onDelete: (it: CalculationItem, name: string) => void;
   onToggle: (it: CalculationItem) => void;
   onMove: (id: string, dir: -1 | 1) => void;
+  onEditPrice: (ingredientId: string) => void;
 }) {
   return (
     <>
@@ -170,7 +190,27 @@ function GroupRows({
             <TableCell className="text-right tabular">{formatQuantity(Number(it.net_quantity), unit)}</TableCell>
             <TableCell className="text-right tabular">{formatPercent(Number(it.yield_percent) / 100, 0)}</TableCell>
             <TableCell className="text-right tabular">{r.grossQuantity !== null ? formatQuantity(r.grossQuantity, unit) : "–"}</TableCell>
-            <TableCell className="text-right tabular text-muted-foreground">{r.unitPrice !== null && ing ? formatUnitPrice(r.unitPrice, unit) : "–"}</TableCell>
+            <TableCell className="text-right tabular text-muted-foreground">
+              <div className="flex items-center justify-end gap-1">
+                <span>{r.unitPrice !== null && ing ? formatUnitPrice(r.unitPrice, unit) : "–"}</span>
+                {ing && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="size-7"
+                        aria-label={`Einkaufspreis von ${ing.name} bearbeiten`}
+                        onClick={() => onEditPrice(ing.id)}
+                      >
+                        <Coins className="size-3.5" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent className="text-xs">Einkaufspreis bearbeiten</TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
+            </TableCell>
             <TableCell className="text-right tabular font-medium">{r.cost !== null ? formatCHF(r.cost) : <span className="text-xs text-muted-foreground italic">Unvollständig</span>}</TableCell>
             <TableCell className="text-xs text-muted-foreground">{quantitySourceLabels[it.quantity_source]}</TableCell>
             <TableCell className="text-center">
@@ -178,9 +218,14 @@ function GroupRows({
             </TableCell>
             <TableCell>
               <div className="flex justify-end gap-1">
-                <Button size="icon" variant="ghost" className="size-8" onClick={() => onEdit(it)} aria-label="Bearbeiten">
-                  <Pencil className="size-4" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button size="icon" variant="ghost" className="size-8" onClick={() => onEdit(it)} aria-label="Menge und Ausbeute bearbeiten">
+                      <Pencil className="size-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="text-xs">Menge und Ausbeute bearbeiten</TooltipContent>
+                </Tooltip>
                 <Button size="icon" variant="ghost" className="size-8 text-destructive hover:text-destructive" onClick={() => onDelete(it, ing?.name ?? "Position")} aria-label="Entfernen">
                   <Trash2 className="size-4" />
                 </Button>
