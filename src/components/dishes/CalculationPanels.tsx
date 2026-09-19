@@ -9,7 +9,8 @@ import { ArrowDown, ArrowUp, CheckCircle2, Coins, Info, Pencil, Plus, Trash2 } f
 import { StatusBadge } from "@/components/layout/StatusBadge";
 import { IngredientPriceDialog } from "@/components/ingredients/IngredientPriceDialog";
 import { useAppContext } from "@/lib/app-route";
-import type { Ingredient } from "@/lib/ingredients";
+import { useQuery } from "@tanstack/react-query";
+import { ingredientsQuery } from "@/lib/ingredients";
 import { MetricValue } from "@/components/dishes/Metric";
 import type { CalculationItem } from "@/lib/dishes";
 import { reviewBlockers, suggestedStatus, type CalculationStatus, type ItemResult, type VariantResult } from "@/lib/costing";
@@ -52,7 +53,9 @@ type TableProps = {
 
 export function CalculationItemsTable({ result, items, emptyHint, onAdd, onEdit, onDelete, onToggle, onMove }: TableProps) {
   const { profile } = useAppContext();
-  const [priceIngredient, setPriceIngredient] = useState<Ingredient | null>(null);
+  const { data: allIngredients } = useQuery(ingredientsQuery);
+  const [priceIngredientId, setPriceIngredientId] = useState<string | null>(null);
+  const priceIngredient = (allIngredients ?? []).find((i) => i.id === priceIngredientId) ?? null;
   const grouped = new Map<string, ItemResult[]>();
   for (const r of result.items) {
     const g = r.item.component_group;
@@ -101,7 +104,7 @@ export function CalculationItemsTable({ result, items, emptyHint, onAdd, onEdit,
                 onDelete={onDelete}
                 onToggle={onToggle}
                 onMove={onMove}
-                onEditPrice={setPriceIngredient}
+                onEditPrice={setPriceIngredientId}
               />
             ))}
             <TableRow className="bg-muted/30 font-medium">
@@ -120,7 +123,7 @@ export function CalculationItemsTable({ result, items, emptyHint, onAdd, onEdit,
           ingredient={priceIngredient}
           userId={profile.id}
           open
-          onOpenChange={(o) => !o && setPriceIngredient(null)}
+          onOpenChange={(o) => !o && setPriceIngredientId(null)}
         />
       )}
     </>
@@ -144,7 +147,7 @@ function GroupRows({
   onDelete: (it: CalculationItem, name: string) => void;
   onToggle: (it: CalculationItem) => void;
   onMove: (id: string, dir: -1 | 1) => void;
-  onEditPrice: (ing: Ingredient) => void;
+  onEditPrice: (ingredientId: string) => void;
 }) {
   return (
     <>
@@ -198,7 +201,7 @@ function GroupRows({
                         variant="ghost"
                         className="size-7"
                         aria-label={`Einkaufspreis von ${ing.name} bearbeiten`}
-                        onClick={() => onEditPrice(ing)}
+                        onClick={() => onEditPrice(ing.id)}
                       >
                         <Coins className="size-3.5" />
                       </Button>
