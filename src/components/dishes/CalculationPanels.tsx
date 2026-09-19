@@ -4,8 +4,12 @@
  * - LiveSummary: financial summary of one VariantResult
  * - ReviewPanel: review blockers and status actions
  */
-import { ArrowDown, ArrowUp, CheckCircle2, Info, Pencil, Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { ArrowDown, ArrowUp, CheckCircle2, Coins, Info, Pencil, Plus, Trash2 } from "lucide-react";
 import { StatusBadge } from "@/components/layout/StatusBadge";
+import { IngredientPriceDialog } from "@/components/ingredients/IngredientPriceDialog";
+import { useAppContext } from "@/lib/app-route";
+import type { Ingredient } from "@/lib/ingredients";
 import { MetricValue } from "@/components/dishes/Metric";
 import type { CalculationItem } from "@/lib/dishes";
 import { reviewBlockers, suggestedStatus, type CalculationStatus, type ItemResult, type VariantResult } from "@/lib/costing";
