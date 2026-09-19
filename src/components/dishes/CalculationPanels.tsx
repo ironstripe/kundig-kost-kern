@@ -101,6 +101,7 @@ export function CalculationItemsTable({ result, items, emptyHint, onAdd, onEdit,
                 onDelete={onDelete}
                 onToggle={onToggle}
                 onMove={onMove}
+                onEditPrice={setPriceIngredient}
               />
             ))}
             <TableRow className="bg-muted/30 font-medium">
