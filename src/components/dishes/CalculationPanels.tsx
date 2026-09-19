@@ -198,9 +198,14 @@ function GroupRows({
             </TableCell>
             <TableCell>
               <div className="flex justify-end gap-1">
-                <Button size="icon" variant="ghost" className="size-8" onClick={() => onEdit(it)} aria-label="Bearbeiten">
-                  <Pencil className="size-4" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button size="icon" variant="ghost" className="size-8" onClick={() => onEdit(it)} aria-label="Menge und Ausbeute bearbeiten">
+                      <Pencil className="size-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="text-xs">Menge und Ausbeute bearbeiten</TooltipContent>
+                </Tooltip>
                 <Button size="icon" variant="ghost" className="size-8 text-destructive hover:text-destructive" onClick={() => onDelete(it, ing?.name ?? "Position")} aria-label="Entfernen">
                   <Trash2 className="size-4" />
                 </Button>
