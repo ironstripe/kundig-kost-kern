@@ -170,7 +170,27 @@ function GroupRows({
             <TableCell className="text-right tabular">{formatQuantity(Number(it.net_quantity), unit)}</TableCell>
             <TableCell className="text-right tabular">{formatPercent(Number(it.yield_percent) / 100, 0)}</TableCell>
             <TableCell className="text-right tabular">{r.grossQuantity !== null ? formatQuantity(r.grossQuantity, unit) : "–"}</TableCell>
-            <TableCell className="text-right tabular text-muted-foreground">{r.unitPrice !== null && ing ? formatUnitPrice(r.unitPrice, unit) : "–"}</TableCell>
+            <TableCell className="text-right tabular text-muted-foreground">
+              <div className="flex items-center justify-end gap-1">
+                <span>{r.unitPrice !== null && ing ? formatUnitPrice(r.unitPrice, unit) : "–"}</span>
+                {ing && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="size-7"
+                        aria-label={`Einkaufspreis von ${ing.name} bearbeiten`}
+                        onClick={() => onEditPrice(ing)}
+                      >
+                        <Coins className="size-3.5" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent className="text-xs">Einkaufspreis bearbeiten</TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
+            </TableCell>
             <TableCell className="text-right tabular font-medium">{r.cost !== null ? formatCHF(r.cost) : <span className="text-xs text-muted-foreground italic">Unvollständig</span>}</TableCell>
             <TableCell className="text-xs text-muted-foreground">{quantitySourceLabels[it.quantity_source]}</TableCell>
             <TableCell className="text-center">
