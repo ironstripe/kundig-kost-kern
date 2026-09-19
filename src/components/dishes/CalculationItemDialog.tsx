@@ -242,6 +242,14 @@ export function CalculationItemDialog({ owner, item, ingredients, nextSortOrder,
             <Button type="submit" disabled={mutation.isPending}>{mutation.isPending ? "Speichern …" : "Speichern"}</Button>
           </DialogFooter>
         </form>
+        {ingredient && priceEditor && (
+          <IngredientPriceDialog
+            ingredient={ingredient}
+            userId={profile.id}
+            open
+            onOpenChange={(o) => setPriceEditor(o)}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
