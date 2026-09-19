@@ -51,6 +51,8 @@ type TableProps = {
 };
 
 export function CalculationItemsTable({ result, items, emptyHint, onAdd, onEdit, onDelete, onToggle, onMove }: TableProps) {
+  const { profile } = useAppContext();
+  const [priceIngredient, setPriceIngredient] = useState<Ingredient | null>(null);
   const grouped = new Map<string, ItemResult[]>();
   for (const r of result.items) {
     const g = r.item.component_group;
