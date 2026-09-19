@@ -164,6 +164,15 @@ export function CalculationItemDialog({ owner, item, ingredients, nextSortOrder,
                   <span>
                     EK: {ingUnitPrice !== null ? formatUnitPrice(ingUnitPrice, baseUnitLabels[ingredient.base_unit]) : "–"}
                   </span>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="h-7 px-2 text-xs"
+                    onClick={() => setPriceEditor(true)}
+                  >
+                    <Coins className="size-3.5" /> Einkaufspreis bearbeiten
+                  </Button>
                   <StatusBadge tone={ingredient.price_status === "confirmed" ? "success" : "warning"}>
                     {priceStatusLabels[ingredient.price_status]}
                   </StatusBadge>
