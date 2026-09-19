@@ -115,6 +115,14 @@ export function CalculationItemsTable({ result, items, emptyHint, onAdd, onEdit,
       <Button variant="outline" onClick={onAdd}>
         <Plus className="size-4" /> Position hinzufügen
       </Button>
+      {priceIngredient && (
+        <IngredientPriceDialog
+          ingredient={priceIngredient}
+          userId={profile.id}
+          open
+          onOpenChange={(o) => !o && setPriceIngredient(null)}
+        />
+      )}
     </>
   );
 }
@@ -127,6 +135,7 @@ function GroupRows({
   onDelete,
   onToggle,
   onMove,
+  onEditPrice,
 }: {
   label: string;
   rows: ItemResult[];
@@ -135,6 +144,7 @@ function GroupRows({
   onDelete: (it: CalculationItem, name: string) => void;
   onToggle: (it: CalculationItem) => void;
   onMove: (id: string, dir: -1 | 1) => void;
+  onEditPrice: (ing: Ingredient) => void;
 }) {
   return (
     <>
