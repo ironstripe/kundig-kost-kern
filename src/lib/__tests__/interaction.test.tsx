@@ -158,8 +158,19 @@ describe("task-first launcher", () => {
     act(() => launch?.click());
 
     expect(host.textContent).toContain("Was möchtest du kalkulieren?");
-    expect(host.querySelectorAll('a[href="/speisekarten"], a[href="/menues"], a[href="/events"]')).toHaveLength(3);
+    expect(host.querySelectorAll('a[href="/menues"], a[href="/events"]')).toHaveLength(2);
+    expect(host.querySelector('a[href="/speisekarten"]')).toBeNull();
     expect(host.textContent).not.toContain("Analysieren");
+
+    const alacarte = host.querySelector('button[aria-label="À-la-carte kalkulieren"]') as HTMLButtonElement;
+    act(() => alacarte.click());
+    expect(host.textContent).toContain("Wie möchtest du die À-la-carte-Karte erfassen?");
+    expect(host.querySelector('a[href="/speisekarten/importieren?from=gerichte"]')).not.toBeNull();
+    expect(host.querySelector('a[href="/gerichte"]')).not.toBeNull();
+    expect(host.querySelector('a[href="/speisekarten"]')).toBeNull();
+
+    act(() => (host.querySelector('button[aria-label="Zurück zur Kalkulationsart"]') as HTMLButtonElement).click());
+    expect(host.textContent).toContain("Was möchtest du kalkulieren?");
 
     act(() => root.unmount());
     host.remove();
