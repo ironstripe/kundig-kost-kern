@@ -7,6 +7,10 @@ import { ScenarioField } from "@/components/scenario/ScenarioInput";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StartLauncher } from "@/components/start/StartLauncher";
 import { Logo } from "@/components/layout/Logo";
+import { draftMenuCardValues } from "@/lib/menu-cards";
+
+const createDraft = vi.hoisted(() => vi.fn());
+vi.mock("@/lib/menu-cards", async (orig) => ({ ...(await orig<typeof import("@/lib/menu-cards")>()), createDraftMenuCard: createDraft }));
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -34,8 +38,17 @@ async function mountWithRouter(ui: React.ReactNode) {
     await router.load();
     root.render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { enabled: false } } })}><RouterProvider router={router} /></QueryClientProvider>);
   });
-  return { host, root };
+  return { host, root, router };
 }
+
+function setInput(input: HTMLInputElement, v: string) {
+  const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!;
+  act(() => {
+    setter.call(input, v);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+}
+const btn = (host: HTMLElement, text: string) => Array.from(host.querySelectorAll("button")).find((b) => b.textContent?.includes(text)) as HTMLButtonElement;
 
 describe("submit shortcut", () => {
   it("only Ctrl/Cmd+Enter counts", () => {
@@ -167,16 +180,60 @@ describe("task-first launcher", () => {
 
     const alacarte = host.querySelector('button[aria-label="À-la-carte kalkulieren"]') as HTMLButtonElement;
     act(() => alacarte.click());
-    expect(host.textContent).toContain("Wie möchtest du die À-la-carte-Karte erfassen?");
-    expect(host.querySelector('a[href="/speisekarten/importieren?from=gerichte"]')).not.toBeNull();
-    expect(host.querySelector('a[href="/gerichte"]')).not.toBeNull();
-    expect(host.querySelector('a[href="/speisekarten"]')).toBeNull();
-
+    expect(host.textContent).toContain("Neues À-la-carte-Angebot");
+    expect(host.textContent).not.toMatch(/Speisekarte|Laufzeit|Öffnungstage|Schliesstage/);
+    expect(btn(host, "Manuell erfassen").disabled).toBe(true);
+    setInput(host.querySelector("input")!, "Winterkarte 2026");
+    expect(createDraft).not.toHaveBeenCalled();
     act(() => (host.querySelector('button[aria-label="Zurück zur Kalkulationsart"]') as HTMLButtonElement).click());
     expect(host.textContent).toContain("Was möchtest du kalkulieren?");
+    expect(createDraft).not.toHaveBeenCalled();
 
     act(() => root.unmount());
     host.remove();
+  });
+
+  it.each([["PDF/Bild importieren", "/speisekarten/importieren", { from: "gerichte" }], ["Manuell erfassen", "/gerichte", { new: 1 }]])(
+    "%s creates exactly one draft, selects it and navigates",
+    async (label, path, search) => {
+      createDraft.mockReset();
+      let resolve!: (v: { id: string }) => void;
+      createDraft.mockImplementation(() => new Promise((r) => (resolve = r)));
+      window.localStorage.clear();
+      const { host, root, router } = await mountWithRouter(<StartLauncher />);
+      act(() => btn(host, "Kalkulation starten").click());
+      act(() => (host.querySelector('button[aria-label="À-la-carte kalkulieren"]') as HTMLButtonElement).click());
+      setInput(host.querySelector("input")!, "Winterkarte 2026");
+      act(() => { btn(host, label).click(); btn(host, label).click(); btn(host, label === "Manuell erfassen" ? "PDF/Bild" : "Manuell").click(); });
+      expect(createDraft).toHaveBeenCalledTimes(1);
+      expect(createDraft).toHaveBeenCalledWith("Winterkarte 2026");
+      await act(async () => { resolve({ id: "draft-1" }); await new Promise((r) => setTimeout(r, 0)); });
+      expect(window.localStorage.getItem("kundicalc.selectedMenuCard")).toBe("draft-1");
+      expect(router.state.location.pathname).toBe(path);
+      expect(router.state.location.search).toEqual(search);
+      act(() => root.unmount());
+      host.remove();
+    },
+  );
+
+  it("failure keeps the name and allows retry", async () => {
+    createDraft.mockReset();
+    createDraft.mockRejectedValueOnce(new Error("x"));
+    const { host, root } = await mountWithRouter(<StartLauncher />);
+    act(() => btn(host, "Kalkulation starten").click());
+    act(() => (host.querySelector('button[aria-label="À-la-carte kalkulieren"]') as HTMLButtonElement).click());
+    setInput(host.querySelector("input")!, "Sommer");
+    await act(async () => { btn(host, "Manuell erfassen").click(); await new Promise((r) => setTimeout(r, 0)); });
+    expect(host.querySelector('[role="alert"]')).not.toBeNull();
+    expect(host.querySelector("input")!.value).toBe("Sommer");
+    expect(btn(host, "Manuell erfassen").disabled).toBe(false);
+    act(() => root.unmount());
+    host.remove();
+  });
+
+  it("draft values are inactive, draft status, no opening days", () => {
+    const v = draftMenuCardValues("  Winterkarte  ", new Date(2026, 8, 27));
+    expect(v).toMatchObject({ name: "Winterkarte", is_active: false, import_status: "draft", opening_weekdays: [], vat_rate: 0.081, small_material_mode: "percent", small_material_value: 0.03, valid_from: "2026-09-27", valid_to: "2026-09-27" });
   });
 
   it("makes the in-app logo a link to the launcher", async () => {
