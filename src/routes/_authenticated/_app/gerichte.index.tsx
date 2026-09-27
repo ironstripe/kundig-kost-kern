@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowUpDown, FileUp, PackagePlus, Plus, Search, UtensilsCrossed } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { EmptyState } from "@/components/layout/EmptyState";
@@ -21,6 +21,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/_app/gerichte/")({
+  validateSearch: (s: Record<string, unknown>): { new?: 1 } => (s.new === 1 || s.new === "1" ? { new: 1 } : {}),
   head: () => ({
     meta: [
       { title: "Gerichte – KundiCalc" },
@@ -69,6 +70,13 @@ function DishesPage() {
   const [active, setActive] = useState<"active" | "inactive" | "all">("active");
   const [sort, setSort] = useState<{ key: SortKey; dir: 1 | -1 }>({ key: "dish", dir: 1 });
   const [dialogOpen, setDialogOpen] = useState(false);
+  const { new: openNew } = Route.useSearch();
+  // Consume ?new=1 once (from the start launcher): open the create dialog, then drop the flag.
+  useEffect(() => {
+    if (!openNew || !card) return;
+    setDialogOpen(true);
+    navigate({ to: "/gerichte", search: {}, replace: true });
+  }, [openNew, card, navigate]);
 
   const rows = useMemo<Row[]>(() => {
     if (!dishes || !variants || !items || !ingredients) return [];
