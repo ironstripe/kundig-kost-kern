@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RotateCcw } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { TableCell } from "@/components/ui/table";
