@@ -87,7 +87,7 @@ describe("ScenarioField keyboard", () => {
     const host = document.createElement("div");
     document.body.appendChild(host);
     const root = createRoot(host);
-    act(() => root.render(<ScenarioField label="Preis" value={10} baseline={10} onChange={onChange} />));
+    act(() => root.render(<ScenarioField label="Preis" value={10} baseline={10} overridden={false} kind="chf" onChange={onChange} />));
     const input = host.querySelector("input")!;
     const type = (v: string) => {
       act(() => input.focus());
