@@ -139,7 +139,7 @@ export function VariantDialog({ mode, dishId, userId, variant, sourceItems = [],
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent submitShortcut busy={mutation.isPending} className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>{titles[mode]}</DialogTitle>

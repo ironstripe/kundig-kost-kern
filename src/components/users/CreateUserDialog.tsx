@@ -59,7 +59,7 @@ export function CreateUserDialog({ open, onOpenChange }: Props) {
   if (created) {
     return (
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent submitShortcut busy={mutation.isPending} className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Benutzer angelegt</DialogTitle>
             <DialogDescription>
@@ -82,7 +82,7 @@ export function CreateUserDialog({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent submitShortcut busy={mutation.isPending} className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Benutzer anlegen</DialogTitle>

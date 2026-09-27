@@ -105,7 +105,7 @@ export function EventLineDialog({ open, onOpenChange, eventId, line, defaultKind
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
+      <DialogContent submitShortcut busy={saving} className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>{line ? "Position bearbeiten" : "Position hinzufügen"}</DialogTitle>
           <DialogDescription>
@@ -216,7 +216,7 @@ export function EventLineDialog({ open, onOpenChange, eventId, line, defaultKind
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving}>
             Abbrechen
           </Button>
-          <Button onClick={submit} disabled={saving}>
+          <Button data-dialog-submit onClick={submit} disabled={saving}>
             Speichern
           </Button>
         </DialogFooter>

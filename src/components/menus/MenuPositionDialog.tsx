@@ -71,7 +71,7 @@ export function MenuPositionDialog({ open, onOpenChange, menuVariantId, dishes, 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent submitShortcut busy={saving} className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{position ? "Position bearbeiten" : "Gang hinzufügen"}</DialogTitle>
           <DialogDescription>
@@ -122,7 +122,7 @@ export function MenuPositionDialog({ open, onOpenChange, menuVariantId, dishes, 
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving}>
             Abbrechen
           </Button>
-          <Button onClick={submit} disabled={saving}>
+          <Button data-dialog-submit onClick={submit} disabled={saving}>
             Speichern
           </Button>
         </DialogFooter>

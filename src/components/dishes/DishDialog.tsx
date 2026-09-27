@@ -96,7 +96,7 @@ export function DishDialog({ dish, categories, menuCardId, open, onOpenChange, o
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent submitShortcut busy={mutation.isPending} className="sm:max-w-lg">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>{isEdit ? "Gericht bearbeiten" : "Gericht hinzufügen"}</DialogTitle>

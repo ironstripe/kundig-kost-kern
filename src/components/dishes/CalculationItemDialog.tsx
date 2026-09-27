@@ -139,7 +139,7 @@ export function CalculationItemDialog({ owner, item, ingredients, nextSortOrder,
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent submitShortcut busy={mutation.isPending} className="sm:max-w-lg">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>{isEdit ? "Position bearbeiten" : "Position hinzufügen"}</DialogTitle>

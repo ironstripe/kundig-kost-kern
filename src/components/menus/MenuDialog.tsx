@@ -88,7 +88,7 @@ export function MenuDialog({ open, onOpenChange, userId, menu, onCreated }: Prop
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent submitShortcut busy={saving} className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>{menu ? "Menü bearbeiten" : "Menü anlegen"}</DialogTitle>
           <DialogDescription>
@@ -151,7 +151,7 @@ export function MenuDialog({ open, onOpenChange, userId, menu, onCreated }: Prop
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving}>
             Abbrechen
           </Button>
-          <Button onClick={submit} disabled={saving}>
+          <Button data-dialog-submit onClick={submit} disabled={saving}>
             {menu ? "Speichern" : "Weiter: Gerichte hinzufügen"}
           </Button>
         </DialogFooter>

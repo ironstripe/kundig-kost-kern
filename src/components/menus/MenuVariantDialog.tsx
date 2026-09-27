@@ -103,7 +103,7 @@ export function MenuVariantDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent submitShortcut busy={saving} className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{variant ? "Menüvariante bearbeiten" : "Weitere Menüvariante"}</DialogTitle>
           <DialogDescription>Zum Beispiel Standard, Vegetarisch, Kinder oder ein Allergie-/Sondermenü.</DialogDescription>
@@ -156,7 +156,7 @@ export function MenuVariantDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving}>
             Abbrechen
           </Button>
-          <Button onClick={submit} disabled={saving}>
+          <Button data-dialog-submit onClick={submit} disabled={saving}>
             Speichern
           </Button>
         </DialogFooter>

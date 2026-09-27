@@ -45,7 +45,7 @@ export function ResetPasswordDialog({ user, onClose }: Props) {
 
   return (
     <Dialog open={!!user} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent submitShortcut busy={mutation.isPending} className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Passwort zurücksetzen</DialogTitle>

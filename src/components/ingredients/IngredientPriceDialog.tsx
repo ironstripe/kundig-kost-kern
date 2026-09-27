@@ -97,7 +97,7 @@ export function IngredientPriceDialog({ ingredient, userId, open, onOpenChange }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent submitShortcut busy={mutation.isPending} className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Einkaufspreis bearbeiten</DialogTitle>
