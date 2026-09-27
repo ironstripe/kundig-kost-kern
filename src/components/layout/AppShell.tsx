@@ -87,7 +87,7 @@ export function AppShell({ profile, email, children }: Props) {
               <span aria-hidden className="hidden h-6 w-px bg-border lg:block" />
               <span className="hidden text-sm font-medium text-foreground lg:block">KundiCalc</span>
               <div className="lg:hidden">
-                <Logo />
+                <Logo home />
               </div>
             </div>
             <div className="hidden text-sm text-muted-foreground lg:block">Kundelfingerhof</div>

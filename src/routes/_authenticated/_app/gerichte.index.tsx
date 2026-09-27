@@ -279,8 +279,8 @@ function DishesPage() {
                         className={cn("cursor-pointer", sameDishAsPrev && "border-t-0 [&>td]:pt-1", !(r.dishActive && r.variantActive) && "opacity-60")}
                         onClick={() => navigate({ to: "/gerichte/$dishId", params: { dishId: r.dishId } })}
                       >
-                        <TableCell className={cn("font-medium", sameDishAsPrev && "text-transparent select-none")}>
-                          <Link to="/gerichte/$dishId" params={{ dishId: r.dishId }} className={cn(!sameDishAsPrev && "hover:underline")}>
+                        <TableCell className={cn(sameDishAsPrev && "text-transparent select-none")}>
+                          <Link to="/gerichte/$dishId" params={{ dishId: r.dishId }} className={cn("inline-block rounded-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", !sameDishAsPrev && "hover:text-primary hover:underline")}>
                             {r.dishName}
                           </Link>
                           {!sameDishAsPrev && r.variantCount > 1 && (

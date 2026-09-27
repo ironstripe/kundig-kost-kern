@@ -117,7 +117,7 @@ function EventsPage() {
                 return (
                   <TableRow key={ev.id}>
                     <TableCell>
-                      <Link to="/events/$eventId" params={{ eventId: ev.id }} className="font-medium hover:underline">
+                      <Link to="/events/$eventId" params={{ eventId: ev.id }} className="inline-block rounded-sm font-semibold hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                         {ev.name}
                       </Link>
                       {ev.is_demo && (

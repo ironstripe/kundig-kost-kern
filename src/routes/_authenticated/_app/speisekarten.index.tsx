@@ -163,7 +163,7 @@ function MenuCardsPage() {
                 return (
                   <TableRow key={c.id} className={cn(isSelected && "bg-accent/30")}>
                     <TableCell>
-                      <Link to="/speisekarten/$menuCardId" params={{ menuCardId: c.id }} className="font-medium hover:underline">
+                      <Link to="/speisekarten/$menuCardId" params={{ menuCardId: c.id }} className="inline-block rounded-sm font-semibold hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                         {c.name}
                       </Link>
                       <div className="text-xs text-muted-foreground">{formatWeekdays(c.opening_weekdays)}</div>
