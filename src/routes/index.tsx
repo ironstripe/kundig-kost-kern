@@ -9,6 +9,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Interne Kalkulationsplattform des Kundelfingerhofs." },
       { property: "og:title", content: "KundiCalc" },
       { property: "og:description", content: "Interne Kalkulationsplattform des Kundelfingerhofs." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   beforeLoad: async () => {
