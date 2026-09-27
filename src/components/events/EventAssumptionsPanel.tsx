@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { atomicInputProps } from "@/lib/interaction";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { StatusBadge } from "@/components/layout/StatusBadge";
@@ -29,8 +30,13 @@ export function EventAssumptionsPanel({ event }: { event: Event }) {
       toast.error("Wert muss eine Zahl ab 0 sein. Leer bedeutet «offen».");
       return;
     }
-    await overrideEventAssumption(id, v);
-    await invalidate();
+    try {
+      await overrideEventAssumption(id, v);
+      await invalidate();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Speichern fehlgeschlagen.");
+      return;
+    }
     toast.success("Annahme für diesen Event angepasst.");
   };
 
@@ -83,8 +89,7 @@ export function EventAssumptionsPanel({ event }: { event: Event }) {
                     <TableCell className="text-right">
                       <Input
                         className="h-8 text-right"
-                        defaultValue={v.value === null ? "" : String(v.value)}
-                        onBlur={(e) => save(v.id, e.target.value)}
+                        {...atomicInputProps(v.value === null ? "" : String(v.value), (raw) => save(v.id, raw))}
                         aria-label={`Wert ${v.label}`}
                       />
                     </TableCell>
