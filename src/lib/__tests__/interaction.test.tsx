@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { createMemoryHistory, createRootRoute, createRoute, createRouter, Outlet, RouterProvider } from "@tanstack/react-router";
 import { atomicInputProps, findDialogCommit, isSubmitShortcut } from "@/lib/interaction";
 import { ScenarioField } from "@/components/scenario/ScenarioInput";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StartLauncher } from "@/components/start/StartLauncher";
 import { Logo } from "@/components/layout/Logo";
 
@@ -19,8 +20,10 @@ async function mountWithRouter(ui: React.ReactNode) {
   const menuCardsRoute = createRoute({ getParentRoute: () => rootRoute, path: "/speisekarten" });
   const menusRoute = createRoute({ getParentRoute: () => rootRoute, path: "/menues" });
   const eventsRoute = createRoute({ getParentRoute: () => rootRoute, path: "/events" });
+  const dishesRoute = createRoute({ getParentRoute: () => rootRoute, path: "/gerichte" });
+  const importRoute = createRoute({ getParentRoute: () => rootRoute, path: "/speisekarten/importieren" });
   const router = createRouter({
-    routeTree: rootRoute.addChildren([indexRoute, startRoute, overviewRoute, menuCardsRoute, menusRoute, eventsRoute]),
+    routeTree: rootRoute.addChildren([indexRoute, startRoute, overviewRoute, menuCardsRoute, menusRoute, eventsRoute, dishesRoute, importRoute]),
     history: createMemoryHistory({ initialEntries: ["/"] }),
   });
   const host = document.createElement("div");
@@ -29,7 +32,7 @@ async function mountWithRouter(ui: React.ReactNode) {
   window.scrollTo = vi.fn();
   await act(async () => {
     await router.load();
-    root.render(<RouterProvider router={router} />);
+    root.render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { enabled: false } } })}><RouterProvider router={router} /></QueryClientProvider>);
   });
   return { host, root };
 }
@@ -158,8 +161,19 @@ describe("task-first launcher", () => {
     act(() => launch?.click());
 
     expect(host.textContent).toContain("Was möchtest du kalkulieren?");
-    expect(host.querySelectorAll('a[href="/speisekarten"], a[href="/menues"], a[href="/events"]')).toHaveLength(3);
+    expect(host.querySelectorAll('a[href="/menues"], a[href="/events"]')).toHaveLength(2);
+    expect(host.querySelector('a[href="/speisekarten"]')).toBeNull();
     expect(host.textContent).not.toContain("Analysieren");
+
+    const alacarte = host.querySelector('button[aria-label="À-la-carte kalkulieren"]') as HTMLButtonElement;
+    act(() => alacarte.click());
+    expect(host.textContent).toContain("Wie möchtest du die À-la-carte-Karte erfassen?");
+    expect(host.querySelector('a[href="/speisekarten/importieren?from=gerichte"]')).not.toBeNull();
+    expect(host.querySelector('a[href="/gerichte"]')).not.toBeNull();
+    expect(host.querySelector('a[href="/speisekarten"]')).toBeNull();
+
+    act(() => (host.querySelector('button[aria-label="Zurück zur Kalkulationsart"]') as HTMLButtonElement).click());
+    expect(host.textContent).toContain("Was möchtest du kalkulieren?");
 
     act(() => root.unmount());
     host.remove();
