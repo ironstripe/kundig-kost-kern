@@ -10,3 +10,6 @@
 <!-- LOVABLE:END -->
 
 - Use `docs/KUNDI-UI-STANDARD.md` for shared visual roles while preserving KundiCalc's sidebar and yellow icon accent, because the family language must not alter calculation workflows.
+- Ordinary form dialogs opt into `<DialogContent submitShortcut busy={pending}>` (Ctrl/Cmd+Enter = primary CTA, no close while saving); approval/handover/import-commit dialogs never opt in, so domain decisions stay separate from Save.
+- Edit dialogs are mounted conditionally with `key={entity id}` so local form state never leaks between records; atomic value fields use `atomicInputProps` (Enter commits once, Escape restores, unchanged = no write).
+- Interaction tests run with `bun run test` (vitest + jsdom, `vitest.config.ts`), kept separate from the app build config.
