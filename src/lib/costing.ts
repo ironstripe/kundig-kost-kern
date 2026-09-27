@@ -19,6 +19,8 @@ export type QuantitySource = Enums["quantity_source"];
 export type CalculationStatus = Enums["calculation_status"];
 
 export const VAT_RATE_DEFAULT = 0.081;
+export const SMALL_MATERIAL_MODE_DEFAULT = "percent" as const;
+export const SMALL_MATERIAL_VALUE_DEFAULT = 0.03;
 
 // ---------------------------------------------------------------------------
 // Units

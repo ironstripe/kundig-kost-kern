@@ -1,6 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
+import { SMALL_MATERIAL_MODE_DEFAULT, SMALL_MATERIAL_VALUE_DEFAULT, VAT_RATE_DEFAULT } from "@/lib/costing";
 
 type Tables = Database["public"]["Tables"];
 export type MenuCard = Tables["menu_cards"]["Row"];
@@ -61,6 +62,33 @@ export async function updateMenuCard(id: string, patch: MenuCardUpdate, userId: 
 export async function deleteMenuCard(id: string) {
   const { error } = await supabase.from("menu_cards").delete().eq("id", id);
   if (error) throw error;
+}
+
+function localIsoDate(d = new Date()) {
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
+/** Non-operational technical container for a new à-la-carte offer (inactive draft, no opening days). */
+export function draftMenuCardValues(name: string, today = new Date()): MenuCardInsert {
+  const date = localIsoDate(today);
+  return {
+    name: name.trim(),
+    import_status: "draft",
+    is_active: false,
+    vat_rate: VAT_RATE_DEFAULT,
+    small_material_mode: SMALL_MATERIAL_MODE_DEFAULT,
+    small_material_value: SMALL_MATERIAL_VALUE_DEFAULT,
+    opening_weekdays: [],
+    valid_from: date,
+    valid_to: date,
+  };
+}
+
+export async function createDraftMenuCard(name: string) {
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data.user) throw error ?? new Error("Nicht angemeldet");
+  return createMenuCard(draftMenuCardValues(name), data.user.id);
 }
 
 // ---------------------------------------------------------------------------
