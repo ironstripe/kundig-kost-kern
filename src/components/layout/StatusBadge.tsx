@@ -1,11 +1,13 @@
 import { cn } from "@/lib/utils";
 
-type Tone = "neutral" | "success" | "warning" | "muted";
+type Tone = "neutral" | "success" | "warning" | "destructive" | "info" | "muted";
 
 const tones: Record<Tone, string> = {
   neutral: "bg-secondary text-secondary-foreground",
-  success: "bg-accent text-accent-foreground",
-  warning: "bg-warning/20 text-warning-foreground",
+  success: "bg-success/15 text-success",
+  warning: "bg-warning/15 text-warning-foreground",
+  destructive: "bg-destructive/15 text-destructive",
+  info: "bg-info/15 text-info",
   muted: "bg-muted text-muted-foreground",
 };
 

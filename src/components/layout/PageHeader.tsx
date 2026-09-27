@@ -8,12 +8,12 @@ type Props = {
 
 export function PageHeader({ title, description, actions }: Props) {
   return (
-    <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-      <div className="max-w-2xl">
+    <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div className="min-w-0 max-w-2xl">
         <h1 className="page-title">{title}</h1>
-        {description && <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>}
+        {description && <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>}
       </div>
-      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+      {actions && <div className="flex flex-wrap items-center gap-2 sm:justify-end">{actions}</div>}
     </div>
   );
 }

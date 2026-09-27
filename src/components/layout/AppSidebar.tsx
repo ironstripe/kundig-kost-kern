@@ -58,13 +58,13 @@ export function AppSidebar({ isAdmin, onNavigate, className, collapsed = false }
                       aria-current={active ? "page" : undefined}
                       aria-label={item.label}
                       className={cn(
-                        "flex size-10 items-center justify-center rounded-md transition-colors",
+                         "flex size-11 lg:size-10 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
                         active
                           ? "bg-sidebar-accent text-sidebar-accent-foreground"
                           : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
                       )}
                     >
-                      <item.icon className="icon-brand size-5 shrink-0" strokeWidth={2} />
+                      <item.icon className="icon-brand size-4 shrink-0" strokeWidth={2} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right">{item.label}</TooltipContent>
@@ -74,7 +74,7 @@ export function AppSidebar({ isAdmin, onNavigate, className, collapsed = false }
                   <Popover>
                     <PopoverTrigger
                       aria-label={`Untermenü ${item.label}`}
-                      className="mt-0.5 flex h-4 w-10 items-center justify-center rounded text-sidebar-foreground/60 transition-colors hover:bg-sidebar-accent/60 hover:text-sidebar-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                       className="mt-0.5 flex h-4 w-10 items-center justify-center rounded text-sidebar-foreground/60 transition-colors hover:bg-sidebar-accent/60 hover:text-sidebar-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                       <ChevronRight className="size-3" />
                     </PopoverTrigger>
@@ -90,7 +90,7 @@ export function AppSidebar({ isAdmin, onNavigate, className, collapsed = false }
                               activeOptions={{ exact: true, includeSearch: true }}
                               aria-current={childActiveClass(child, item.to) ? "page" : undefined}
                               className={cn(
-                                "block rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-accent",
+                                 "flex min-h-11 lg:min-h-8 items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                                 childActiveClass(child, item.to) ? "font-medium text-foreground" : "text-muted-foreground",
                               )}
                             >
@@ -114,7 +114,7 @@ export function AppSidebar({ isAdmin, onNavigate, className, collapsed = false }
                 activeOptions={{ exact: true }}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                   "flex min-h-11 lg:min-h-9 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
                   active
                     ? "bg-sidebar-accent text-sidebar-accent-foreground"
                     : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
@@ -137,7 +137,7 @@ export function AppSidebar({ isAdmin, onNavigate, className, collapsed = false }
                           activeOptions={{ exact: true, includeSearch: true }}
                           aria-current={childActive ? "page" : undefined}
                           className={cn(
-                            "block rounded-md px-3 py-1.5 text-sm transition-colors",
+                             "flex min-h-11 lg:min-h-8 items-center rounded-md px-3 py-1.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
                             childActive
                               ? "font-medium text-sidebar-accent-foreground"
                               : "text-sidebar-foreground/70 hover:text-sidebar-foreground",

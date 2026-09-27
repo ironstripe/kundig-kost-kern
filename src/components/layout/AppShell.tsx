@@ -57,7 +57,7 @@ export function AppShell({ profile, email, children }: Props) {
         </Sheet>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-background/95 px-4 backdrop-blur sm:px-6 lg:px-8">
+          <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-card/95 px-4 backdrop-blur sm:px-6 lg:px-8">
             <div className="flex items-center gap-3">
               {/* Mobile trigger */}
               <Button
