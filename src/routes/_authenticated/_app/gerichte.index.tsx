@@ -21,7 +21,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/_app/gerichte/")({
-  validateSearch: (s: Record<string, unknown>): { new?: 1 } => (s.new === 1 || s.new === "1" ? { new: 1 } : {}),
+  validateSearch: (s: Record<string, unknown>): { new?: 1 } => (s["new"] === 1 || s["new"] === "1" ? { new: 1 } : {}),
   head: () => ({
     meta: [
       { title: "Gerichte – KundiCalc" },
