@@ -120,6 +120,7 @@ export function CalculationItemsTable({ result, items, emptyHint, onAdd, onEdit,
       </Button>
       {priceIngredient && (
         <IngredientPriceDialog
+          key={priceIngredient.id}
           ingredient={priceIngredient}
           userId={profile.id}
           open

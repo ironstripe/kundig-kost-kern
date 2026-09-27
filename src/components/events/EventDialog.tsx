@@ -52,6 +52,7 @@ export function EventDialog({ open, onOpenChange, userId, event, onCreated }: Pr
   const [saving, setSaving] = useState(false);
 
   const submit = async () => {
+    if (saving) return;
     if (!name.trim()) {
       toast.error("Bitte einen Eventnamen erfassen.");
       return;
@@ -100,7 +101,7 @@ export function EventDialog({ open, onOpenChange, userId, event, onCreated }: Pr
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent submitShortcut busy={saving} className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>{event ? "Event bearbeiten" : "Event anlegen"}</DialogTitle>
           <DialogDescription>
@@ -175,7 +176,7 @@ export function EventDialog({ open, onOpenChange, userId, event, onCreated }: Pr
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving}>
             Abbrechen
           </Button>
-          <Button onClick={submit} disabled={saving}>
+          <Button data-dialog-submit onClick={submit} disabled={saving}>
             Speichern
           </Button>
         </DialogFooter>

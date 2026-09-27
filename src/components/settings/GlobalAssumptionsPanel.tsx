@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { atomicInputProps } from "@/lib/interaction";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,8 +51,13 @@ export function GlobalAssumptionsPanel({ userId, isAdmin }: { userId: string; is
       toast.error("Wert muss eine Zahl ab 0 sein.");
       return;
     }
-    await updateEventAssumption(id, { value: v }, userId);
-    await invalidate();
+    try {
+      await updateEventAssumption(id, { value: v }, userId);
+      await invalidate();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Speichern fehlgeschlagen.");
+      return;
+    }
     toast.success("Standardwert gespeichert. Bestehende Events bleiben unverändert.");
   };
 
@@ -127,8 +133,7 @@ export function GlobalAssumptionsPanel({ userId, isAdmin }: { userId: string; is
                   {isAdmin ? (
                     <Input
                       className="h-8 text-right"
-                      defaultValue={a.value === null ? "" : String(a.value)}
-                      onBlur={(e) => save(a.id, e.target.value)}
+                      {...atomicInputProps(a.value === null ? "" : String(a.value), (raw) => save(a.id, raw))}
                       aria-label={`Standardwert ${a.label}`}
                     />
                   ) : (

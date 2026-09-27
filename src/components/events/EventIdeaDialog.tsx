@@ -50,6 +50,7 @@ export function EventIdeaDialog({ open, onOpenChange, userId, idea, onCreated }:
   const [saving, setSaving] = useState(false);
 
   const submit = async () => {
+    if (saving) return;
     if (!title.trim()) {
       toast.error("Bitte einen Titel erfassen.");
       return;
@@ -100,7 +101,7 @@ export function EventIdeaDialog({ open, onOpenChange, userId, idea, onCreated }:
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent submitShortcut busy={saving} className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>{idea ? "Idee bearbeiten" : "Neue Eventidee"}</DialogTitle>
           <DialogDescription>
@@ -176,7 +177,7 @@ export function EventIdeaDialog({ open, onOpenChange, userId, idea, onCreated }:
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Abbrechen
           </Button>
-          <Button onClick={submit} disabled={saving}>
+          <Button data-dialog-submit onClick={submit} disabled={saving}>
             {idea ? "Speichern" : "Idee erfassen"}
           </Button>
         </DialogFooter>

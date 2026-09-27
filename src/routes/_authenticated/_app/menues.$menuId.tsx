@@ -422,6 +422,7 @@ function MenuDetailPage() {
       {editOpen && <MenuDialog open={editOpen} onOpenChange={setEditOpen} userId={user.id} menu={menu} />}
       {variantDialog.open && (
         <MenuVariantDialog
+          key={variantDialog.variant?.id ?? "new"}
           open={variantDialog.open}
           onOpenChange={(o) => setVariantDialog({ open: o })}
           menuId={menu.id}
@@ -445,6 +446,7 @@ function MenuDetailPage() {
       )}
       {positionDialog?.open && (
         <MenuPositionDialog
+          key={positionDialog.position?.id ?? `new-${positionDialog.menuVariantId}`}
           open
           onOpenChange={(o) => !o && setPositionDialog(null)}
           menuVariantId={positionDialog.menuVariantId}

@@ -470,6 +470,7 @@ function DishDetailPage() {
       )}
       {dialog.kind === "variant" && (
         <VariantDialog
+          key={`${dialog.mode}-${dialog.variant?.id ?? "new"}`}
           mode={dialog.mode}
           dishId={dishId}
           userId={profile.id}
@@ -483,6 +484,7 @@ function DishDetailPage() {
       )}
       {dialog.kind === "item" && selected && (
         <CalculationItemDialog
+          key={dialog.item?.id ?? "new"}
           owner={{ variant_id: selected.id }}
           item={dialog.item ?? null}
           ingredients={ingredients}
@@ -510,6 +512,7 @@ function DishDetailPage() {
       )}
       {dialog.kind === "addOn" && card && (
         <AddOnDialog
+          key={dialog.addOn?.id ?? "new"}
           addOn={dialog.addOn ?? null}
           menuCardId={card.id}
           dishes={dishes ?? []}

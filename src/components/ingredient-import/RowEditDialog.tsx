@@ -62,7 +62,7 @@ export function RowEditDialog({ row, values, open, onOpenChange, onSave }: Props
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent submitShortcut  className="max-w-lg">
         <form onSubmit={submit} className="space-y-4">
           <DialogHeader>
             <DialogTitle>Zeile {row} korrigieren</DialogTitle>

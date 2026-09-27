@@ -144,7 +144,7 @@ export function IngredientDialog({ ingredient, existing, userId, open, onOpenCha
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-xl">
+      <DialogContent submitShortcut busy={mutation.isPending} className="max-h-[92vh] overflow-y-auto sm:max-w-xl">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>{isEdit ? "Zutat bearbeiten" : "Zutat hinzufügen"}</DialogTitle>

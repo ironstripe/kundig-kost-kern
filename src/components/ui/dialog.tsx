@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { handleDialogSubmitShortcut } from "@/lib/interaction";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
@@ -31,8 +32,13 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    /** Ordinary form dialogs only: Ctrl/Cmd+Enter triggers the visible primary CTA. */
+    submitShortcut?: boolean;
+    /** While a save is pending, Escape/outside click do not close the dialog. */
+    busy?: boolean;
+  }
+>(({ className, children, submitShortcut, busy, onKeyDown, onEscapeKeyDown, onInteractOutside, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
@@ -41,6 +47,18 @@ const DialogContent = React.forwardRef<
         "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg",
         className,
       )}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (submitShortcut) handleDialogSubmitShortcut(e);
+      }}
+      onEscapeKeyDown={(e) => {
+        if (busy) e.preventDefault();
+        onEscapeKeyDown?.(e);
+      }}
+      onInteractOutside={(e) => {
+        if (busy) e.preventDefault();
+        onInteractOutside?.(e);
+      }}
       {...props}
     >
       {children}

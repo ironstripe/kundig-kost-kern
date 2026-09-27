@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RotateCcw } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { TableCell } from "@/components/ui/table";
@@ -60,6 +60,8 @@ export function ScenarioField({ baseline, value, overridden, onChange, kind, uni
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, focused]);
 
+  const skipCommit = useRef(false);
+
   const commit = () => {
     const raw = parseDecimal(text);
     if (!Number.isFinite(raw) || raw < min || (max !== undefined && raw > max)) {
@@ -81,11 +83,19 @@ export function ScenarioField({ baseline, value, overridden, onChange, kind, uni
         onFocus={() => setFocused(true)}
         onBlur={() => {
           setFocused(false);
+          // Escape restores the prior value; the blur it triggers must not commit.
+          if (skipCommit.current) {
+            skipCommit.current = false;
+            return;
+          }
           commit();
         }}
         onKeyDown={(e) => {
+          // Enter commits exactly once, through the blur handler.
           if (e.key === "Enter") (e.target as HTMLInputElement).blur();
           if (e.key === "Escape") {
+            e.stopPropagation();
+            skipCommit.current = true;
             setText(toText(value));
             (e.target as HTMLInputElement).blur();
           }
