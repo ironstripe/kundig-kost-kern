@@ -90,7 +90,7 @@ export function AppSidebar({ isAdmin, onNavigate, className, collapsed = false }
                               activeOptions={{ exact: true, includeSearch: true }}
                               aria-current={childActiveClass(child, item.to) ? "page" : undefined}
                               className={cn(
-                                 "block rounded-md px-2 py-2 text-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                 "flex min-h-11 lg:min-h-8 items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                                 childActiveClass(child, item.to) ? "font-medium text-foreground" : "text-muted-foreground",
                               )}
                             >
