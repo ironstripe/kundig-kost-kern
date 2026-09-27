@@ -50,6 +50,7 @@ export function EventIdeaDialog({ open, onOpenChange, userId, idea, onCreated }:
   const [saving, setSaving] = useState(false);
 
   const submit = async () => {
+    if (saving) return;
     if (!title.trim()) {
       toast.error("Bitte einen Titel erfassen.");
       return;

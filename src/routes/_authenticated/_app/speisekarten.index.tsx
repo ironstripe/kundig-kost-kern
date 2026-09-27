@@ -221,6 +221,7 @@ function MenuCardsPage() {
 
       {(dialog.kind === "create" || dialog.kind === "edit") && (
         <MenuCardConfigDialog
+          key={dialog.kind === "edit" ? dialog.card.id : "new"}
           card={dialog.kind === "edit" ? dialog.card : null}
           userId={user.id}
           open

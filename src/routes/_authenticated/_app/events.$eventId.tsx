@@ -159,6 +159,7 @@ function EventDetailPage() {
 
       {lineDialog && (
         <EventLineDialog
+          key={lineDialog.line?.id ?? `new-${lineDialog.kind}-${String(lineDialog.actual)}`}
           open
           onOpenChange={(o) => !o && setLineDialog(null)}
           eventId={event.id}

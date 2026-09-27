@@ -52,6 +52,7 @@ export function EventDialog({ open, onOpenChange, userId, event, onCreated }: Pr
   const [saving, setSaving] = useState(false);
 
   const submit = async () => {
+    if (saving) return;
     if (!name.trim()) {
       toast.error("Bitte einen Eventnamen erfassen.");
       return;

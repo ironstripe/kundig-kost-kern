@@ -66,6 +66,7 @@ export function EventLineDialog({ open, onOpenChange, eventId, line, defaultKind
   const kind = EVENT_LINE_CATEGORIES.find((c) => c.value === category)?.kind ?? "revenue";
 
   const submit = async () => {
+    if (saving) return;
     if (!name.trim()) {
       toast.error("Bitte eine Bezeichnung erfassen.");
       return;

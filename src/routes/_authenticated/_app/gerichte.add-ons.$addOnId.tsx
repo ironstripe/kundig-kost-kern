@@ -251,6 +251,7 @@ function AddOnDetailPage() {
       )}
       {dialog.kind === "item" && (
         <CalculationItemDialog
+          key={dialog.item?.id ?? "new"}
           owner={{ add_on_id: addOnId }}
           item={dialog.item ?? null}
           ingredients={ingredients}

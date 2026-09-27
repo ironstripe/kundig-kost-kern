@@ -45,6 +45,7 @@ export function MenuPositionDialog({ open, onOpenChange, menuVariantId, dishes, 
   }, [dishes, variants]);
 
   const submit = async () => {
+    if (saving) return;
     if (!variantId) {
       toast.error("Bitte eine bestehende Gericht-Variante wählen.");
       return;
