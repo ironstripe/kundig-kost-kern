@@ -194,7 +194,7 @@ function IngredientsPage() {
                     const used = (usage?.[ing.id] ?? 0) > 0;
                     return (
                       <TableRow key={ing.id} className={!ing.is_active ? "opacity-60" : undefined}>
-                        <TableCell className="font-medium">
+                        <TableCell>
                           {ing.name}
                           {ing.source_type === "ai_estimate" && (
                             <span className="ml-2 text-xs text-muted-foreground">Annahme</span>

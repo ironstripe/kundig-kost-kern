@@ -103,7 +103,7 @@ function MenusPage() {
               {rows.map(({ menu, results, primary }) => (
                 <TableRow key={menu.id}>
                   <TableCell>
-                    <Link to="/menues/$menuId" params={{ menuId: menu.id }} className="font-medium hover:underline">
+                    <Link to="/menues/$menuId" params={{ menuId: menu.id }} className="inline-block rounded-sm font-semibold hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                       {menu.name}
                     </Link>
                     {menu.demo_key && (

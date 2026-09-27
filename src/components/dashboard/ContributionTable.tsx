@@ -135,11 +135,11 @@ export function ContributionTable({ lines }: { lines: MenuLine[] }) {
             {filtered.map((l) => (
               <TableRow key={l.key} className={cn(l.kind === "add_on" && "bg-secondary/40")}>
                 <TableCell className="text-muted-foreground">{l.categoryName}</TableCell>
-                <TableCell className="max-w-56 truncate font-medium">
-                  {l.dishId ? <Link to="/gerichte/$dishId" params={{ dishId: l.dishId }} className="hover:underline">{l.dishName}</Link> : <span className="text-muted-foreground">{l.dishName}</span>}
+                <TableCell className="max-w-56 truncate">
+                  {l.dishId ? <Link to="/gerichte/$dishId" params={{ dishId: l.dishId }} className="inline-block rounded-sm font-semibold hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{l.dishName}</Link> : <span className="text-muted-foreground">{l.dishName}</span>}
                 </TableCell>
                 <TableCell>
-                  <span className="font-medium">{l.kind === "add_on" ? <Link to="/gerichte/add-ons/$addOnId" params={{ addOnId: l.id }} className="hover:underline">{l.name}</Link> : l.name}</span>
+                  {l.kind === "add_on" ? <Link to="/gerichte/add-ons/$addOnId" params={{ addOnId: l.id }} className="inline-block rounded-sm font-semibold hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{l.name}</Link> : <span>{l.name}</span>}
                   {l.kind === "add_on" && <StatusBadge tone="neutral" className="ml-2">Add-on</StatusBadge>}
                 </TableCell>
                 <TableCell className="tabular text-right">{l.total === null ? "–" : formatNumber(l.total, Number.isInteger(l.total) ? 0 : 1)}</TableCell>

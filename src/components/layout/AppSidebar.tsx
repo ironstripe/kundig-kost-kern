@@ -39,7 +39,7 @@ export function AppSidebar({ isAdmin, onNavigate, className, collapsed = false }
           collapsed ? "justify-center px-0" : "px-5",
         )}
       >
-        <Logo compact={collapsed} />
+        <Logo compact={collapsed} home />
       </div>
       <ul className={cn("flex-1 space-y-0.5 overflow-y-auto overflow-x-hidden py-4", collapsed ? "px-2" : "px-3")}>
         {NAV_ITEMS.map((item) => {

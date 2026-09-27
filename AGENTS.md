@@ -13,3 +13,4 @@
 - Ordinary form dialogs opt into `<DialogContent submitShortcut busy={pending}>` (Ctrl/Cmd+Enter = primary CTA, no close while saving); approval/handover/import-commit dialogs never opt in, so domain decisions stay separate from Save.
 - Edit dialogs are mounted conditionally with `key={entity id}` so local form state never leaks between records; atomic value fields use `atomicInputProps` (Enter commits once, Escape restores, unchanged = no write).
 - Interaction tests run with `bun run test` (vitest + jsdom, `vitest.config.ts`), kept separate from the app build config.
+- Authenticated home is `/start`; it reveals calculation types only after intent selection, while `/uebersicht` remains the analytical dashboard and the logo is the sole home affordance.
