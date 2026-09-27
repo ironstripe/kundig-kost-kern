@@ -76,19 +76,19 @@ export function ContributionTable({ lines }: { lines: MenuLine[] }) {
     <section className="surface">
       <header className="flex flex-col gap-3 border-b border-border px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h2 className="text-base font-semibold">Beitrag zur Gesamtwirtschaftlichkeit</h2>
+          <h2 className="section-title">Beitrag zur Gesamtwirtschaftlichkeit</h2>
           <p className="text-xs text-muted-foreground">Einbezogene Positionen. Filter wirken nur auf diese Tabelle – die Gesamtsummen oben bleiben unverändert.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="h-8 w-44"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="w-44 lg:h-8"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Alle Kategorien</SelectItem>
               {categories.map(([k, n]) => <SelectItem key={k} value={k}>{n}</SelectItem>)}
             </SelectContent>
           </Select>
           <Select value={type} onValueChange={(v) => setType(v as typeof type)}>
-            <SelectTrigger className="h-8 w-40"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="w-40 lg:h-8"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Varianten & Add-ons</SelectItem>
               <SelectItem value="variant">Nur Varianten</SelectItem>
@@ -96,7 +96,7 @@ export function ContributionTable({ lines }: { lines: MenuLine[] }) {
             </SelectContent>
           </Select>
           <Select value={status} onValueChange={(v) => setStatus(v as typeof status)}>
-            <SelectTrigger className="h-8 w-40"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="w-40 lg:h-8"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Alle Status</SelectItem>
               {(Object.keys(calculationStatusLabels) as CalculationStatus[]).map((s) => <SelectItem key={s} value={s}>{calculationStatusLabels[s]}</SelectItem>)}
@@ -135,7 +135,7 @@ export function ContributionTable({ lines }: { lines: MenuLine[] }) {
             {filtered.map((l) => (
               <TableRow key={l.key} className={cn(l.kind === "add_on" && "bg-secondary/40")}>
                 <TableCell className="text-muted-foreground">{l.categoryName}</TableCell>
-                <TableCell className="max-w-56 truncate">
+                <TableCell className="max-w-56 truncate font-medium">
                   {l.dishId ? <Link to="/gerichte/$dishId" params={{ dishId: l.dishId }} className="hover:underline">{l.dishName}</Link> : <span className="text-muted-foreground">{l.dishName}</span>}
                 </TableCell>
                 <TableCell>
