@@ -11,7 +11,7 @@ import { Logo } from "@/components/layout/Logo";
 
 const key = (k: string, mod: Partial<{ ctrlKey: boolean; metaKey: boolean }> = {}) => ({ key: k, ctrlKey: false, metaKey: false, ...mod });
 
-function mountWithRouter(ui: React.ReactNode) {
+async function mountWithRouter(ui: React.ReactNode) {
   const rootRoute = createRootRoute({ component: () => <><Outlet />{ui}</> });
   const indexRoute = createRoute({ getParentRoute: () => rootRoute, path: "/" });
   const startRoute = createRoute({ getParentRoute: () => rootRoute, path: "/start" });
@@ -26,7 +26,11 @@ function mountWithRouter(ui: React.ReactNode) {
   const host = document.createElement("div");
   document.body.appendChild(host);
   const root = createRoot(host);
-  act(() => root.render(<RouterProvider router={router} />));
+  window.scrollTo = vi.fn();
+  await act(async () => {
+    await router.load();
+    root.render(<RouterProvider router={router} />);
+  });
   return { host, root };
 }
 
@@ -142,8 +146,8 @@ describe("ScenarioField keyboard", () => {
 });
 
 describe("task-first launcher", () => {
-  it("shows only two intents before revealing exactly three calculation types", () => {
-    const { host, root } = mountWithRouter(<StartLauncher />);
+  it("shows only two intents before revealing exactly three calculation types", async () => {
+    const { host, root } = await mountWithRouter(<StartLauncher />);
     expect(host.textContent).toContain("Kalkulation starten");
     expect(host.textContent).toContain("Analysieren");
     expect(host.textContent).not.toContain("À-la-carte");
@@ -161,8 +165,8 @@ describe("task-first launcher", () => {
     host.remove();
   });
 
-  it("makes the in-app logo a link to the launcher", () => {
-    const { host, root } = mountWithRouter(<Logo home />);
+  it("makes the in-app logo a link to the launcher", async () => {
+    const { host, root } = await mountWithRouter(<Logo home />);
     const logo = host.querySelector('a[href="/start"]');
     expect(logo?.getAttribute("aria-label")).toBe("KundiCalc Startseite");
 
