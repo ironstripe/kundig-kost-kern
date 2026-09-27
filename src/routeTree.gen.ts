@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as AuthenticatedAppRouteRouteImport } from './routes/_authenticated/_app/route'
 import { Route as AuthenticatedPasswortAendernRouteImport } from './routes/_authenticated/passwort-aendern'
+import { Route as AuthenticatedAppStartRouteImport } from './routes/_authenticated/_app/start'
 import { Route as AuthenticatedAppSzenarioRouteImport } from './routes/_authenticated/_app/szenario'
 import { Route as AuthenticatedAppUebersichtRouteImport } from './routes/_authenticated/_app/uebersicht'
 import { Route as AuthenticatedAppVerkaufsmengenRouteImport } from './routes/_authenticated/_app/verkaufsmengen'
@@ -67,6 +68,11 @@ const AuthenticatedPasswortAendernRoute =
     path: '/passwort-aendern',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAppStartRoute = AuthenticatedAppStartRouteImport.update({
+  id: '/start',
+  path: '/start',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
 const AuthenticatedAppSzenarioRoute =
   AuthenticatedAppSzenarioRouteImport.update({
     id: '/szenario',
@@ -205,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/setup': typeof SetupRoute
   '/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
+  '/start': typeof AuthenticatedAppStartRoute
   '/szenario': typeof AuthenticatedAppSzenarioRoute
   '/uebersicht': typeof AuthenticatedAppUebersichtRoute
   '/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
@@ -233,6 +240,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/setup': typeof SetupRoute
   '/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
+  '/start': typeof AuthenticatedAppStartRoute
   '/szenario': typeof AuthenticatedAppSzenarioRoute
   '/uebersicht': typeof AuthenticatedAppUebersichtRoute
   '/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
@@ -264,6 +272,7 @@ export interface FileRoutesById {
   '/setup': typeof SetupRoute
   '/_authenticated/_app': typeof AuthenticatedAppRouteRouteWithChildren
   '/_authenticated/passwort-aendern': typeof AuthenticatedPasswortAendernRoute
+  '/_authenticated/_app/start': typeof AuthenticatedAppStartRoute
   '/_authenticated/_app/szenario': typeof AuthenticatedAppSzenarioRoute
   '/_authenticated/_app/uebersicht': typeof AuthenticatedAppUebersichtRoute
   '/_authenticated/_app/verkaufsmengen': typeof AuthenticatedAppVerkaufsmengenRoute
@@ -294,6 +303,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/setup'
     | '/passwort-aendern'
+    | '/start'
     | '/szenario'
     | '/uebersicht'
     | '/verkaufsmengen'
@@ -322,6 +332,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/setup'
     | '/passwort-aendern'
+    | '/start'
     | '/szenario'
     | '/uebersicht'
     | '/verkaufsmengen'
@@ -352,6 +363,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/_authenticated/_app'
     | '/_authenticated/passwort-aendern'
+    | '/_authenticated/_app/start'
     | '/_authenticated/_app/szenario'
     | '/_authenticated/_app/uebersicht'
     | '/_authenticated/_app/verkaufsmengen'
@@ -426,6 +438,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/passwort-aendern'
       preLoaderRoute: typeof AuthenticatedPasswortAendernRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/_app/start': {
+      id: '/_authenticated/_app/start'
+      path: '/start'
+      fullPath: '/start'
+      preLoaderRoute: typeof AuthenticatedAppStartRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
     }
     '/_authenticated/_app/szenario': {
       id: '/_authenticated/_app/szenario'
@@ -585,6 +604,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAppRouteRouteChildren {
+  AuthenticatedAppStartRoute: typeof AuthenticatedAppStartRoute
   AuthenticatedAppSzenarioRoute: typeof AuthenticatedAppSzenarioRoute
   AuthenticatedAppUebersichtRoute: typeof AuthenticatedAppUebersichtRoute
   AuthenticatedAppVerkaufsmengenRoute: typeof AuthenticatedAppVerkaufsmengenRoute
@@ -610,6 +630,7 @@ interface AuthenticatedAppRouteRouteChildren {
 }
 
 const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
+  AuthenticatedAppStartRoute: AuthenticatedAppStartRoute,
   AuthenticatedAppSzenarioRoute: AuthenticatedAppSzenarioRoute,
   AuthenticatedAppUebersichtRoute: AuthenticatedAppUebersichtRoute,
   AuthenticatedAppVerkaufsmengenRoute: AuthenticatedAppVerkaufsmengenRoute,

@@ -1,12 +1,34 @@
 import { describe, expect, it, vi } from "vitest";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
+import { createMemoryHistory, createRootRoute, createRoute, createRouter, Outlet, RouterProvider } from "@tanstack/react-router";
 import { atomicInputProps, findDialogCommit, isSubmitShortcut } from "@/lib/interaction";
 import { ScenarioField } from "@/components/scenario/ScenarioInput";
+import { StartLauncher } from "@/components/start/StartLauncher";
+import { Logo } from "@/components/layout/Logo";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
 const key = (k: string, mod: Partial<{ ctrlKey: boolean; metaKey: boolean }> = {}) => ({ key: k, ctrlKey: false, metaKey: false, ...mod });
+
+function mountWithRouter(ui: React.ReactNode) {
+  const rootRoute = createRootRoute({ component: () => <><Outlet />{ui}</> });
+  const indexRoute = createRoute({ getParentRoute: () => rootRoute, path: "/" });
+  const startRoute = createRoute({ getParentRoute: () => rootRoute, path: "/start" });
+  const overviewRoute = createRoute({ getParentRoute: () => rootRoute, path: "/uebersicht" });
+  const menuCardsRoute = createRoute({ getParentRoute: () => rootRoute, path: "/speisekarten" });
+  const menusRoute = createRoute({ getParentRoute: () => rootRoute, path: "/menues" });
+  const eventsRoute = createRoute({ getParentRoute: () => rootRoute, path: "/events" });
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([indexRoute, startRoute, overviewRoute, menuCardsRoute, menusRoute, eventsRoute]),
+    history: createMemoryHistory({ initialEntries: ["/"] }),
+  });
+  const host = document.createElement("div");
+  document.body.appendChild(host);
+  const root = createRoot(host);
+  act(() => root.render(<RouterProvider router={router} />));
+  return { host, root };
+}
 
 describe("submit shortcut", () => {
   it("only Ctrl/Cmd+Enter counts", () => {
@@ -116,5 +138,35 @@ describe("ScenarioField keyboard", () => {
     press("Escape");
     expect(onChange).not.toHaveBeenCalled();
     expect(input.value).toBe("10");
+  });
+});
+
+describe("task-first launcher", () => {
+  it("shows only two intents before revealing exactly three calculation types", () => {
+    const { host, root } = mountWithRouter(<StartLauncher />);
+    expect(host.textContent).toContain("Kalkulation starten");
+    expect(host.textContent).toContain("Analysieren");
+    expect(host.textContent).not.toContain("À-la-carte");
+    expect(host.querySelector('a[href="/uebersicht"]')).not.toBeNull();
+
+    const launch = Array.from(host.querySelectorAll("button")).find((button) => button.textContent?.includes("Kalkulation starten"));
+    expect(launch).toBeDefined();
+    act(() => launch?.click());
+
+    expect(host.textContent).toContain("Was möchtest du kalkulieren?");
+    expect(host.querySelectorAll('a[href="/speisekarten"], a[href="/menues"], a[href="/events"]')).toHaveLength(3);
+    expect(host.textContent).not.toContain("Analysieren");
+
+    act(() => root.unmount());
+    host.remove();
+  });
+
+  it("makes the in-app logo a link to the launcher", () => {
+    const { host, root } = mountWithRouter(<Logo home />);
+    const logo = host.querySelector('a[href="/start"]');
+    expect(logo?.getAttribute("aria-label")).toBe("KundiCalc Startseite");
+
+    act(() => root.unmount());
+    host.remove();
   });
 });
